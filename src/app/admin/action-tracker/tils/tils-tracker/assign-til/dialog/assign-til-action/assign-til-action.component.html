@@ -1,0 +1,255 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="actionForm" >
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Action</mat-label>
+                        <input matInput formControlName="tilAction" >
+                        <mat-error *ngIf="actionForm.get('tilAction').hasError('required')">
+                            Action  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Discription</mat-label>
+                        <textarea matInput formControlName="actionDescription" rows="3" ></textarea>
+                        <mat-error *ngIf="actionForm.get('actionDescription').hasError('required')">
+                            Action Description is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Equipment</mat-label>
+                        <mat-select formControlName="siteEquipmentId" >
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of equipment"
+                                [value]="d.equipmentId">{{d.unit}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('siteEquipmentId').hasError('required')" >
+                            Equipment is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>actionCategory</mat-label>
+                        <input matInput formControlName="actionCategory" >
+                        <mat-error *ngIf="actionForm.get('actionCategory').hasError('required')">
+                            Action Category  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Unit Status</mat-label>
+                        <input matInput formControlName="unitStatus" >
+                        <mat-error *ngIf="actionForm.get('unitStatus').hasError('required')">
+                            unitStatus  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Budget Source</mat-label>
+                        <mat-select formControlName="budgetSourceId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of budgetSource"
+                                [value]="d.budgetSourceId">{{d.budgetSourceTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('budgetSourceId').hasError('required')" >
+                            Part Service is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priorityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of priority"
+                                [value]="reg.priorityId">{{reg.priorityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('priorityId').hasError('required')" >
+                            Priority is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target Date</mat-label>
+                        <input matInput [matDatepicker]="picker4" formControlName="targetDate" [disabled]="this.userId != 22">
+                        <mat-datepicker-toggle matSuffix [for]="picker4" [disabled]="this.userId != 22"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                        <mat-error *ngIf="actionForm.get('targetDate').hasError('required')" >
+                            Target Date  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Assigned To</mat-label>
+                        <mat-select formControlName="assignedTo">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users"
+                                [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('assignedTo').hasError('required')" >
+                            User is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>  -->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Budget</mat-label>
+                        <mat-select formControlName="budget">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of budget"
+                                [value]="u.budgetId">{{u.budgetName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('budget').hasError('required')" >
+                            Budget is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Assigned To</mat-label>
+                        <mat-select formControlName="assignedToId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of users"
+                                [value]="d.userId">{{d.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('assignedToId').hasError('required')" >
+                            Part Service is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Status Detail</mat-label>
+                        <textarea matInput formControlName="siteStatusDetail" rows="3" ></textarea>
+                        <mat-error *ngIf="actionForm.get('siteStatusDetail').hasError('required')" >
+                            ite Status Detail is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Part Service</mat-label>
+                        <mat-select formControlName="partServiceId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of part"
+                                [value]="d.partId">{{d.partTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('partServiceId').hasError('required')" >
+                            Part Service is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+              
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Final Implementation</mat-label>
+                        <mat-select formControlName="finalImplementationId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of finalImplementation"
+                                [value]="d.finalImpId">{{d.finalImpTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('finalImplementationId').hasError('required')" >
+                            Final Implementation is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Evidence</mat-label>
+                        <mat-select formControlName="evidenceId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of evidence"
+                                [value]="d.evidenceId">{{d.evidenceTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('evidenceId').hasError('required')" >
+                            Evidence is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>SAP Planning</mat-label>
+                        <mat-select formControlName="planningId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of sapPlaning"
+                                [value]="d.sapPlanningId">{{d.sapPlanningTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('planningId').hasError('required')" >
+                            SAP Planning is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusid">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of statusList"
+                                [value]="d.statusId">{{d.statustitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('statusid').hasError('required')" >
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+            </div>
+            <div class="row" [hidden]="data.mode == 'edit' || data.mode == 'add' || data.mode == 'view'">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <!-- <label>Report</label>
+                    <app-file-upload (change)="handleUpload($event)" formControlName="reportPath"></app-file-upload> -->
+                        <div class="example-button-row float-start">
+                            <button mat-raised-button color="success" (click)="uploadEvidence()">
+                                <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                        </div>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <div class="example-button-row float-start" [hidden]="data.mode == 'action' || data.mode == 'add'">
+                            <button mat-raised-button color="success" (click)="viewEvidence()">
+                                <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                        </div>
+                    <!-- <div class="example-button-row float-start" *ngIf="action.reportAttahced" [hidden]="data.mode == 'action' || data.mode == 'add'">
+                        <button mat-raised-button color="success" (click)="downloadReport()">
+                            <mat-icon>cloud_download</mat-icon>Report</button>
+                    </div> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-12">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!actionForm.valid" 
+                            [mat-dialog-close]="action" (click)="submit()" [hidden]="data.mode == 'view'">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                  
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

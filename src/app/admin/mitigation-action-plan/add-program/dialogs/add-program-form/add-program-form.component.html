@@ -1,0 +1,61 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="programForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Program Title</mat-label>
+                        <input matInput formControlName="programTitle" [readonly]="data.action == 'view'">
+                        <mat-error *ngIf="programForm.get('programTitle').hasError('required')">
+                            Program Title is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Technology</mat-label>
+                        <mat-select formControlName="technologies" #user (selectionChange)="addChip(user.value)" [disabled]="data.action == 'view'">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tech of allTechnologies" [value]="tech.technologyId">{{tech.technologyTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="technologyList.length==0">
+                            Please Select Technologies
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="accent" *ngFor="let u of technologyList" (removed)="removeChip(u)" selected>
+                            {{u.technologyTitle}}
+                            <button matChipRemove [disabled]="data.action == 'view'">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary"  (click)="submit()" [hidden]="data.action == 'view'" [disabled]="!programForm.valid"
+                            [mat-dialog-close]="submitObj">Save</button>
+                           
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="'Running Hours'" [items]="[]" [active_item]="'Timeline'"></app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row mb-0">
+                    <div class="col-md-9">
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Sites</mat-label>
+                            <mat-select (selectionChange)="getData($event.value)" [(ngModel)]="selectedSite">
+                                <mat-option *ngFor="let r of sites" [value]="r.siteId">{{r.siteTitle}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="topLevelArr">
+            <div class="row" *ngFor="let f of topLevelArr">
+                <div class="card">
+                    <div class="body">
+                        <div class="col-md-12">
+                            <h4>{{f.unit}}</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="body table-responsive  mb-4">
+                                <table class="table table-bordered  mb-4">
+                                    <thead>
+                                        <tr>
+                                            <th> {{f.startDate | date:'yyyy' }}</th>
+                                            <th *ngFor="let k of f.yearData" style="min-width: 20%;">
+                                                {{k.yearId}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th> {{f.startHour | roundedNumber: 2}}</th>
+                                            <td *ngFor="let k of f.yearData" style="min-width: 20%;">
+                                                {{k.yearlyTotal | roundedNumber: 2}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th> </th>
+                                            <td *ngFor="let k of f.yearData">
+                                                <ng-container *ngFor="let l of k.outages">
+
+                                                    {{l.outageTitle}}
+
+                                                </ng-container>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</section>

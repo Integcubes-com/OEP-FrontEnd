@@ -1,0 +1,105 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="observationForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Sites</mat-label>
+                        <mat-select formControlName="siteId" >
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of sites"
+                                [value]="reg.siteId">{{reg.siteTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('siteId').hasError('required')" >
+                            Site is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Excel Model</mat-label>
+                        <mat-select formControlName="modelId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of models"
+                                [value]="reg.modelId">{{reg.status}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('modelId').hasError('required')" >
+                            Excel Model is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Live Application</mat-label>
+                        <mat-select formControlName="liveApplication">
+                            <mat-option>None</mat-option>
+                            <mat-option 
+                                value="Yes">Yes</mat-option>
+                                <mat-option 
+                                value="No">No</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('liveApplication').hasError('required')" >
+                            Live Apllication is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of status"
+                                [value]="reg.lusId">{{reg.status}} - {{reg.score}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('statusId').hasError('required')" >
+                            Excel Model is required
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target</mat-label>
+                        <input matInput formControlName="target">
+                        <mat-error *ngIf="observationForm.get('target').hasError('required')" >
+                            Target is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Remarks</mat-label>
+                        <textarea matInput formControlName="remarks" rows="3"></textarea>
+                        <mat-error *ngIf="observationForm.get('remarks').hasError('required')" >
+                            Remarks is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-12">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!observationForm.valid" 
+                            [mat-dialog-close]="latestStatus" (click)="submit()">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+               
+            </div>
+        </form>
+    </div>
+</div>
+
+

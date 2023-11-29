@@ -1,0 +1,189 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="trackingForm">
+            
+                     <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let status of statuss" [value]="status.statusId">{{status.statusTitle}}</mat-option>
+                          </mat-select>
+                        <mat-error *ngIf="trackingForm.get('statusId').hasError('required')">
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Comments</mat-label>
+                        <textarea matInput formControlName="comments"></textarea>
+                        <mat-error *ngIf="trackingForm.get('comments').hasError('required')">
+                            Comments are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Closure Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="closureDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="trackingForm.get('closureDate').hasError('required')">
+                            Closure Date is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Evidence Available</mat-label>
+                        <mat-select formControlName="evidenceAvailable" #user2 (selectionChange)="checker(user2.value, 'evid')">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let status of evidenceStatuss" [value]="status.evidenceId">{{status.evidenceTitle}}</mat-option>
+                          </mat-select>
+                        <mat-error *ngIf="trackingForm.get('evidenceAvailable').hasError('required')">
+                            Evidence is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Days To Target</mat-label>
+                        <input matInput formControlName="daysToTarget">
+                        <mat-error *ngIf="trackingForm.get('daysToTarget').hasError('required')">
+                            Target Days are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Completion Score</mat-label>
+                        <input matInput formControlName="completionScore">
+                        <mat-error *ngIf="trackingForm.get('completionScore').hasError('required')">
+                            Completion Score is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId" #user (selectionChange)="checker(user.value, 'status')">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let status of statuss" [value]="status.statusId">{{status.statusTitle}}</mat-option>
+                          </mat-select>
+                        <mat-error *ngIf="trackingForm.get('statusId').hasError('required')">
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Comments</mat-label>
+                        <textarea matInput formControlName="comments"></textarea>
+                        <mat-error *ngIf="trackingForm.get('comments').hasError('required')">
+                            Comments are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Closure Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="closureDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="trackingForm.get('closureDate').hasError('required')">
+                            Closure Date is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Assign To</mat-label>
+                        <mat-select formControlName="assignedTo">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of filteredArray" [value]="u.userId">{{u.name}}</mat-option>
+                          </mat-select>
+                        <mat-error *ngIf="trackingForm.get('assignedTo').hasError('required')">
+                           User is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Assign To</mat-label>
+                        <input type="text"aria-label="Number" matInput formControlName="assignedTo"
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredArray" [value]="option.name" (onSelectionChange)="addUser(option)">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            </div>
+          
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <label>File</label>
+                    <app-file-upload formControlName="fileAttachment"></app-file-upload>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="example-button-row float-start">
+                    <button mat-raised-button color="success" (click)="uploadEvidence()">
+                        <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <!-- <div class="example-button-row float-start" >
+                        <button mat-raised-button color="success" (click)="downloadReport()">
+                            <mat-icon>cloud_download</mat-icon>Report</button>
+                    </div> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-6">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!trackingForm.valid || evidenceStatus"
+                            [mat-dialog-close]="actionTracker">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

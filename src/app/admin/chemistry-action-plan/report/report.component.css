@@ -1,0 +1,11 @@
+th, td{
+    font-family: calibri;
+    font-size:13px;
+    background-color: white!important;
+}
+td, th{
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+
+

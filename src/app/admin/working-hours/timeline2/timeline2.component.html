@@ -1,0 +1,56 @@
+<!-- <section class="content">
+    <div class="content-block">
+        <div class="block-header">
+            <app-breadcrumb [title]="'Running Hours'" [items]="[]" [active_item]="'Timeline'"></app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row mb-0">
+                    <div class="col-md-9">
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Sites</mat-label>
+                            <mat-select (selectionChange)="getData($event.value)">
+                                <mat-option *ngFor="let r of sites" [value]="r.siteId">{{r.siteTitle}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="flattenedData">
+            <div class="row">
+                <div class="card">
+                    <div class="body">
+                        <div class="col-md-12">
+                            <table>
+                                <tr>
+                                    <th>Site</th>
+                                    <th>Unit</th>
+                                    <ng-container *ngFor="let y of yearList">
+                                        <th>{{y}}</th>
+                                    </ng-container>
+                                </tr>
+                                    <tr *ngFor="let f of flattenedData | unique2:equipmentId">
+                                        <td>{{f.siteName}}</td>
+                                        <td>{{f.unit}}</td>
+                                           <ng-container  *ngFor="let y of yearList">
+                                            <ng-container  *ngFor="let l of flattenedData">
+                                                <ng-container  *ngIf="y == l.yearId && f.equipmentId == l.equipmentId">
+                                                    <td> {{f.yearlyTotal}}</td>
+                                                </ng-container>
+                                            </ng-container>
+                                           </ng-container>
+                                    </tr>
+                          
+                               
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</section> -->

@@ -1,0 +1,162 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" #form="ngForm">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Title</mat-label>
+                        <textarea matInput [(ngModel)]="insurence.title"  readonly #titlel="ngModel" name="titlel"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurance Recommendation</mat-label>
+                        <input matInput [(ngModel)]="insurence.insuranceRecommendation" readonly #insuranceRecommendation="ngModel" name="insuranceRecommendation">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Reference Number</mat-label>
+                        <input matInput [(ngModel)]="insurence.referenceNumber" readonly #referenceNumber="ngModel" name="referenceNumber">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Priority</mat-label>
+                        <input matInput [(ngModel)]="insurence.priorityTitle" readonly #title="ngModel" name="title">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Nomac Status</mat-label>
+                        <input matInput [(ngModel)]="insurence.nomacStatusTitle" readonly #nomacStatusTitle="ngModel" name="nomacStatusTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurence Status</mat-label>
+                        <input matInput [(ngModel)]="insurence.insurenceStatusTitle" readonly #insurenceStatusTitle="ngModel" name="insurenceStatusTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Latest Status</mat-label>
+                        <input matInput [(ngModel)]="insurence.latestStatus" readonly #latestStatus="ngModel" name="latestStatus">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target Date</mat-label>
+                        <input  matInput [matDatepicker]="picker" [(ngModel)]="insurence.targetDate" readonly #targetDate="ngModel" name="targetDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker" disabled></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Updates</mat-label>
+                        <input matInput [(ngModel)]="insurence.siteUpdates" readonly #siteUpdates="ngModel" name="siteUpdates">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>PC Comments</mat-label>
+                        <input matInput [(ngModel)]="insurence.pcComments" readonly #pcComments="ngModel" name="pcComments">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>CAPEX/OPEX</mat-label>
+                        <input matInput [(ngModel)]="insurence.type" readonly #type="ngModel" name="type">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Expected Budget</mat-label>
+                        <input matInput [(ngModel)]="insurence.expectedBudget" readonly #expectedBudget="ngModel" name="expectedBudget">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site</mat-label>
+                        <input matInput [(ngModel)]="insurence.siteTitle" readonly #siteTitle="ngModel" name="siteTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Significance</mat-label>
+                        <input matInput [(ngModel)]="insurence.significance" readonly #significance="ngModel" name="significance">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>NOMAC Proactive Risk Prevention Approach</mat-label>
+                        <input matInput [(ngModel)]="insurence.proactiveReference" readonly #proactiveReference="ngModel" name="proactiveReference">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Region</mat-label>
+                        <input matInput [(ngModel)]="insurence.regionTitle" readonly #regionTitle="ngModel" name="regionTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Source</mat-label>
+                        <input matInput [(ngModel)]="insurence.sourceTitle" readonly #sourceTitle="ngModel" name="sourceTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Document</mat-label>
+                        <input matInput [(ngModel)]="insurence.documentTypeTitle" readonly #documentTypeTitle="ngModel" name="documentTypeTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Year</mat-label>
+                        <input matInput [(ngModel)]="insurence.year" readonly #year="ngModel" name="year">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Recommendation</mat-label>
+                        <input matInput [(ngModel)]="insurence.recommendationTypeTitle" readonly #recommendationTypeTitle="ngModel" name="recommendationTypeTitle">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Report</mat-label>
+                        <textarea matInput [(ngModel)]="insurence.report" readonly #report="ngModel" name="report"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <div class="example-button-row float-start" *ngIf="insurence.reportAttahced" >
+                            <button mat-raised-button color="success" (click)="downloadReport()">
+                                <mat-icon>cloud_download</mat-icon>Report</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <div class="example-button-row float-end">
+                            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

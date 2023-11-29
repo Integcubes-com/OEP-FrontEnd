@@ -1,0 +1,322 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="recommendationForm">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Title</mat-label>
+                        <input matInput formControlName="title" [readonly]="mode == 'view'">
+                        <mat-error *ngIf="recommendationForm.get('title').hasError('required')">
+                            Title is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Reference Number</mat-label>
+                        <input matInput formControlName="referenceNumber" [readonly]="mode == 'view'">
+                        <mat-error *ngIf="recommendationForm.get('referenceNumber').hasError('required')">
+                            Reference Number is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Region</mat-label>
+                        <mat-select formControlName="regionId" (selectionChange)="getSites($event.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of regions"
+                                [value]="region.regionId">{{region.regionTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('regionId').hasError('required')">
+                            Region is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Site</mat-label>
+                        <mat-select formControlName="siteId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let site of sites" [value]="site.siteId">{{site.siteTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('siteId').hasError('required')">
+                            Site is required
+                        </mat-error>
+                    </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                    <mat-label>Site</mat-label>
+                    <input matInput formControlName="siteTitle" [readonly]="mode == 'view'">
+                </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Significance</mat-label>
+                        <mat-select formControlName="significance">
+                            <mat-option>None</mat-option>
+                            <mat-option value="Yes">Yes</mat-option>
+                            <mat-option value="Site">Site</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('significance').hasError('required')">
+                            Significance is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Significance</mat-label>
+                        <input matInput formControlName="significance" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priorityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let priority of priorities"
+                                [value]="priority.priorityId">{{priority.priorityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('priorityId').hasError('required')">
+                            Priority is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Priority</mat-label>
+                        <input matInput formControlName="priority" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Nomac Status</mat-label>
+                        <mat-select formControlName="nomacStatusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let nomac of nomacStatuss"
+                                [value]="nomac.nomacStatusId">{{nomac.nomacStatusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('nomacStatusId').hasError('required')">
+                            Nomac Status is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Nomac Status</mat-label>
+                        <input matInput formControlName="nomacStatus" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Insurence Status</mat-label>
+                        <mat-select formControlName="insurenceStatusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let insurence of insurenceStatuss"
+                                [value]="insurence.insurenceStatusId">{{insurence.insurenceStatusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('insurenceStatusId').hasError('required')">
+                            Insurence Status is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Insurence Status</mat-label>
+                        <input matInput formControlName="insurenceStatus" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurance Recommendation</mat-label>
+                        <textarea matInput formControlName="insuranceRecommendation" [readonly]="mode == 'view'"></textarea>
+                        <mat-error *ngIf="recommendationForm.get('insuranceRecommendation').hasError('required')">
+                            Insurance Recommendation is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Latest Status</mat-label>
+                        <textarea matInput formControlName="latestStatus" [readonly]="mode == 'view'"></textarea>
+                        <mat-error *ngIf="recommendationForm.get('latestStatus').hasError('required')">
+                            Latest Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="targetDate" [readonly]="mode == 'view'">
+                        <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="mode == 'view'"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="recommendationForm.get('targetDate').hasError('required')">
+                            Target Date is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>CAPEX/OPEX</mat-label>
+                        <mat-select formControlName="type">
+                            <mat-option>None</mat-option>
+                            <mat-option value="CAPEX">CAPEX</mat-option>
+                            <mat-option value="OPEX">OPEX</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('type').hasError('required')">
+                            CAPEX/OPEX is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>CAPEX/OPEX</mat-label>
+                        <input matInput formControlName="type" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Updates</mat-label>
+                        <textarea matInput formControlName="siteUpdates" [readonly]="mode == 'view'"></textarea>
+                        <mat-error *ngIf="recommendationForm.get('siteUpdates').hasError('required')">
+                            Site Updates is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>PC Comments</mat-label>
+                        <textarea matInput formControlName="pcComments" [readonly]="mode == 'view'"></textarea>
+                        <mat-error *ngIf="recommendationForm.get('pcComments').hasError('required')">
+                            PC Comments is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Expected Budget</mat-label>
+                        <input matInput formControlName="expectedBudget" [readonly]="mode == 'view'">
+                        <mat-error *ngIf="recommendationForm.get('expectedBudget').hasError('required')">
+                            Expected Budget is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>NOMAC Proactive Risk Prevention Approach</mat-label>
+                        <mat-select formControlName="proactiveId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let proactive of proactives"
+                                [value]="proactive.proactiveId">{{proactive.proactiveReference + " - " + proactive.proactivetitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('proactiveId').hasError('required')">
+                            NOMAC Proactive Risk Prevention Approach is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>NOMAC Proactive Risk Prevention Approach</mat-label>
+                        <input matInput formControlName="proactive" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Source</mat-label>
+                        <mat-select formControlName="sourceId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let source of sources | oMExcludePipe:3"
+                                [value]="source.sourceId">{{source.sourceTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('sourceId').hasError('required')">
+                            Source is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Source</mat-label>
+                        <input matInput formControlName="source" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Document</mat-label>
+                        <mat-select formControlName="documentTypeId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let document of documents"
+                                [value]="document.documentId">{{document.documnetTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('documentTypeId').hasError('required')">
+                            Document is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Document</mat-label>
+                        <input matInput formControlName="documentType" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Year</mat-label>
+                        <input matInput formControlName="year" [readonly]="mode == 'view'">
+                        <mat-error *ngIf="recommendationForm.get('year').hasError('required')">
+                            Year is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode != 'view'">
+                        <mat-label>Recommendation</mat-label>
+                        <mat-select formControlName="recommendationTypeId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let rt of recommendationTypes"
+                                [value]="rt.typeId">{{rt.typeTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="recommendationForm.get('recommendationTypeId').hasError('required')">
+                            Recommendation is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="mode == 'view'">
+                        <mat-label>Recommendation</mat-label>
+                        <input matInput formControlName="recommendationType" [readonly]="mode == 'view'">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Report</mat-label>
+                        <textarea matInput formControlName="report" [readonly]="mode == 'view'"></textarea>
+                        <mat-error *ngIf="recommendationForm.get('report').hasError('required')">
+                            Report is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row" *ngIf="mode != 'view'">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <label>Report</label>
+                    <app-file-upload (change)="handleUpload($event)" formControlName="reportPath"></app-file-upload>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <!-- <div class="example-button-row float-start" *ngIf="mode == 'edit' || mode == 'view' ">
+                        <button mat-raised-button color="success" (click)="downloadReport()">
+                            <mat-icon>cloud_download</mat-icon>Report</button>
+                    </div> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" (click)="submit()"
+                            [disabled]="!recommendationForm.valid" *ngIf="mode != 'view'" [mat-dialog-close]="recommendation">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

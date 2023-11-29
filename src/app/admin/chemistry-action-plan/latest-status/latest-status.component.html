@@ -1,0 +1,142 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="'Chemistry Action Plan'" [items]="[]"
+                [active_item]="'Observations'"></app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="table-responsive">
+                            <div class="materialTableHeader">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <ul class="header-buttons-left ms-0">
+                                            <li class="dropdown">
+                                                <h2>Observations</h2>
+                                            </li>
+                                            <li class="dropdown m-l-20">
+                                                <label for="search-input"><i
+                                                        class="material-icons search-icon">search</i></label>
+                                                <input placeholder="Search" type="text" (keyup)="applyFilter($event)"
+                                                    #input class="browser-default search-field" aria-label="Search box">
+                                            </li>
+                                            <li>
+                                                <div class="m-l-10" matTooltip="ADD">
+                                                    <button mat-mini-fab color="primary" (click)="addStatus()">
+                                                        <mat-icon class="col-white">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-4">
+                                        <ul class="header-buttons">
+                                            <li>
+                                                <div class="export-button m-l-10" matTooltip="XLSX">
+                                                    <img src="assets/images/icons/xlsx.png" alt=""
+                                                        (click)="exporter.exportTable('xlsx', {fileName:'assets-list', sheet: 'sheet1'})" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="export-button m-l-10" matTooltip="CSV">
+                                                    <img src="assets/images/icons/csv.png" alt=""
+                                                        (click)="exporter.exportTable('csv')" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="export-button m-l-10" matTooltip="JSON">
+                                                    <img src="assets/images/icons/json.png" alt=""
+                                                        (click)="exporter.exportTable('json')" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="export-button m-l-10" matTooltip="TXT">
+                                                    <img src="assets/images/icons/txt.png" alt=""
+                                                        (click)="exporter.exportTable('txt')" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-container">
+                                <table mat-table [dataSource]="dataSource" matSort matTableExporter 
+                                    #exporter="matTableExporter">
+                                    <ng-container matColumnDef="id">
+                                        <th mat-header-cell *matHeaderCellDef> No. </th>
+                                        <td mat-cell *matCellDef="let site ; let i = index"> {{i+1}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="siteTitle">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Site </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.siteTitle}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="modelStatus">
+                                        <th mat-header-cell *matHeaderCellDef> Excel Model </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.modelStatus}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="liveApplication">
+                                        <th mat-header-cell *matHeaderCellDef> Live Application </th>
+                                        <td mat-cell *matCellDef="let site">{{site.liveApplication}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="status">
+                                        <th mat-header-cell *matHeaderCellDef> Status </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.status}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="score">
+                                        <th mat-header-cell *matHeaderCellDef> Score </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.score *100 }}%</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="remarks">
+                                        <th mat-header-cell *matHeaderCellDef>remarks </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.remarks}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions" style="text-align:center;">
+                                        <th mat-header-cell *matHeaderCellDef style="padding:0 50px!important;text-align:center">Actions
+                                        </th>
+                                        <td mat-cell class="action-button" style="text-align:center;"
+                                            *matCellDef="let row; let i=index;" class="pr-0">
+                                            <button mat-icon-button (click)="$event.stopPropagation()"
+                                                (click)="editStatus(row)" class="tbl-action-btn" matTooltip="EDIT">
+                                                <app-feather-icons [icon]="'edit'"
+                                                    [class]="'tbl-fav-edit'"></app-feather-icons>
+                                            </button>
+                                            <!-- <button mat-icon-button (click)="$event.stopPropagation()" color="primary"
+                                                matTooltip="VIEW Action Package" (click)="viewStatus(row)"
+                                                aria-label="Example icon button with a menu icon">
+                                                <mat-icon>visibility</mat-icon>
+                                            </button> -->
+                                            <button mat-icon-button (click)="$event.stopPropagation()"
+                                                (click)="deleteStatus(row)" class="tbl-action-btn" matTooltip="DELETE">
+                                                <app-feather-icons [icon]="'trash-2'"
+                                                    [class]="'tbl-fav-delete'"></app-feather-icons>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                        (click)="editStatus(row)" [style.cursor]="'pointer'" matRipple></tr>
+                                </table>
+                                <div *ngIf="isTableLoading" class="tbl-spinner">
+                                    <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                                    </mat-progress-spinner>
+                                </div>
+                                <div *ngIf="!isTableLoading" class="no-results"
+                                    [style.display]="dataSource?.renderedData?.length == 0 ? '' : 'none'">
+                                    No results
+                                </div>
+                                <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                                    aria-label="Select page of periodic elements">
+                                </mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

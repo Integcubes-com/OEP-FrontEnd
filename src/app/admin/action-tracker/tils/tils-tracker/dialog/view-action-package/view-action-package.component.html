@@ -1,0 +1,166 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="actionForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>TIL Number</mat-label>
+                        <mat-select formControlName="tilId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let til of tils"
+                                [value]="til.tilId">{{til.tilNumber}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Title</mat-label>
+                        <input matInput formControlName="actionTitle" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>users</mat-label>
+                        <mat-select   #user
+                        (selectionChange)="addChip(user.value, 'user')" formControlName="userId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let act of apiUsers"
+                                [value]="act.userId">{{act.userName}}</mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="primary" *ngFor="let u of userList"  selected>
+                            {{u.email}}
+                            
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Action Closure Guidelines</mat-label>
+                        <mat-select formControlName="actionClosureGuidelinesId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let act of actionClosure"
+                                [value]="act.acId">{{act.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Unit Status</mat-label>
+                        <mat-select formControlName="unitStatusId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let act of outages"
+                                [value]="act.outageTypeId">{{act.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="actionDescription" readonly></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Expected Budget</mat-label>
+                        <input matInput formControlName="expectedBudget" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Budget Source</mat-label>
+                        <mat-select formControlName="budgetSourceId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let act of budgetSources"
+                                [value]="act.budgetSourceId" >{{act.budgetSourceTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>PAT Comment</mat-label>
+                        <textarea matInput formControlName="patComments" readonly></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>PAT Comment</mat-label>
+                        <textarea matInput formControlName="patComments" readonly></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priorityId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let act of prioritys"
+                                [value]="act.priorityId">{{act.priorityTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Recurrence</mat-label>
+                        <textarea matInput formControlName="recurrence" readonly></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Review Status</mat-label>
+                        <mat-select formControlName="reviewStatusId" readonly>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let act of reviewStatuss"
+                                [value]="act.reviewStatusId">{{act.reviewStatusTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

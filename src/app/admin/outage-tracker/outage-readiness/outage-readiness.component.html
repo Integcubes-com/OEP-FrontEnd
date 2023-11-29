@@ -1,0 +1,94 @@
+<section class="content mb-4">
+    <div class="content-block mb-4">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Outage Tracker'" [items]="[]" [active_item]="'Outage-Phases'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>Phases</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                        <li>
+                          <div class="m-l-10" matTooltip="ADD PHASE">
+                            <button mat-mini-fab color="primary" (click)="addPhase()">
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                          </div>
+                        </li>
+                        <!-- <li>
+                            <div class="m-l-10" matTooltip="Trash">
+                              <button mat-mini-fab color="warn">
+                                <mat-icon class="col-white">delete</mat-icon>
+                              </button>
+                            </div>
+                          </li> -->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-accordion multi class="example-headers-align">
+            <mat-expansion-panel hideToggle *ngFor="let phase of phases; let i = index">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <h5>Phase:{{phase.phaseNumber}}</h5>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <h6>{{phase.phaseTitle}}</h6>
+                  <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDuration(phase)">
+                     Deadline
+                    </button>
+                    <button mat-menu-item (click)="addReadiness(phase)">
+                      Add Outage Actions</button>
+                      <button mat-menu-item (click)="editPhase(phase)">
+                        Edit Phase</button>
+                    <button mat-menu-item (click)="deletePhase(phase)">
+                      Delete Phase</button>
+
+                  </mat-menu>
+                </mat-panel-description>
+                            
+              </mat-expansion-panel-header>
+              <ng-container *ngFor="let desc of phaseDescription; let i = index">
+                <div class="row" *ngIf="desc.phaseId == phase.phaseId">
+                  <div class="col-md-10 col-10 col-xs-10 col-sm-10">
+                  <strong>{{desc.phaseReadNum}} )</strong> {{desc.phaseReadDesc}}
+                  </div>
+                  <div class="col-md-2 col-2 col-xs-2 col-sm-2 ">
+                    <div class="float-end">
+                      <button mat-icon-button  color="primary">
+                        <mat-icon class="action-btn" matTooltip="Edit" (click)="editPhaseDesc(phase, desc)">edit</mat-icon>
+                      </button>
+                     <button mat-icon-button  color="warn" >
+                       <mat-icon class="action-btn" matTooltip="Delete" (click)="deletePhaseDesc(phase, desc)">delete</mat-icon>
+                     </button>
+                    </div>
+                  
+                  </div>
+                 </div>
+              </ng-container>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </div>
+  </section>
+  

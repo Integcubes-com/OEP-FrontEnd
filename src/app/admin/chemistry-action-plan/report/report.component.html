@@ -1,0 +1,218 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Chemistry Action Plan'" [items]="[]" [active_item]="'Reports'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <!-- <div style="background: #F5F5F5;">
+              <div class="row m-2 p-0">                
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Regions</mat-label>
+                    <mat-select [(ngModel)]="filterObj.regionId" (selectionChange)="search()">
+                      <mat-option [value]="-1">--All--</mat-option>
+                      <mat-option *ngFor="let d of regions" [value]="d.regionId">{{d.regionTitle}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3 pb-0">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Sites</mat-label>
+                    <mat-select [(ngModel)]="filterObj.siteId" (selectionChange)="search()">
+                      <mat-option [value]="-1">--All--</mat-option>
+                      <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3 pb-0">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Status</mat-label>
+                    <mat-select [(ngModel)]="filterObj.statusId" (selectionChange)="search()">
+                      <mat-option [value]="-1">--All--</mat-option>
+                      <mat-option *ngFor="let rf of statuss" [value]="rf.statusId">{{rf.statusTitle}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3 pb-0">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Priority</mat-label>
+                    <mat-select [(ngModel)]="filterObj.priorityId" (selectionChange)="search()">
+                      <mat-option [value]="-1">--All--</mat-option>
+                      <mat-option *ngFor="let rf of prioritys" [value]="rf.priorityId">{{rf.priorityTitle}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+          </div> -->
+          <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="table-responsive m-4">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>Reports</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="handleSearch($event.target.value)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-4">
+                      <ul class="header-buttons">
+                        <li class="me-4">
+                          <button mat-raised-button color="filter" [matMenuTriggerFor]="menu1">Filter
+                            <mat-icon>filter_list</mat-icon>
+                          </button>
+                          <mat-menu #menu1="matMenu">
+                            <div style="position: relative; max-width: 200px!important; max-height: 350px;"
+                              [perfectScrollbar]>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <h6 class="ms-4 mt-3">Filter:</h6>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="me-2 float-end"><button mat-icon-button color="primary"
+                                      aria-label="Example icon button with a home icon" (click)="filterFn()">
+                                      <mat-icon>search</mat-icon>
+                                    </button></div>
+                                </div>
+                              </div>
+                              <mat-accordion>
+                                <mat-expansion-panel class="mb-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="    font-size: 13px;">
+                                      Regions
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12" *ngFor="let r of regions; let i = index">
+                                        <ng-container>
+                                          <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                            [(ngModel)]="r.selected" (click)="regionList(r)">
+                                            {{r.regionTitle}}
+                                          </mat-checkbox>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="    font-size: 13px;">
+                                      Sites
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12" *ngFor="let r of sites; let i = index">
+                                        <ng-container>
+                                          <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                            [(ngModel)]="r.selected" (click)="siteList(r)">
+                                            {{r.siteTitle}}
+                                          </mat-checkbox>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="    font-size: 13px;">
+                                      Status
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12" *ngFor="let r of statuss; let i = index">
+                                        <ng-container>
+                                          <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                            [(ngModel)]="r.selected" (click)="statusList(r)">
+                                            {{r.statusTitle}}
+                                          </mat-checkbox>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                              </mat-accordion>
+                            </div>
+                          </mat-menu>
+                        </li>
+                        <li>
+                          <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                            Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item matTooltip="XLSX" (click)="downloadExcel()">
+                              <img src="assets/images/icons/xlsx.png" alt="">
+                              <span class="ms-1">Download Excel</span>
+                            </button>
+                            <!-- <button mat-menu-item matTooltip="CSV" (click)="exporter.exportTable('csv')">
+                              <img src="assets/images/icons/csv.png" alt="">
+                              <span class="ms-1">Download CSV</span>
+                            </button>
+                            <button mat-menu-item matTooltip="JSON" (click)="exporter.exportTable('json')">
+                              <img src="assets/images/icons/json.png" alt="">
+                              <span class="ms-1">Download JSON</span>
+                            </button>
+                            <button mat-menu-item matTooltip="TXT" (click)="exporter.exportTable('txt')">
+                              <img src="assets/images/icons/txt.png" alt="">
+                              <span class="ms-1">Download Text</span>
+                            </button> -->
+                          </mat-menu>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <table class="table  table-bordered table-sm row-border " id="datatableexample">
+                  <thead>
+                    <tr>
+                      <th>no#</th>
+                      <th>Plant</th>
+                      <th style="padding: 0 100px;">Observation</th>
+                      <th>Suggestion/Recommendation</th>
+                      <th>Priority</th>
+                      <th>Target Date</th>
+                      <th>Remarks/Response from the site</th>
+                      <th>Status</th>
+                      <th>Reference</th>
+                    </tr>
+                  </thead>
+                  
+              <div *ngIf="isTableLoading" class="tbl-spinner" style="margin: auto;">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
+              </div>
+                  <tbody>
+                    <tr *ngFor="let act of actions ; let i= index">
+                      <th style="text-align:center!important;" scope="row">{{i+1}}</th>
+                      <td>{{act.siteName}}</td>
+                      <td>{{act.observationTitle}}</td>
+                      <td style="text-align: left!important;" data-toggle="tooltip" class="link" role="button"
+                        (click)="editAction(act)" matTooltip="View" [style.cursor]="'pointer'">
+                        <u>{{act.actionTitle}}</u>
+                      </td>
+                      <td>{{act.priorityTitle}}</td>
+                      <td>{{act.targetDate|date}}</td>
+                      <td>{{act.remarks}}</td>
+                      <td>{{act.statusTitle}}</td>
+                      <td>{{act.referenceNumber}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,218 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Business Process'" [items]="[]" [active_item]="'Monthly'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="header">
+                <h2>Monthly KPIs</h2>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="row ms-2 me-2 mt-2">
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Month</mat-label>
+                    <mat-select [(ngModel)]="filterObj.monthId" (selectionChange)="getKPI()">
+                      <mat-option *ngFor="let s of monthArray" [value]="s.number">{{s.title}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                 
+                  <!-- <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select Date</mat-label>
+                    <input matInput [matDatepicker]="picker7" [(ngModel)]="filterObj.date" (ngModelChange)="getKPI()">
+                    <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                    <mat-datepicker #picker7></mat-datepicker>
+                  </mat-form-field> -->
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Year</mat-label>
+                    <mat-select [(ngModel)]="filterObj.yearId" (selectionChange)="getKPI()">
+                      <mat-option *ngFor="let s of years" [value]="s">{{s}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Sites</mat-label>
+                    <mat-select [(ngModel)]="filterObj.siteId" (selectionChange)="getKPI()">
+                      <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <div class="mt-3">
+                    <button mat-raised-button color="primary" (click)="saveAction()">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="body" *ngFor="let kpi of monthlyKPI | unique:'groupId'">
+            <h6 class="ms-4">{{kpi.groupCode + ") " + kpi.groupTitle}} 
+              <span *ngIf="kpi.groupId == 1"><strong>{{"Weight:" + obj3}}</strong></span>
+              <span *ngIf="kpi.groupId == 2"><strong>{{"Weight:" + obj4}}</strong></span>
+              <span *ngIf="kpi.groupId == 3"><strong>{{"Weight:" + obj5}}</strong></span>
+              <span *ngIf="kpi.groupId == 4"><strong>{{"Weight:" + obj6}}</strong></span>
+              <span *ngIf="kpi.groupId == 5"><strong>{{"Weight:" + obj7}}</strong></span>
+              <span *ngIf="kpi.groupId == 6"><strong>{{"Weight:" + obj1}}</strong></span>
+              <span *ngIf="kpi.groupId == 7"><strong>{{"Weight:" + obj2}}</strong></span>
+          </h6>
+            <div class="body table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th width="5%">Code</th>
+                    <th width="15%">Business Process Element</th>
+                    <th width="2%">Weight</th>
+                    <th width="2%">Actual</th>
+                    <th width="2%">N/A</th>
+                    <th width="2%">Unit</th>
+                    <th width="2%">Weighted Score</th>
+                    <th width="20%">Measurement</th>
+                    <th width="20%">Annual Target</th>
+                    <th width="1%">Info</th>
+                    <th width="20%">Comment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let k of monthlyKPI" [ngStyle]="{ 'background-color': k.color }">
+                    <ng-container *ngIf="kpi.groupId == k.groupId">
+                      <td>{{k.indicatorCode}}</td>
+                      <td>{{k.indicatorTitle}}</td>
+                      <td> {{k.indicatorWeight}}</td>
+                      <!-- style="background-color: #D3F9D3!important" -->
+                      <!-- background-color: #D3F9D3!important; -->
+                      <td ><input type="number" [disabled]="k.notApplicable"
+                          style="border:none; width:100px " [ngStyle]="{ 'background-color': k.color }" [(ngModel)]="k.value"
+                          (change)="checkScore(k)"></td>
+                      <td>
+                        <mat-checkbox [(ngModel)]="k.notApplicable"></mat-checkbox>
+                      </td>
+                      <td>{{k.unit}}</td>
+                      <td>{{k.weightedScore | number: "1.2"}}</td>
+                      <td>{{k.measurementTitle}}</td>
+                      <td>{{k.annualTargetTitle}}</td>
+                      <td><i class="material-icons" [ngStyle]="{'color':'#FFD700'}"
+                          [matTooltip]="k.classificationTitle == null? '...' :k.classificationTitle">info</i></td>
+                      <td>
+                        <!-- style="background-color: #D3F9D3!important" -->
+                        <!-- background-color: #D3F9D3!important -->
+                        <textarea type="text" rows="4"
+                          [disabled]="k.notApplicable" style="border:none;width:100px" [ngStyle]="{ 'background-color': k.color }" 
+                          [(ngModel)]="k.comment"></textarea>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th width="5%">Code</th>
+                          <th width="15%">Business Process Element</th>
+                          <th width="2%">Weight</th>
+                          <th width="2%">Score</th>
+                          <th width="2%">Unit</th>
+                          <th width="20%">Measurement</th>
+                          <th width="20%">Annual Target</th>
+                          <th width="1%">Info</th>
+                          <th width="20%">Comment</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr  *ngFor="let k of monthlyKPI | unique:'indicatorCode'">
+                            <ng-container *ngIf="kpi.groupId == k.groupId">
+                              <td>{{k.indicatorCode}}</td>
+                              <td>{{k.indicatorTitle}}</td>
+                              <td class="p-0 m-0">
+                                <ng-container  *ngFor="let l of monthlyKPI; let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode">
+                                    <tr class="p-0 m-0">
+                                      <td class="p-0 m-0" style="border:none !important">{{k.indicatorWeight}}</td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                              </td>
+                              <td class="p-0 m-0">
+                                <ng-container  *ngFor="let l of monthlyKPI; let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode; let z = index">
+                                    <tr class="p-0 m-0">
+                                      <td class="p-0 m-0" style="border:none !important;"><input type="number"
+                                        style="border: none!important; width: 55px;" [(ngModel)]="l.value"
+                                        (change)="checkScore(l)"></td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                              </td>
+                              <td>
+                                <ng-container *ngFor="let l of monthlyKPI; let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode">
+                                    <tr class="p-0 m-0" >
+                                      <td class="p-0 m-0" style="border:none !important"> {{k.unit}}</td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                               </td>
+                               <td>
+                                <ng-container *ngFor="let l of monthlyKPI let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode">
+                                    <tr class="p-0 m-0">
+                                      <td class="p-0 m-0" style="border:none !important"> {{k.measurementTitle}}</td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                               </td>
+                               <td>
+                                <ng-container *ngFor="let l of monthlyKPI; let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode">
+                                    <tr class="p-0 m-0">
+                                      <td class="p-0 m-0" style="border:none !important">{{k.annualTargetTitle}}</td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                               </td>
+                               <td>
+                                <ng-container *ngFor="let l of monthlyKPI; let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode">
+                                    <tr class="p-0 m-0">
+                                      <td class="p-0 m-0" style="border:none !important"><i class="material-icons" [ngStyle]="{'color':'#FFD700'}"
+                                        [matTooltip]="k.classificationTitle == null? '...' :k.classificationTitle">info</i></td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                               </td>
+                               <td>
+                                <ng-container *ngFor="let l of monthlyKPI; let z = index">
+                                  <ng-container *ngIf="k.indicatorCode == l.indicatorCode">
+                                    <tr class="p-0 m-0">
+                                      <td class="p-0 m-0" style="border:none !important;"><textarea type="text" rows="4"
+                                        style="border: none!important;" [(ngModel)]="k.comment"></textarea></td>
+                                    </tr>
+                                    <hr *ngIf="z==0">
+                                  </ng-container>
+                                </ng-container>
+                               </td>
+          
+                            </ng-container>
+                        </tr>
+                      </tbody>
+                    </table> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

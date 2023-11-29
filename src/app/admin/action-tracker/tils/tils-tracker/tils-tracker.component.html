@@ -1,0 +1,324 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'TILs'" [items]="[]" [active_item]="'TIL Action Package'"></app-breadcrumb>
+      </div>
+      <div class="card" *ngIf="displayFilter">
+        <div class="row m-4 p-0">
+          <h5 class="card-title">Filter By:</h5>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Budget Source</mat-label>
+              <mat-select [(ngModel)]="filterObj.budgetSource">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let d of budgetSources" [value]="d.budgetSourceId">{{d.budgetSourceTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>TIL Number</mat-label>
+              <mat-select [(ngModel)]="filterObj.tilNumber">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let s of tils" [value]="s.tilId">{{s.tilNumber}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Unit Status</mat-label>
+              <mat-select [(ngModel)]="filterObj.unitStatus">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let rf of outages" [value]="rf.outageTypeId">{{rf.title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Review Status</mat-label>
+              <mat-select [(ngModel)]="filterObj.reviewStatus">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let rf of reviewStatuss" [value]="rf.reviewStatusId">{{rf.reviewStatusTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Priority</mat-label>
+              <mat-select [(ngModel)]="filterObj.priority">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let rf of prioritys" [value]="rf.priorityId">{{rf.priorityTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-1 pb-0">
+            <div class="float-end">
+              <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
+                (click)="getTils()">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>Assign TIL</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                        <li>
+                          <div class="m-l-10" matTooltip="ADD">
+                            <button mat-mini-fab color="primary" (click)="addActionPackage()">
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                          </div>
+                        </li>
+                        <!-- <li>
+                          <div class="m-l-10" matTooltip="FILTER DATA">
+                            <button mat-mini-fab color="warn" (click)="toggleFilter()">
+                              <mat-icon>filter_list</mat-icon>
+                            </button>
+                          </div>
+                        </li> -->
+                        <!-- <li>
+                          <button  class="status-button1" mat-raised-button color="accent" [matMenuTriggerFor]="menu">Sites</button>
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item>Item 1</button>
+                            <button mat-menu-item>Item 2</button>
+                          </mat-menu>
+                        </li>
+                        <li>
+                          <button  mat-raised-button color="primary" [matMenuTriggerFor]="menu">Status</button>
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item>Item 1</button>
+                            <button mat-menu-item>Item 2</button>
+                          </mat-menu>
+                        </li> -->
+                      </ul>
+                    </div>
+                    <div class="col-4">
+                      <ul class="header-buttons">
+                      <li class="me-4">
+                        <button mat-raised-button color="filter" [matMenuTriggerFor]="menu1">Filter
+                          <mat-icon>filter_list</mat-icon>
+                        </button>
+                        <mat-menu #menu1="matMenu">
+                          <div style="position: relative; max-width: 200px!important; max-height: 350px;"
+                            [perfectScrollbar]>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h6 class="ms-4 mt-3">Filter:</h6>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="me-2 float-end"><button mat-icon-button color="primary" matTooltip="SEARCH"
+                                    aria-label="Example icon button with a home icon" (click)="filterFn()">
+                                    <mat-icon>search</mat-icon>
+                                  </button></div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="me-2 float-end"><button mat-icon-button color="warn" matTooltip="CLEAR"
+                                    (click)="$event.stopPropagation()" aria-label="Example icon button with a home icon"
+                                    (click)="clearFn()">
+                                    <mat-icon>clear_all</mat-icon>
+                                  </button></div>
+                              </div>
+                            </div>
+                            <mat-accordion (click)="$event.stopPropagation()">
+                              <mat-expansion-panel class="mb-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    TIL Number
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of tils; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="tilNumberListFn(r)">
+                                        {{r.tilNumber}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Outage Type
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of outages; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="unitStatusListFn(r)">
+                                        {{r.title}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Budget Sources
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of budgetSources; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="budgetSourceListFn(r)">
+                                        {{r.budgetSourceTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Review Status
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of reviewStatuss; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="reviewStatusListFn(r)">
+                                        {{r.reviewStatusTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Priority
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of prioritys; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="priorityStatusListFn(r)">
+                                        {{r.priorityTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                            </mat-accordion>
+                          </div>
+                        </mat-menu>
+                      </li>
+                      <li>
+                        <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                          Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item matTooltip="XLSX"
+                            (click)="exporter.exportTable('xlsx', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/xlsx.png" alt="">
+                            <span class="ms-1">Download Excel</span>
+                          </button>
+                          <button mat-menu-item matTooltip="CSV"
+                            (click)="exporter.exportTable('csv', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/csv.png" alt="">
+                            <span class="ms-1">Download CSV</span>
+                          </button>
+                          <button mat-menu-item matTooltip="JSON"
+                            (click)="exporter.exportTable('json', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/json.png" alt="">
+                            <span class="ms-1">Download JSON</span>
+                          </button>
+                          <button mat-menu-item matTooltip="TXT"
+                            (click)="exporter.exportTable('txt', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/txt.png" alt="">
+                            <span class="ms-1">Download Text</span>
+                          </button>
+                        </mat-menu>
+                      </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="example-container">
+                <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let til ; let i = index"> {{i+1}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="tilNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> TIL Number </th>
+                    <td mat-cell *matCellDef="let til"> {{til.tilNumber}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actionTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                    <td mat-cell *matCellDef="let til">
+                      {{til.actionTitle}}
+                  </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actionCategory">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action Category </th>
+                    <td mat-cell *matCellDef="let til"> {{til.actionCategory}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="priorityTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Priority </th>
+                    <td mat-cell *matCellDef="let til"> {{til.priorityTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions" style="text-align:center;" >
+                    <th mat-header-cell *matHeaderCellDef style="padding:0 80px!important">Actions</th>
+                    <td mat-cell class="action-button" style="text-align:center;" *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button (click)="$event.stopPropagation()" 
+                        class="tbl-action-btn" matTooltip="EDIT" (click)="updateActionPackage(row)">
+                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
+                      <button mat-icon-button (click)="$event.stopPropagation()" 
+                        class="tbl-action-btn" matTooltip="DELETE" (click)="deleteAction(row)">
+                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                      </button>
+                      <button mat-icon-button (click)="$event.stopPropagation()"  color="primary" matTooltip="VIEW Action Package" (click)="viewPackage(row)"
+                        aria-label="Example icon button with a menu icon">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="$event.stopPropagation()"  color="accent" matTooltip="VIEW TILs" (click)="viewTil(row)"
+                        aria-label="Example icon button with a menu icon">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="updateActionPackage(row)"  [style.cursor]="'pointer'" matRipple></tr>
+                </table>
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+                <div *ngIf="!isTableLoading" class="no-results"
+                [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                No results
+              </div>
+                <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,259 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="siteEquipmentForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Region</mat-label>
+                        <mat-select formControlName="regionId" (selectionChange)="getSites($event.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of regions"
+                                [value]="reg.regionId">{{reg.regionTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteEquipmentForm.get('regionId').hasError('required')">
+                            Region is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="view">
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Site</mat-label>
+                        <mat-select formControlName="siteId" (selectionChange)="getUsers($event.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let site of selectedSites"
+                                [value]="site.siteId">{{site.siteTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteEquipmentForm.get('siteId').hasError('required')">
+                            Site is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Site</mat-label>
+                        <input matInput formControlName="site" [readonly]="view">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Model</mat-label>
+                        <mat-select formControlName="model">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let f of fleet"
+                                [value]="f.fleetEquipId">{{f.title}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteEquipmentForm.get('model').hasError('required')">
+                            Site is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Model</mat-label>
+                        <input matInput formControlName="modelTitle" [readonly]="view">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Unit SN</mat-label>
+                        <input matInput formControlName="unitSN" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('unitSN').hasError('required')">
+                            Unit SN is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Unit</mat-label>
+                        <input matInput formControlName="siteUnit" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('siteUnit').hasError('required')">
+                            Site unit is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Next Outage</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="nextOutage" [disabled]="view">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="siteEquipmentForm.get('nextOutage').hasError('required')">
+                            Next Outage Report is required
+                        </mat-error>
+                    </mat-form-field> -->
+                    <!-- <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Next Outage</mat-label>
+                        <input matInput formControlName="nextOutage" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('nextOutage').hasError('required')">
+                            Next Outage is required
+                        </mat-error>
+                    </mat-form-field> -->
+                <!-- </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Outage Type</mat-label>
+                        <mat-select formControlName="outageType">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let site of outageType"
+                                [value]="site.outageTypeId">{{site.title}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteEquipmentForm.get('outageType').hasError('required')">
+                            Site is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Outage Type</mat-label>
+                        <input matInput formControlName="outageTypeTitle" [readonly]="view">
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Details</mat-label>
+                        <textarea matInput formControlName="details" [readonly]="view"></textarea>
+                        <mat-error *ngIf="siteEquipmentForm.get('details').hasError('required')">
+                            Details are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Responsible</mat-label>
+                        <mat-select formControlName="responsible">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let site of selectedUsers"
+                                [value]="site.userId">{{site.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteEquipmentForm.get('responsible').hasError('required')">
+                            User is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Outage Type</mat-label>
+                        <input matInput formControlName="responsibleTitle" [readonly]="view">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Unit COD</mat-label>
+                        <input matInput [matDatepicker]="picker7" formControlName="unitCOD" [disabled]="view" [readonly]="view">
+                        <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                        <mat-datepicker #picker7></mat-datepicker>
+                        <mat-error *ngIf="siteEquipmentForm.get('unitCOD').hasError('required')">
+                            Unit COD Report is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Unit COD</mat-label>
+                        <input matInput formControlName="unitCOD" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('unitCOD').hasError('required')">
+                            Unit COD Type is required
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <input matInput formControlName="unit" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('unit').hasError('required')">
+                            Unit Type is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Model Equipment Type</mat-label>
+                        <input matInput formControlName="modelEquipmentType" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('modelEquipmentType').hasError('required')">
+                            Model Equipment Type is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Total TILs Issued</mat-label>
+                        <input matInput formControlName="totalTILsIssued" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('totalTILsIssued').hasError('required')">
+                            Total TILs Issued is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Total TILs Issued</mat-label>
+                        <input matInput formControlName="tilsDueInNext12Months" [readonly]="view">
+                        <mat-error *ngIf="siteEquipmentForm.get('tilsDueInNext12Months').hasError('required')">
+                            Total TILs Issued is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Recurring TILs</mat-label>
+                        <input matInput formControlName="recurringTILs" [readonly]="!view">
+                        <mat-error *ngIf="siteEquipmentForm.get('recurringTILs').hasError('required')">
+                            Recurring TILs Issued is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-checkbox class="example-margin" formControlName="isCritical">Is Critical</mat-checkbox>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" (click)="submit()" *ngIf="!view"
+                            [disabled]="!siteEquipmentForm.valid" [mat-dialog-close]="equipment">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

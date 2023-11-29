@@ -1,0 +1,147 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="actionForm" >
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Action</mat-label>
+                        <textarea matInput formControlName="actionTitle" rows="3"></textarea>
+                        <mat-error *ngIf="actionForm.get('actionTitle').hasError('required')">
+                            Action is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priorityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of prioritys"
+                                [value]="reg.priorityId">{{reg.priorityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('priorityId').hasError('required')" >
+                            Priority is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target Date</mat-label>
+                        <input matInput [matDatepicker]="picker4" formControlName="targetDate" >
+                        <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                        <mat-error *ngIf="actionForm.get('targetDate').hasError('required')" >
+                            Target Date  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Department</mat-label>
+                        <mat-select formControlName="deptId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of depts"
+                                [value]="d.deptId">{{d.deptTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('deptId').hasError('required')" >
+                            Department is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Assigned To</mat-label>
+                        <mat-select formControlName="userId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users"
+                                [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('userId').hasError('required')" >
+                            User is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Reference Number</mat-label>
+                        <input matInput formControlName="referenceNumber" >
+                        <mat-error *ngIf="actionForm.get('referenceNumber').hasError('required')" >
+                            Reference Number is required
+                        </mat-error>
+                        <mat-error *ngIf="actionForm.get('referenceNumber').hasError('maxlength')" >
+                            Max length of 20 is allowed
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.action == 'edit' || data.action == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="startDate" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="actionForm.get('startDate').hasError('required')" >
+                            Start Date  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.action == 'edit' || data.action == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of statuss"
+                                [value]="d.statusId">{{d.statusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="actionForm.get('statusId').hasError('required')" >
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.action == 'edit' || data.action == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Suggestion</mat-label>
+                        <textarea matInput formControlName="suggestion" rows="3" ></textarea>
+                        <mat-error *ngIf="actionForm.get('suggestion').hasError('required')" >
+                            Suggestion is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.action == 'edit' || data.action == 'add'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Remarks / Suggestions from the site</mat-label>
+                        <textarea matInput formControlName="remarks" rows="3" ></textarea>
+                        <mat-error *ngIf="actionForm.get('remarks').hasError('required')" >
+                            Remarks iare required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <div class="row" >
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-12">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!actionForm.valid" 
+                            [mat-dialog-close]="actionData" (click)="submit()" [hidden]="data.action == 'view'">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+               
+            </div>
+        </form>
+    </div>
+</div>

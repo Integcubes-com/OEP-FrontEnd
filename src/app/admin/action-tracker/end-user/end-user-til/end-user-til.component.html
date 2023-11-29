@@ -1,0 +1,507 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'TILs'" [items]="[]" [active_item]="'Action Tracking'"></app-breadcrumb>
+    </div>
+    <div class="card" *ngIf="displayFilter">
+      <div class="row m-4 p-0">
+        <h5 class="card-title">Filter By:</h5>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Target Date Start</mat-label>
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="filterObj.startDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Target Date End</mat-label>
+            <input matInput [matDatepicker]="picker2" [(ngModel)]="filterObj.endDate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Regions</mat-label>
+            <mat-select [(ngModel)]="filterObj.regionId" (selectionChange)="getSites($event.value)">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let d of regions" [value]="d.regionId">{{d.regionTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Sites</mat-label>
+            <mat-select [(ngModel)]="filterObj.siteId">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let d of selectedSites" [value]="d.siteId">{{d.siteTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>SAP/Planning</mat-label>
+            <mat-select [(ngModel)]="filterObj.sap">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let d of sapPlaning" [value]="d.sapPlanningId">{{d.sapPlanningTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="filterObj.status">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let s of statusList" [value]="s.statusId">{{s.statustitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Equipment</mat-label>
+            <mat-select [(ngModel)]="filterObj.equipment">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let d of equipment" [value]="d.equipmentId">{{d.siteTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Days To Target</mat-label>
+            <mat-select [(ngModel)]="filterObj.daysToTarget">
+              <mat-option value="">All</mat-option>
+              <mat-option value="Closed">Closed</mat-option>
+              <mat-option value="OverDue">OverDue</mat-option>
+              <mat-option value="Less than a week">Less than a week</mat-option>
+              <mat-option value="Less than a Month">Less than a Month</mat-option>
+              <mat-option value="Less than 6 Month">Less than 6 Month</mat-option>
+              <mat-option value="Greate than 6 Month">Greate than 6 Month</mat-option>
+              <mat-option value="Greate than 6 Month">Greate than 6 Month</mat-option>
+              <mat-option value="NotDue">NotDue</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 pb-0">
+          <div class="float-start">
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
+              (click)="getActions()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ms-0">
+                      <li class="dropdown">
+                        <h2>TIL Tracking</h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                        <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                          class="browser-default search-field" aria-label="Search box">
+                      </li>
+                      <!-- <li>
+                        <div class="m-l-10" matTooltip="FILTER DATA">
+                          <button mat-mini-fab color="warn" (click)="toggleFilter()">
+                            <mat-icon>filter_list</mat-icon>
+                          </button>
+                        </div>
+                      </li> -->
+                      <li>
+                        <div class="m-l-10" matTooltip="FILTER DATA">
+                          <button mat-mini-fab color="accent" (click)="addColumns()">
+                            <mat-icon>view_column</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+
+                      <!-- <li class="me-4">
+                              <div class="m-l-10" matTooltip="ADD">
+                                  <button mat-mini-fab color="primary" (click)="addObservation()">
+                                      <mat-icon class="col-white">add</mat-icon>
+                                  </button>
+                              </div>
+                          </li> -->
+                      <li class="me-4">
+                        <button mat-raised-button color="filter" [matMenuTriggerFor]="menu1">Filter
+                          <mat-icon>filter_list</mat-icon>
+                        </button>
+                        <mat-menu #menu1="matMenu">
+                          <div style="position: relative; max-width: 200px!important; max-height: 350px;"
+                            [perfectScrollbar]>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h6 class="ms-4 mt-3">Filter:</h6>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="me-2 float-end"><button mat-icon-button color="primary" matTooltip="SEARCH"
+                                    aria-label="Example icon button with a home icon" (click)="filterFn()">
+                                    <mat-icon>search</mat-icon>
+                                  </button></div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="me-2 float-end"><button mat-icon-button color="warn" matTooltip="CLEAR"
+                                    (click)="$event.stopPropagation()" aria-label="Example icon button with a home icon"
+                                    (click)="clearFn()">
+                                    <mat-icon>clear_all</mat-icon>
+                                  </button></div>
+                              </div>
+                            </div>
+                            <mat-accordion (click)="$event.stopPropagation()">
+                              <mat-expansion-panel class="mb-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Regions
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of regions; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="regionListFn(r)">
+                                        {{r.regionTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Sites
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of sites; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="siteListFn(r)">
+                                        {{r.siteTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Sap/Planning
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of sapPlaning; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="sapListFn(r)">
+                                        {{r.sapPlanningTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Status
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of statusList; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="statusListFn(r)">
+                                        {{r.statustitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Equipment
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of equipment; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="equipmentListFn(r)">
+                                        {{r.siteTitle + "-" + r.unit}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Days To Target
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of daysToTargetList; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="daysToTargetListFn(r)">
+                                        {{r.title}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Focus/Severity
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12 cs-style" *ngFor="let r of tilFocuss; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="focusListFn(r)">
+                                        {{r.focusTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    OEM Severity
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12 cs-style" *ngFor="let r of tilSeveritys; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="severityListFn(r)">
+                                        {{r.oemSeverityTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Priority
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12 cs-style" *ngFor="let r of priority; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="priorityListFn(r)">
+                                        {{r.priorityTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                            </mat-accordion>
+                          </div>
+                        </mat-menu>
+                      </li>
+                      <li>
+                        <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                          Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item matTooltip="XLSX"
+                            (click)="exporter.exportTable('xlsx', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/xlsx.png" alt="">
+                            <span class="ms-1">Download Excel</span>
+                          </button>
+                          <button mat-menu-item matTooltip="CSV"
+                            (click)="exporter.exportTable('csv', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/csv.png" alt="">
+                            <span class="ms-1">Download CSV</span>
+                          </button>
+                          <button mat-menu-item matTooltip="JSON"
+                            (click)="exporter.exportTable('json', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/json.png" alt="">
+                            <span class="ms-1">Download JSON</span>
+                          </button>
+                          <button mat-menu-item matTooltip="TXT"
+                            (click)="exporter.exportTable('txt', {fileName:'Site-list'})">
+                            <img src="assets/images/icons/txt.png" alt="">
+                            <span class="ms-1">Download Text</span>
+                          </button>
+                        </mat-menu>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- <div class="col-4">
+                      <ul class="header-buttons">
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="XLSX">
+                            <img src="assets/images/icons/xlsx.png" alt=""
+                              (click)="exporter.exportTable('xlsx', {fileName:'assets-list', sheet: 'sheet1'})" />
+                          </div>
+                        </li>
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="CSV">
+                            <img src="assets/images/icons/csv.png" alt="" (click)="exporter.exportTable('csv')" />
+                          </div>
+                        </li>
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="JSON">
+                            <img src="assets/images/icons/json.png" alt="" (click)="exporter.exportTable('json')" />
+                          </div>
+                        </li>
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="TXT">
+                            <img src="assets/images/icons/txt.png" alt="" (click)="exporter.exportTable('txt')" />
+                          </div>
+                        </li>
+                      </ul>
+                    </div> -->
+                </div>
+              </div>
+              <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> No. </th>
+                  <td mat-cell *matCellDef="let act ; let i = index"> {{i+1}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tapTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Package Title </th>
+                  <td mat-cell *matCellDef="let act"> {{act.tapTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="targetDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Target Date </th>
+                  <td mat-cell *matCellDef="let act"> {{act.targetDate | date}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tilNumber">
+                  <th mat-header-cell *matHeaderCellDef> TIL Number </th>
+                  <td mat-cell *matCellDef="let act"> {{act.tilNumber}} </td>
+                </ng-container>
+                <ng-container matColumnDef="priorityTitle">
+                  <th mat-header-cell *matHeaderCellDef> Priority </th>
+                  <td mat-cell *matCellDef="let act"> {{act.priorityTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tilAction">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let act"> {{act.tilAction}} </td>
+                </ng-container>
+                <ng-container matColumnDef="daysToTarget">
+                  <th mat-header-cell *matHeaderCellDef> Days To Target </th>
+                  <td mat-cell *matCellDef="let act"> {{act.daysToTarget}} </td>
+                </ng-container>
+                <ng-container matColumnDef="statustitle">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let act"> {{act.statustitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actionDescription">
+                  <th mat-header-cell *matHeaderCellDef> Action Description </th>
+                  <td mat-cell *matCellDef="let act"> {{act.actionDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="siteEquipmentTitle">
+                  <th mat-header-cell *matHeaderCellDef>Equipment </th>
+                  <td mat-cell *matCellDef="let act"> {{act.siteEquipmentTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="statusCalculated">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let act"> {{act.statusCalculated}} </td>
+                </ng-container>
+                <ng-container matColumnDef="regionTitle">
+                  <th mat-header-cell *matHeaderCellDef> Region </th>
+                  <td mat-cell *matCellDef="let act"> {{act.regionTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="focusTitle">
+                  <th mat-header-cell *matHeaderCellDef> Focus/Severity </th>
+                  <td mat-cell *matCellDef="let act"> {{act.focusTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="oemSeverityTitle">
+                  <th mat-header-cell *matHeaderCellDef> OEM Severity </th>
+                  <td mat-cell *matCellDef="let act"> {{act.oemSeverityTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="siteTitle">
+                  <th mat-header-cell *matHeaderCellDef> Site </th>
+                  <td mat-cell *matCellDef="let act"> {{act.siteTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tilDescription">
+                  <th mat-header-cell *matHeaderCellDef> TIL Title </th>
+                  <td mat-cell *matCellDef="let act"> {{act.tilDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="evidenceTitle">
+                  <th mat-header-cell *matHeaderCellDef> Evidence </th>
+                  <td mat-cell *matCellDef="let act"> {{act.evidenceTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="assignedToTitle">
+                  <th mat-header-cell *matHeaderCellDef> Assigned To </th>
+                  <td mat-cell *matCellDef="let act"> {{act.assignedToTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tilTitle">
+                  <th mat-header-cell *matHeaderCellDef> Title </th>
+                  <td mat-cell *matCellDef="let act"> {{act.tilTitle}} </td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let act"> {{act.action}} </td>
+                </ng-container> -->
+                <ng-container matColumnDef="finalImplementationTitle">
+                  <th mat-header-cell *matHeaderCellDef> Final Implementation Title </th>
+                  <td mat-cell *matCellDef="let act"> {{act.finalImplementationTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="report">
+                  <th mat-header-cell *matHeaderCellDef> Report </th>
+                  <td mat-cell *matCellDef="let recommendation"> <i matTooltip="DOWNLOAD"
+                      (click)="$event.stopPropagation()" (click)="downloadReport(recommendation)"
+                      *ngIf="recommendation.reportAttahced" style="color:rgb(0, 81, 255);"
+                      class="material-icons">file_download</i><span *ngIf="!recommendation.reportAttahced">No
+                      File</span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="padding-left:50px!important;padding-right:50px!important">Actions</th>
+                  <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0" style="text-align: 
+                    center;">
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="saveAction(row)"
+                      class="tbl-action-btn" matTooltip="EDIT">
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+                    <button mat-icon-button (click)="$event.stopPropagation()" color="primary" matTooltip="VIEW TILs"
+                      (click)="viewAction(row)" aria-label="Example icon button with a menu icon">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewAction(row)"
+                  [style.cursor]="'pointer'" matRipple></tr>
+              </table>
+              <div *ngIf="isTableLoading" class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
+              </div>
+              <div *ngIf="!isTableLoading" class="no-results"
+                [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                No results
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

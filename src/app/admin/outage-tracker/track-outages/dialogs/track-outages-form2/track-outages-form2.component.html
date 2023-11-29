@@ -1,0 +1,90 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+            <div class="row ms-4 me-4">
+                <div class="col-md-12 mt-3" style="font-size: larger;">
+                    <span style="color:#4CAA49"><b>Action:</b></span><span class="ms-2 ">{{action.phaseReadDesc}}</span>
+                </div>
+                <div class="col-md-12 mt-3" style="font-size:medium;">
+                    <span style="color:#4CAA49"><b>Start Date:</b></span><span class="ms-2 ">{{action.startDate | date}}</span>
+                </div>
+                <div class="col-md-12 mt-3" style="font-size: medium;">
+                    <span style="color:#4CAA49"><b>Deadline:</b></span><span class="ms-2 ">{{action.endDate | date}}</span>
+                </div>
+            </div>
+        <form class="register-form m-4" [formGroup]="actionForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Select Month</mat-label>
+                        <mat-select formControlName="date" (selectionChange)="getData($event.value)">
+                            <mat-option *ngFor="let m of monthList" [value]="m.monthId">{{m.date | date:'mediumDate'}}</mat-option>
+                          </mat-select> 
+                          <mat-error *ngIf="actionForm.get('date').hasError('required')">
+                            Date is Required
+                        </mat-error>                
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Remarks</mat-label>
+                        <textarea matInput formControlName="remarks" ></textarea>
+                        <mat-error *ngIf="actionForm.get('remarks').hasError('required')">
+                            Remarks is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>progress %</mat-label>
+                        <input matInput formControlName="progress">
+                        <mat-error *ngIf="actionForm.get('progress').hasError('required')">
+                            Progress is Required
+                        </mat-error>
+                        <mat-error *ngIf="actionForm.get('progress').hasError('pattern')">
+                            Only Number are accepted
+                        </mat-error>
+                        <mat-error *ngIf="actionForm.get('progress').hasError('min')">
+                            Value can not be less then 0
+                        </mat-error>
+                        <mat-error *ngIf="actionForm.get('progress').hasError('max')">
+                            Value can not be greater then 100
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <section>
+                        <mat-checkbox formControlName="notApplicable" (change)="techSelect($event)">Not Applicable</mat-checkbox>
+                      </section>
+                </div>
+            </div>
+    
+                    <div class="row mt-4">      
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-6">
+                    <div class="example-button-row float-start">
+                        <button mat-raised-button color="success" (click)="uploadEvidence()">
+                            <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                    </div>
+                </div>   
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-6">
+                    <div class="example-button-row float-end mt-2">
+                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!actionForm.valid" *ngIf="data.action!='view'">Save</button>    
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form> 
+    </div>
+</div>

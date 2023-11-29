@@ -1,0 +1,364 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header">
+            <app-breadcrumb [title]="'Sites'" [items]="[]" [active_item]="'Sites'"></app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="table-responsive">
+                            <div class="materialTableHeader">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <ul class="header-buttons-left ms-0">
+                                            <li class="dropdown">
+                                                <h2>Sites</h2>
+                                            </li>
+                                            <li class="dropdown m-l-20">
+                                                <label for="search-input"><i
+                                                        class="material-icons search-icon">search</i></label>
+                                                <input placeholder="Search" type="text" (keyup)="applyFilter($event)"
+                                                    #input class="browser-default search-field" aria-label="Search box">
+                                            </li>
+                                            <li>
+                                                <div class="m-l-10" matTooltip="ADD">
+                                                    <button mat-mini-fab color="primary" (click)="addSite()">
+                                                        <mat-icon class="col-white">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="m-l-10" matTooltip="FILTER DATA">
+                                                  <button mat-mini-fab color="accent" (click)="addColumns()">
+                                                    <mat-icon>view_column</mat-icon>
+                                                  </button>
+                                                </div>
+                                              </li> 
+                                        </ul>
+                                    </div>
+                                    <div class="col-4">
+                                        <ul class="header-buttons">
+
+                                            <!-- <li class="me-4">
+                                                <div class="m-l-10" matTooltip="ADD">
+                                                    <button mat-mini-fab color="primary" (click)="addObservation()">
+                                                        <mat-icon class="col-white">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </li> -->
+                                            <li class="me-4">
+                                                <button mat-raised-button color="filter"
+                                                    [matMenuTriggerFor]="menu1">Filter
+                                                    <mat-icon>filter_list</mat-icon>
+                                                </button>
+                                                <mat-menu #menu1="matMenu">
+                                                    <div style="position: relative; max-width: 200px!important; max-height: 350px;"
+                                                        [perfectScrollbar]>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h6 class="ms-4 mt-3">Filter:</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="me-2 float-end"><button mat-icon-button
+                                                                        color="primary"
+                                                                        aria-label="Example icon button with a home icon"
+                                                                        (click)="filterFn()">
+                                                                        <mat-icon>search</mat-icon>
+                                                                    </button></div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <mat-accordion>
+                                                            <mat-expansion-panel class="mb-0">
+                                                                <mat-expansion-panel-header
+                                                                    (click)="$event.stopPropagation()">
+                                                                    <mat-panel-title style="    font-size: 13px;">
+                                                                        Regions
+                                                                    </mat-panel-title>
+                                                                </mat-expansion-panel-header>
+                                                                <mat-panel-description>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-12"
+                                                                            *ngFor="let r of siteRegions; let i = index">
+                                                                            <mat-checkbox
+                                                                                (click)="$event.stopPropagation()"
+                                                                                class="example-margin"
+                                                                                [(ngModel)]="r.selected"
+                                                                                (click)="regionList(r)">
+                                                                                {{r.regionTitle}}
+                                                                            </mat-checkbox>
+                                                                        </div>
+                                                                    </div>
+                                                                </mat-panel-description>
+                                                            </mat-expansion-panel>
+                                                            <mat-expansion-panel class="mt-0">
+                                                                <mat-expansion-panel-header
+                                                                    (click)="$event.stopPropagation()">
+                                                                    <mat-panel-title style="font-size: 13px;">
+                                                                        Country
+                                                                    </mat-panel-title>
+                                                                </mat-expansion-panel-header>
+                                                                <mat-panel-description>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-12"
+                                                                            *ngFor="let r of siteCountry; let i = index">
+                                                                            <mat-checkbox
+                                                                                (click)="$event.stopPropagation()"
+                                                                                class="example-margin"
+                                                                                [(ngModel)]="r.selected"
+                                                                                (click)="countryList(r)">
+                                                                                {{r.countryTitle}}
+                                                                            </mat-checkbox>
+                                                                        </div>
+                                                                    </div>
+                                                                </mat-panel-description>
+                                                            </mat-expansion-panel>
+                                                            <mat-expansion-panel class="mt-0">
+                                                                <mat-expansion-panel-header
+                                                                    (click)="$event.stopPropagation()">
+                                                                    <mat-panel-title style="font-size: 13px;">
+                                                                        Technology
+                                                                    </mat-panel-title>
+                                                                </mat-expansion-panel-header>
+                                                                <mat-panel-description>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-12"
+                                                                            *ngFor="let r of siteTechnology; let i = index">
+                                                                            <mat-checkbox
+                                                                                (click)="$event.stopPropagation()"
+                                                                                class="example-margin"
+                                                                                [(ngModel)]="r.selected"
+                                                                                (click)="technologyList(r)">
+                                                                                {{r.technologyTitle}}
+                                                                            </mat-checkbox>
+                                                                        </div>
+                                                                    </div>
+                                                                </mat-panel-description>
+                                                            </mat-expansion-panel>
+                                                        </mat-accordion>
+                                                    </div>
+                                                </mat-menu>
+                                            </li>
+                                            <li>
+                                                <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                                                    Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                                                <mat-menu #menu="matMenu">
+                                                    <button mat-menu-item matTooltip="XLSX"
+                                                        (click)="exporter.exportTable('xlsx', {fileName:'Site-list'})">
+                                                        <img src="assets/images/icons/xlsx.png" alt="">
+                                                        <span class="ms-1">Download Excel</span>
+                                                    </button>
+                                                    <button mat-menu-item matTooltip="CSV"
+                                                        (click)="exporter.exportTable('csv', {fileName:'Site-list'})">
+                                                        <img src="assets/images/icons/csv.png" alt="">
+                                                        <span class="ms-1">Download CSV</span>
+                                                    </button>
+                                                    <button mat-menu-item matTooltip="JSON"
+                                                        (click)="exporter.exportTable('json', {fileName:'Site-list'})">
+                                                        <img src="assets/images/icons/json.png" alt="">
+                                                        <span class="ms-1">Download JSON</span>
+                                                    </button>
+                                                    <button mat-menu-item matTooltip="TXT"
+                                                        (click)="exporter.exportTable('txt', {fileName:'Site-list'})">
+                                                        <img src="assets/images/icons/txt.png" alt="">
+                                                        <span class="ms-1">Download Text</span>
+                                                    </button>
+                                                </mat-menu>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-container">
+                                <table mat-table [dataSource]="dataSource" matSort matTableExporter
+                                    #exporter="matTableExporter">
+                                    <ng-container matColumnDef="id">
+                                        <th mat-header-cell *matHeaderCellDef> No. </th>
+                                        <td mat-cell *matCellDef="let site ; let i = index"> {{i+1}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="siteName">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Site </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.siteName}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="insurenceReport">
+                                        <th mat-header-cell *matHeaderCellDef> Insurence Report </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.insurenceReport}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="tilsReport">
+                                        <th mat-header-cell *matHeaderCellDef> TILs Report </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.tilsReport}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="country">
+                                        <th mat-header-cell *matHeaderCellDef> Country </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.country}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="region">
+                                        <th mat-header-cell *matHeaderCellDef> Region </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.region}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="reads">
+                                        <th mat-header-cell *matHeaderCellDef> Read </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.reads}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="writes">
+                                        <th mat-header-cell *matHeaderCellDef> Write </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.writes}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="communication">
+                                        <th mat-header-cell *matHeaderCellDef> Communication </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.communication}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="projectCompany">
+                                        <th mat-header-cell *matHeaderCellDef> Project Company </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.projectCompany}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="siteDescription">
+                                        <th mat-header-cell *matHeaderCellDef> Site Description </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.siteDescription}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="projectStatus">
+                                        <th mat-header-cell *matHeaderCellDef> Project Status </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.projectStatus}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="technology">
+                                        <th mat-header-cell *matHeaderCellDef> Technology </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.technology}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="projectCOD">
+                                        <th mat-header-cell *matHeaderCellDef> Project COD </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.projectCOD}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="onmContractExpiry">
+                                        <th mat-header-cell *matHeaderCellDef> O&M Contact Expiry </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.onmContractExpiry |
+                                            date:'fullDate'}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="sitePGMName">
+                                        <th mat-header-cell *matHeaderCellDef> PGM Name </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.sitePGMName}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="insuranceLastReportDate">
+                                        <th mat-header-cell *matHeaderCellDef> Insurance Last Report Date </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.insuranceLastReportDate |
+                                            date:'fullDate'}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="insuranceNextAuditDate">
+                                        <th mat-header-cell *matHeaderCellDef> Insurence Next Audit Date </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.insuranceNextAuditDate |
+                                            date:'fullDate'}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="modifiedDate">
+                                        <th mat-header-cell *matHeaderCellDef> Modified Date </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.modifiedDate | date:'fullDate'}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="modifiedBy">
+                                        <th mat-header-cell *matHeaderCellDef> Modified By </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.modifiedBy}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="sitePGM">
+                                        <th mat-header-cell *matHeaderCellDef>Site PGM </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.sitePGM}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="insurancePOC">
+                                        <th mat-header-cell *matHeaderCellDef> Insurance POC </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.insurancePOC}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="tilPOC">
+                                        <th mat-header-cell *matHeaderCellDef> TIL POC </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.tilPOC}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="insuranceSummary">
+                                        <th mat-header-cell *matHeaderCellDef> Insurance Summary </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.insuranceSummary}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="tilsSummary">
+                                        <th mat-header-cell *matHeaderCellDef> TILs Summary </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.tilsSummary}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="clusterTitle">
+                                        <th mat-header-cell *matHeaderCellDef> Cluster Title </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.clusterTitle}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="siteEMO">
+                                        <th mat-header-cell *matHeaderCellDef> Site EMO </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.siteEMO}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="s4hanaCode">
+                                        <th mat-header-cell *matHeaderCellDef> s4hana Code </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.s4hanaCode}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="projectName">
+                                        <th mat-header-cell *matHeaderCellDef> Project Name </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.projectName}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="onmName">
+                                        <th mat-header-cell *matHeaderCellDef> ONM Name </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.onmName}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="totalTILsIssued">
+                                        <th mat-header-cell *matHeaderCellDef> Total TILs Issued </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.totalTILsIssued}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="tilsDueInNext12Months">
+                                        <th mat-header-cell *matHeaderCellDef> TILs Due In Next 12 Months </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.tilsDueInNext12Months}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="recurringTILs">
+                                        <th mat-header-cell *matHeaderCellDef> Recurring TILs </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.recurringTILs}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="externalCommunication">
+                                        <th mat-header-cell *matHeaderCellDef> External Communication </th>
+                                        <td mat-cell *matCellDef="let site"> {{site.externalCommunication}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef style="padding:auto 50px!important">Actions
+                                        </th>
+                                        <td mat-cell class="action-button" *matCellDef="let row; let i=index;"
+                                            class="pr-0">
+                                            <button mat-icon-button (click)="$event.stopPropagation()"
+                                                (click)="updateSite(row)" class="tbl-action-btn" matTooltip="EDIT">
+                                                <app-feather-icons [icon]="'edit'"
+                                                    [class]="'tbl-fav-edit'"></app-feather-icons>
+                                            </button>
+                                            <button mat-icon-button (click)="$event.stopPropagation()" color="primary"
+                                                matTooltip="VIEW Action Package" (click)="viewSite(row)"
+                                                aria-label="Example icon button with a menu icon">
+                                                <mat-icon>visibility</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="$event.stopPropagation()"
+                                                (click)="deleteSite(row)" class="tbl-action-btn" matTooltip="DELETE">
+                                                <app-feather-icons [icon]="'trash-2'"
+                                                    [class]="'tbl-fav-delete'"></app-feather-icons>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                        (click)="updateSite(row)" [style.cursor]="'pointer'" matRipple></tr>
+                                </table>
+                                <div *ngIf="isTableLoading" class="tbl-spinner">
+                                    <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                                    </mat-progress-spinner>
+                                </div>
+                                <div *ngIf="!isTableLoading" class="no-results"
+                                    [style.display]="dataSource?.renderedData?.length == 0 ? '' : 'none'">
+                                    No results
+                                </div>
+                                <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                                    aria-label="Select page of periodic elements">
+                                </mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

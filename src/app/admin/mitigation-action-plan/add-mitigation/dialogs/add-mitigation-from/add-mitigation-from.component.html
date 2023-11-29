@@ -1,0 +1,264 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="mitigationForm">
+            <div class="row">
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Action Title</mat-label>
+                        <textarea matInput formControlName="actionTitle" row="5"></textarea>
+                        <mat-error *ngIf="mitigationForm.get('actionTitle').hasError('required')">
+                            Action Title
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Action Description</mat-label>
+                        <textarea matInput formControlName="comments" row="5"></textarea>
+                        <mat-error *ngIf="mitigationForm.get('comments').hasError('required')">
+                            Comments are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Critical Program</mat-label>
+                        <mat-select formControlName="programId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let country of programs"
+                                [value]="country.programId">{{country.programTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('programId').hasError('required')">
+                            Critical Program is required
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Country</mat-label>
+                        <input matInput formControlName="country" [readonly]="view">
+                    </mat-form-field> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priorityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of prioritys"
+                                [value]="region.priorityId">{{region.priorityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('priorityId').hasError('required')">
+                            Priority is required
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="view">
+                    </mat-form-field> -->
+                </div>
+
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Objective Outcome</mat-label>
+                        <textarea matInput formControlName="objectiveOutcome" row="5"></textarea>
+                        <mat-error *ngIf="mitigationForm.get('objectiveOutcome').hasError('required')">
+                            Objective Outcomes are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Tech Accountability</mat-label>
+                        <mat-select formControlName="techAccountabilityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of techAccountabilities"
+                                [value]="region.taId">{{region.taTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('techAccountabilityId').hasError('required')">
+                            Tech Accountability is required
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="view">
+                    </mat-form-field> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Key Phases</mat-label>
+                        <mat-select formControlName="keyPhases" #user (selectionChange)="addChip(user.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of keyPhases"
+                                [value]="region.keyPhaseId">{{region.keyPhaseTitle + " - " +
+                                region.keyPhaseCode}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="accent" *ngFor="let u of keyPhaseList" (removed)="removeChip(u)" selected>
+                            {{u.keyPhaseCode}}
+                            <button matChipRemove
+                                [disabled]="data.action == 'view' || data.action == 'action' || data.action == 'review'">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <!-- <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="view">
+                    </mat-form-field> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                    *ngIf="data.action == 'action' || data.action == 'review'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Third Party Interface</mat-label>
+                        <input matInput formControlName="thirdPartyInterface">
+                        <mat-error *ngIf="mitigationForm.get('thirdPartyInterface').hasError('required')">
+                            Third Party Interface are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                    *ngIf="(data.action == 'action' || data.action == 'review') && (mitigationResult.isReviewed == false)">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of statuss | oMExcludePipe:4"
+                                [value]="region.statusId">{{region.statusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('statusId').hasError('required')">
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field class="example-full-width" appearance="outline" *ngIf="data.action == 'action' && mitigationResult.statusTitle == 'Completed'">
+                        <mat-label>Status</mat-label>
+                        <input matInput formControlName="statusTitle" disabled>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="data.action == 'review'">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId" >
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of statuss" [value]="region.statusId">{{region.statusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('statusId').hasError('required')">
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="data.action == 'action' && mitigationResult.statusTitle != 'Completed'">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId" >
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of statuss | oMExcludePipe:4" [value]="region.statusId">{{region.statusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('statusId').hasError('required')">
+                            Status is required
+                        </mat-error>
+                    </mat-form-field> -->
+                    <!-- <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="view">
+                    </mat-form-field> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                    *ngIf="(data.action == 'action' || data.action == 'review') && (mitigationResult.isReviewed == true)">
+
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of statuss"
+                                [value]="region.statusId">{{region.statusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="mitigationForm.get('statusId').hasError('required')">
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                    *ngIf="data.action == 'action' || data.action == 'review'">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Comment</mat-label>
+                        <textarea matInput formControlName="actionComment"></textarea>
+                        <mat-error *ngIf="mitigationForm.get('actionComment').hasError('required')">
+                            ActionComment is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                    *ngIf="data.action == 'action' || data.action == 'review'">
+                    <section>
+                        <mat-checkbox formControlName="tataInvolvement">TATA involvement</mat-checkbox>
+                    </section>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                    *ngIf="(data.action == 'action' || data.action == 'review')">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="targetDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="mitigationForm.get('targetDate').hasError('required')">
+                            Date Issued is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    *ngIf="data.action == 'review' || (data.action == 'action' && this.mitigationResult.rework == true)">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Reviewer Comment</mat-label>
+                        <textarea matInput formControlName="reviewerComment" row="5"></textarea>
+                        <mat-error *ngIf="mitigationForm.get('reviewerComment').hasError('required')">
+                            Comment required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2" *ngIf="data.action == 'review'">
+                    <section>
+                        <mat-checkbox formControlName="isReviewed"
+                            (change)="userAction($event)">Completed</mat-checkbox>
+                    </section>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2" *ngIf="data.action == 'review'">
+                    <section>
+                        <mat-checkbox formControlName="isRework">Rework</mat-checkbox>
+                    </section>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-xl-6 col-lg-6col-md-6 col-sm-6 mb-2">
+                    <div class="example-button-row float-start">
+                        <button mat-raised-button color="success" (click)="openAttachments()"
+                            (click)="$event.stopPropagation()"
+                            [hidden]="data.action == 'add' || data.action == 'view' || data.action == 'edit'">
+                            <mat-icon>insert_drive_file</mat-icon>{{ data.action == 'action' ? 'Attach Evidence' :
+                            data.action == 'review' ? 'View Evidence' : '' }}</button>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6col-md-6 col-sm-6 mb-2">
+                    <div class="example-button-row float-end mt-2">
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!mitigationForm.valid"
+                            [mat-dialog-close]="apiObj" (click)="submit()"
+                            [hidden]="data.action == 'view' || data.action == 'action' || data.action == 'review'">Save</button>
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!mitigationForm.valid"
+                            [mat-dialog-close]="mitigationResult" (click)="submit()"
+                            [hidden]="data.action == 'view' || data.action == 'add' || data.action == 'edit' || (data.action == 'action' &&  this.mitigationResult.isReviewed == true)">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

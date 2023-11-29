@@ -1,0 +1,99 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Outage Tracker'" [items]="[]" [active_item]="'Regions'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>Regions</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                        <li>
+                          <div class="m-l-10" matTooltip="ADD">
+                            <button mat-mini-fab color="primary" (click)="addRegion()">
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                          </div>
+                        </li>
+                        <li>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <table mat-table [dataSource]="dataSource" matSort>
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let region ; let i = index"> {{i+1}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                    <td mat-cell *matCellDef="let region"> {{region.title}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="executiveDirectorTitle">
+                    <th mat-header-cell *matHeaderCellDef> Executive Director </th>
+                    <td mat-cell *matCellDef="let region"> {{region.executiveDirectorTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="executiveVPTitle">
+                    <th mat-header-cell *matHeaderCellDef> Executive VP </th>
+                    <td mat-cell *matCellDef="let region"> {{region.executiveVPTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="insuranceSummary">
+                    <th mat-header-cell *matHeaderCellDef> Insurence Summary </th>
+                    <td mat-cell *matCellDef="let region"> {{region.insuranceSummary}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="TILsSummary">
+                    <th mat-header-cell *matHeaderCellDef> TIL Summary </th>
+                    <td mat-cell *matCellDef="let region"> {{region.tiLsSummary}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="padding-left:10px!important">Actions</th>
+                    <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="updateRegion(row)"
+                        class="tbl-action-btn" matTooltip="EDIT">
+                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
+                      <button mat-icon-button color="primary" (click)="$event.stopPropagation()" matTooltip="VIEW"
+                        (click)="viewRegion(row)">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteRegion(row)"
+                        class="tbl-action-btn" matTooltip="DELETE">
+                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewRegion(row)"
+                    [style.cursor]="'pointer'" matRipple></tr>
+                </table>
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+                <div *ngIf="!isTableLoading" class="no-results"
+                  [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                  No results
+                </div>
+                <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

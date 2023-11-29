@@ -1,0 +1,85 @@
+<!-- <section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'Observation'" [items]="[]" [active_item]="'Actions'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="p-4 pb-2">
+            <div class="row">
+              <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
+                <h6 style="color:green; font-weight: 400; font-size: 15px;">{{pageTitle}}</h6>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2">
+                <div class="example-button-row float-end">
+                  <button mat-raised-button color="accent" [routerLink]="['/admin/chemistry-action-plan/observation']">
+                    Back</button>
+                  <button mat-raised-button color="primary" (click)="newAction()">
+                    
+                    Add</button>
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="row clearfix">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div >
+                  <div class="ms-4">
+                    <h5>Actions</h5>
+                  </div>
+                  <div class="body table-responsive">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Action Title</th>
+                          <th>Priority</th>
+                          <th>Target Date</th>
+                          <th>Remarks</th>
+                          <th>Department</th>
+                          <th>Assigned To</th>
+                          <th>Status</th>
+                          <th>Reference</th>
+                          <th>Suggestion</th>
+                          <th style="padding: 0 50px;"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let act of actions; let i= index" [ngClass]="{'delayed': act.closureStatus, 'completed' : !act.closureStatus}">
+                          <th scope="row">{{i+1}}</th>
+                          <td>{{act.actionTitle}}</td>
+                          <td>{{act.priorityTitle}}</td>
+                          <td>{{act.targetDate|date}}</td>
+                          <td>{{act.remarks}}</td>
+                          <td>{{act.deptTitle}}</td>
+                          <td>{{act.userName}}</td>
+                          <td>{{act.statusTitle}}</td>
+                          <td>{{act.referenceNumber}}</td>
+                          <td>{{act.suggestion}}</td>
+                          <td> <button mat-icon-button (click)="$event.stopPropagation()" (click)="editAction(act)"
+                              class="tbl-action-btn" matTooltip="EDIT">
+                              <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                            </button>
+                            <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteAction(act)"
+                              class="tbl-action-btn" matTooltip="DELETE">
+                              <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section> -->

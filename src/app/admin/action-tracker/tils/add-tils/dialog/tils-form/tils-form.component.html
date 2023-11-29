@@ -1,0 +1,311 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="tilForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>TIL Number</mat-label>
+                        <input matInput formControlName="tilNumber">
+                        <mat-error *ngIf="tilForm.get('tilNumber').hasError('required')">
+                            TIL Number is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Alternate Number</mat-label>
+                        <input matInput formControlName="alternateNumber">
+                        <mat-error *ngIf="tilForm.get('alternateNumber').hasError('required')">
+                            Alternate Number is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>TIL Title</mat-label>
+                        <input matInput formControlName="tilTitle">
+                        <mat-error *ngIf="tilForm.get('tilTitle').hasError('required')">
+                            TIL Title is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>OEM</mat-label>
+                        <textarea matInput formControlName="oem"></textarea>
+                        <mat-error *ngIf="tilForm.get('oem').hasError('required')">
+                            OEM is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Recommendations</mat-label>
+                        <textarea matInput formControlName="recommendations"></textarea>
+                        <mat-error *ngIf="tilForm.get('recommendations').hasError('required')">
+                            Recommendations is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>OEM Timing Code</mat-label>
+                        <mat-select formControlName="oemTimingId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilTiming of tilTimings"
+                                [value]="tilTiming.timingId">{{tilTiming.timingCode}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('oemTimingId').hasError('required')">
+                            OEM Timing Code is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>OEM Severity</mat-label>
+                        <mat-select formControlName="oemSeverityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilSeverity of tilSeveritys"
+                                [value]="tilSeverity.oemSeverityId">{{tilSeverity.oemSeverityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('oemSeverityId').hasError('required')">
+                            OEM Severity is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>TIL Focus</mat-label>
+                        <mat-select formControlName="tilFocusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilFocus of tilFocuss"
+                                [value]="tilFocus.focusId">{{tilFocus.focusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('tilFocusId').hasError('required')">
+                            TIL Focus is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Date Received Nomac</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="dateReceivedNomac">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                        <mat-error *ngIf="tilForm.get('dateReceivedNomac').hasError('required')">
+                            Date Received is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Date Issued Document</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="dateIssuedDocument">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="tilForm.get('dateIssuedDocument').hasError('required')">
+                            Date Issued is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Current Revision</mat-label>
+                        <input matInput formControlName="currentRevision">
+                        <mat-error *ngIf="tilForm.get('currentRevision').hasError('required')">
+                            Current Revision is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Document Type</mat-label>
+                        <mat-select formControlName="documentTypeId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilDocType of tilDocTypes"
+                                [value]="tilDocType.typeId">{{tilDocType.typeTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('documentTypeId').hasError('required')">
+                            Document Type is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Source</mat-label>
+                        <mat-select formControlName="sourceId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilSource of tilSources"
+                                [value]="tilSource.sourceId">{{tilSource.sourceTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('sourceId').hasError('required')">
+                            Source is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Review Status</mat-label>
+                        <mat-select formControlName="reviewStatusId" disabled>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilReviewStatus of tilReviewStatuss"
+                                [value]="tilReviewStatus.reviewStatusId">{{tilReviewStatus.reviewStatusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('reviewStatusId').hasError('required')">
+                            Review Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Review Forum</mat-label>
+                        <mat-select formControlName="reviewForumId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilReviewForum of tilReviewForums"
+                                [value]="tilReviewForum.reviewFormId">{{tilReviewForum.reviewFormTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('reviewForumId').hasError('required')">
+                            Review Forum is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Applicability Notes</mat-label>
+                        <textarea matInput formControlName="applicabilityNotes"></textarea>
+                        <mat-error *ngIf="tilForm.get('applicabilityNotes').hasError('required')">
+                            Applicability Notes is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Notes</mat-label>
+                        <textarea matInput formControlName="notes"></textarea>
+                        <mat-error *ngIf="tilForm.get('notes').hasError('required')">
+                            Notes is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Component</mat-label>
+                        <mat-select formControlName="componentId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tilComponent of tilComponents"
+                                [value]="tilComponent.componentId">{{tilComponent.componentTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="tilForm.get('componentId').hasError('required')">
+                            Component is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Report</mat-label>
+                        <textarea matInput formControlName="report"></textarea>
+                        <mat-error *ngIf="tilForm.get('report').hasError('required')">
+                            Report is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Implementation Notes</mat-label>
+                        <textarea matInput formControlName="implementationNotes"></textarea>
+                        <mat-error *ngIf="tilForm.get('implementationNotes').hasError('required')">
+                            Implementation Notes is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Year Of Issue</mat-label>
+                        <input matInput formControlName="yearOfIssue">
+                        <mat-error *ngIf="tilForm.get('yearOfIssue').hasError('required')">
+                            Year Of Issue is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <label>Attachments</label>
+                    <app-file-upload (change)="handleUpload($event)" formControlName="attachments"></app-file-upload>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <!-- <div class="example-button-row float-start">
+                        <button mat-raised-button color="success" (click)="downloadReport()">
+                            <mat-icon>cloud_download</mat-icon>Report</button>
+                    </div> -->
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!tilForm.valid"
+                            [mat-dialog-close]="til">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,314 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="siteForm">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="siteName" [readonly]="view">
+                        <mat-error *ngIf="siteForm.get('siteName').hasError('required')">
+                            Name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Country</mat-label>
+                        <mat-select formControlName="countryId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let country of siteCountry"
+                                [value]="country.countryId">{{country.countryTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('countryId').hasError('required')">
+                            Country is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Country</mat-label>
+                        <input matInput formControlName="country" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Region</mat-label>
+                        <mat-select formControlName="regionId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let region of siteRegions" [value]="region.regionId">{{region.regionTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('regionId').hasError('required')">
+                            Region is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Region</mat-label>
+                        <input matInput formControlName="region" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Cluster</mat-label>
+                        <mat-select formControlName="clusterId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let r of clusters"
+                                [value]="r.clusterId">{{r.clusterTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('clusterId').hasError('required')">
+                            Cluster is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Project Company</mat-label>
+                        <input matInput formControlName="projectCompany" [readonly]="view">
+                        <mat-error *ngIf="siteForm.get('projectCompany').hasError('required')">
+                            Project Company is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>S4HANA Code</mat-label>
+                        <input matInput formControlName="s4hanaCode" [readonly]="view">
+                        <mat-error *ngIf="siteForm.get('s4hanaCode').hasError('required')">
+                            S4HANA Code is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Project Name</mat-label>
+                        <input matInput formControlName="projectName" [readonly]="view">
+                        <mat-error *ngIf="siteForm.get('projectName').hasError('required')">
+                            Project Name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label> O&M(Operation & Maintenance)</mat-label>
+                        <input matInput formControlName="onmName" [readonly]="view">
+                        <mat-error *ngIf="siteForm.get('onmName').hasError('required')">
+                            O&M is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Project Status</mat-label>
+                        <mat-select formControlName="projectStatusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let status of siteProjectStatus"
+                                [value]="status.projectStatusId">{{status.projectStatusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('projectStatusId').hasError('required')">
+                            Project Status is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Project Status</mat-label>
+                        <input matInput formControlName="projectStatus" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Description</mat-label>
+                        <input matInput formControlName="siteDescription" [readonly]="view">
+                        <mat-error *ngIf="siteForm.get('siteDescription').hasError('required')">
+                            Site Description is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Technology</mat-label>
+                        <mat-select formControlName="technologyId" #user (selectionChange)="addChip(user.value, 'user')">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let tech of siteTechnology" [value]="tech.technologyId">{{tech.technologyTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('technologyId').hasError('required')">
+                            Project Status is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="accent" *ngFor="let u of siteTechnologyList" (removed)="removeChip(u, 'user')" selected>
+                            {{u.technologyTitle}}
+                            <button matChipRemove *ngIf="!view">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Site PGM</mat-label>
+                        <mat-select formControlName="sitePGMId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users" [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('sitePGMId').hasError('required')">
+                            Site PGM is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Site PGM</mat-label>
+                        <input matInput formControlName="sitePGMName" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Insurance POC</mat-label>
+                        <mat-select formControlName="insurancePOCId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users" [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('insurancePOCId').hasError('required')">
+                            Insurance POC is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Insurance POC</mat-label>
+                        <input matInput formControlName="insurancePOCName" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>TIL POC</mat-label>
+                        <mat-select formControlName="tilPOCId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users" [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('tilPOCId').hasError('required')">
+                            Insurance POC is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>TIL POC</mat-label>
+                        <input matInput formControlName="siteEMOName" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Site EMO</mat-label>
+                        <mat-select formControlName="siteEMOId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users" [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="siteForm.get('siteEMOId').hasError('required')">
+                            Site EMO is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="view">
+                        <mat-label>Site EMO</mat-label>
+                        <input matInput formControlName="siteEMOName" [readonly]="view">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Project COD</mat-label>
+                        <input matInput [matDatepicker]="picker7" formControlName="projectCOD">
+                        <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                        <mat-datepicker #picker7></mat-datepicker>
+                        <mat-error *ngIf="siteForm.get('projectCOD').hasError('required')">
+                            Project COD Report is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>O&M Contract Expiry</mat-label>
+                        <input matInput [matDatepicker]="picker4" formControlName="onmContractExpiry">
+                        <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                        <mat-error *ngIf="siteForm.get('onmContractExpiry').hasError('required')">
+                            O&M Contract Expiry is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurance Last Report Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="insuranceLastReportDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="siteForm.get('insuranceLastReportDate').hasError('required')">
+                            Date Issued is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurance Next Audit Date</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="insuranceNextAuditDate" [readonly]="view">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                        <mat-error *ngIf="siteForm.get('insuranceNextAuditDate').hasError('required')">
+                            Audate Date is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>TILs Summary</mat-label>
+                        <textarea matInput formControlName="tilsSummary" [readonly]="view"></textarea>
+                        <mat-error *ngIf="siteForm.get('tilsSummary').hasError('required')">
+                            TILs Summary is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurance Summary</mat-label>
+                        <textarea matInput formControlName="insuranceSummary" [readonly]="view"></textarea>
+                        <mat-error *ngIf="siteForm.get('insuranceSummary').hasError('required')">
+                            Insurance Summary is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+                <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" *ngIf="!view">
+                    <label>Insurence Report</label>
+                    <app-file-upload   (change)="handleUpload($event, 'insurenceReport')" formControlName="uploadFile1"></app-file-upload>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" *ngIf="!view">
+                    <label>TILs Report</label>
+                    <app-file-upload  color="success" multiple  (change)="handleUpload($event, 'tilsReport')" formControlName="uploadFile2"></app-file-upload>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <div class="example-button-row float-start">
+                        <button mat-raised-button color="accent" *ngIf="view && site.tilsReportPath !== '' || edit && site.tilsReportPath !== '' " (click)="downloadTilReport()">
+                            <mat-icon>cloud_download</mat-icon>TIL</button>
+                        <button mat-raised-button color="success" *ngIf="view && site.insurenceReportPath !== '' || edit && site.insurenceReportPath !== '' " (click)="downloadInsuranceReport()">
+                            <mat-icon>cloud_download</mat-icon>Insurance</button>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!siteForm.valid || siteTechnologyList.length == 0" *ngIf="!view"
+                            [mat-dialog-close]="saveObj" (click)="submit()">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

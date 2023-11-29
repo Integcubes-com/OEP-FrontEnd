@@ -1,0 +1,98 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Chemistry Action Plan'" [items]="[]" [active_item]="'Documents'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>Documents</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                        <li>
+                          <div class="m-l-10" matTooltip="ADD">
+                            <button mat-mini-fab color="primary" (click)="addDocument()">
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                          </div>
+                        </li>
+                        <li>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <table mat-table [dataSource]="dataSource" matSort>
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let region ; let i = index"> {{i+1}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="siteTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Site </th>
+                    <td mat-cell *matCellDef="let region"> {{region.siteTitle}} </td>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="regionTitle">
+                    <th mat-header-cell *matHeaderCellDef> Region </th>
+                    <td mat-cell *matCellDef="let region"> {{region.regionTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="docName">
+                    <th mat-header-cell *matHeaderCellDef> Document Name </th>
+                    <td mat-cell *matCellDef="let region" matTooltip="DOWNLOAD" (click)="downloadReport(region)" (click)="$event.stopPropagation()"> <u>{{region.docName}} </u><span class="p-0 m-0">
+                      <mat-icon color="accent" style="font-size:22px" class="m-0 pb-0">cloud_download </mat-icon>
+                    </span> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="file">
+                    <th mat-header-cell *matHeaderCellDef> File </th>
+                    <td mat-cell *matCellDef="let region"  (click)="downloadReport(region)" (click)="$event.stopPropagation()">  <i matTooltip="DOWNLOAD" style="color:red;font-size: 15px;"class="far fa-file-pdf tbl-pdf"></i> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="padding-left:10px!important">Actions</th>
+                    <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="updateDocument(row)"
+                        class="tbl-action-btn" matTooltip="EDIT">
+                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
+                      <!-- <button mat-icon-button color="primary" (click)="$event.stopPropagation()" matTooltip="VIEW"
+                        (click)="viewDocument(row)">
+                        <mat-icon>visibility</mat-icon>
+                      </button> -->
+                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteDocument(row)"
+                        class="tbl-action-btn" matTooltip="DELETE">
+                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="updateDocument(row)"
+                    [style.cursor]="'pointer'" matRipple></tr>
+                </table>
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+                <div *ngIf="!isTableLoading" class="no-results"
+                  [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                  No results
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

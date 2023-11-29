@@ -1,0 +1,105 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="countryForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Region</mat-label>
+                        <mat-select formControlName="regionId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let r of region"
+                                [value]="r.regionId">{{r.regionTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="countryForm.get('regionId').hasError('required')">
+                            Region is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Cluster</mat-label>
+                        <mat-select formControlName="clusterId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let r of clusters"
+                                [value]="r.clusterId">{{r.clusterTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="countryForm.get('clusterId').hasError('required')">
+                            Cluster is required
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="countryTitle">
+                        <mat-error *ngIf="countryForm.get('countryTitle').hasError('required')">
+                            Country Name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Code</mat-label>
+                        <input matInput formControlName="countryCode">
+                        <mat-error *ngIf="countryForm.get('countryCode').hasError('required')">
+                            Country Code is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Executive Director</mat-label>
+                        <mat-select formControlName="executiveDirectorId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of users"
+                                [value]="user.userId">{{user.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="countryForm.get('executiveDirectorId').hasError('required')">
+                            Executive Director is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Executive VPs</mat-label>
+                        <mat-select formControlName="executiveVPId" #user (selectionChange)="addChip(user.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of users"
+                                [value]="user.userId">{{user.userName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="accent" *ngFor="let u of userList" (removed)="removeChip(u)" selected>
+                            {{u.userName}}
+                            <button matChipRemove [disabled]="data.action=='view'">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [hidden]="this.data.action == 'view'" 
+                        (click)="submit()" [disabled]="!countryForm.valid">Save</button>                          
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

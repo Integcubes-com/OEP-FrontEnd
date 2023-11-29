@@ -1,0 +1,242 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="proactiveForm">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Proactive Title</mat-label>
+                        <input matInput formControlName="proactivetitle" >
+                        <mat-error *ngIf="proactiveForm.get('proactivetitle').hasError('required')">
+                            Proactive Title is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Proactive Reference</mat-label>
+                        <input matInput formControlName="proactiveReference" >
+                        <mat-error *ngIf="proactiveForm.get('proactiveReference').hasError('required')">
+                            Proactive Reference is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Criticality</mat-label>
+                        <mat-select formControlName="criticalityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveCriticality"
+                                [value]="user.criticalityId">{{user.criticalityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('criticalityId').hasError('required')">
+                            Criticality is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="categoryId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveCategory"
+                                [value]="user.categoryId">{{user.categoryTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('categoryId').hasError('required')">
+                            Category is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Exposure</mat-label>
+                        <mat-select formControlName="exposureId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveExposure"
+                                [value]="user.exposureId">{{user.exposureTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('exposureId').hasError('required')">
+                            Exposure is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Recommendation</mat-label>
+                        <textarea matInput formControlName="recommendations" rows="3"></textarea>
+                        <mat-error *ngIf="proactiveForm.get('recommendations').hasError('required')">
+                            Recommendation is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Guidelines</mat-label>
+                        <textarea matInput formControlName="guidelines" rows="3"></textarea>
+                        <mat-error *ngIf="proactiveForm.get('guidelines').hasError('required')">
+                            Guidelines is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Details</mat-label>
+                        <textarea matInput formControlName="details" rows="3"></textarea>
+                        <mat-error *ngIf="proactiveForm.get('details').hasError('required')">
+                            Details is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Approach</mat-label>
+                        <mat-select formControlName="approachStatusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveApproachStatus"
+                                [value]="user.approachStatusId">{{user.approachStatusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('approachStatusId').hasError('required')">
+                            Approach Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Source</mat-label>
+                        <mat-select formControlName="sourceId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveProactiveSource"
+                                [value]="user.sourceId">{{user.sourceTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('sourceId').hasError('required')">
+                            Source is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Theme</mat-label>
+                        <mat-select formControlName="themeId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveProactiveTheme"
+                                [value]="user.themeId">{{user.themeTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('themeId').hasError('required')">
+                            Theme is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Audit Preperatory Checklist</mat-label>
+                        <mat-select formControlName="auditPreperatoryChecklist">
+                            <mat-option>None</mat-option>
+                            <mat-option value="Yes">Yes</mat-option>
+                            <mat-option value="No">No</mat-option>
+
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('auditPreperatoryChecklist').hasError('required')">
+                            Audit Preparation Checklist is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Project Phase</mat-label>
+                        <mat-select formControlName="phaseprojectId" #user (selectionChange)="addChip(user.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of proactiveProjectPhase"
+                                [value]="user.projectPhaseId">{{user.projectPhaseTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="accent" *ngFor="let u of projectPhaseList" (removed)="removeChip(u)" selected>
+                            {{u.projectPhaseTitle}}
+                            <button matChipRemove [disabled]="data.action=='view'">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+           
+
+            <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" *ngIf="!view">
+                        <mat-label>Executive Director</mat-label>
+                        <mat-select formControlName="executiveDirectorId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of users"
+                                [value]="user.userId">{{user.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="proactiveForm.get('executiveDirectorId').hasError('required')">
+                            Executive Director is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline" >
+                        <mat-label>Executive VPs</mat-label>
+                        <mat-select formControlName="executiveVPId" #user (selectionChange)="addChip(user.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let user of users"
+                                [value]="user.userId">{{user.userName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-chip-list>
+                        <mat-chip color="accent" *ngFor="let u of projectPhaseList" (removed)="removeChip(u)" selected>
+                            {{u.userName}}
+                            <button matChipRemove [disabled]="data.action=='view'">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>TILs Summary</mat-label>
+                        <textarea matInput formControlName="TILsSummary" ></textarea>
+                        <mat-icon matSuffix>tab</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Insurence Summary</mat-label>
+                        <textarea matInput formControlName="insuranceSummary" ></textarea>
+                        <mat-icon matSuffix>tab</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [hidden]="data.action == 'view'" (click)="submit()" [disabled]="!proactiveForm.valid"
+                            >Save</button>
+                           
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

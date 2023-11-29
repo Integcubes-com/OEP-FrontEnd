@@ -1,0 +1,339 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'O&M Systems Mitigation Plan'" [items]="[]" [active_item]="'Actions'"></app-breadcrumb>
+    </div>
+    <div class="card" *ngIf="displayFilter">
+      <div class="row m-4 p-0">
+        <h5 class="card-title">Filter By:</h5>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Program</mat-label>
+            <mat-select [(ngModel)]="filterObj.program" (selectionChange)="getMitigationActions()">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let d of programs" [value]="d.programId">{{d.programTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Site</mat-label>
+            <mat-select [(ngModel)]="filterObj.site" (selectionChange)="getTechnology($event.value)" (selectionChange)="getMitigationActions()">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Technology</mat-label>
+            <mat-select [(ngModel)]="filterObj.technology" (selectionChange)="getMitigationActions()">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let rf of technologys" [value]="rf.technologyId">{{rf.technologyTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Priority</mat-label>
+            <mat-select [(ngModel)]="filterObj.priority" (selectionChange)="getMitigationActions()">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let rf of prioritys" [value]="rf.priorityId">{{rf.priorityTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="filterObj.status" (selectionChange)="getMitigationActions()">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let rf of statuss  | MultipleExclude: excludePipes" [value]="rf.statusId">{{rf.statusTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <div class="col-md-9 pb-0">
+          <div class="float-end">
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
+              (click)="getMitigationActions()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ms-0">
+                      <li class="dropdown">
+                        <h2>Actions</h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                        <input placeholder="Search" type="text" (keyup)="handleSearch($event.target.value)" #input
+                          class="browser-default search-field" aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="m-l-10" matTooltip="FILTER DATA">
+                          <button mat-mini-fab color="warn" (click)="toggleFilter()">
+                            <mat-icon>filter_list</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <!-- <li class="me-4">
+                        <button mat-raised-button color="filter" [matMenuTriggerFor]="menu1">Filter
+                          <mat-icon>filter_list</mat-icon>
+                        </button>
+                        <mat-menu #menu1="matMenu">
+                          <div style="position: relative; max-width: 200px!important; max-height: 350px;"
+                            [perfectScrollbar]>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h6 class="ms-4 mt-3">Filter:</h6>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="me-2 float-end"><button mat-icon-button color="primary"
+                                    aria-label="Example icon button with a home icon" (click)="filterFn()">
+                                    <mat-icon>search</mat-icon>
+                                  </button></div>
+                              </div>
+                            </div>
+                            <mat-accordion>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="    font-size: 13px;">
+                                    Site
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of sites; let i = index">
+                                      <ng-container>
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="siteList(r)">
+                                          {{r.siteTitle}}
+                                        </mat-checkbox>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="    font-size: 13px;">
+                                    Programs
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of programs; let i = index">
+                                      <ng-container>
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="programList(r)">
+                                          {{r.programTitle | slice:0:20}}
+                                        </mat-checkbox>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="    font-size: 13px;">
+                                    Technology
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of technologys; let i = index">
+                                      <ng-container>
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.selected" (click)="technologyList(r)">
+                                          {{r.technologyTitle}}
+                                        </mat-checkbox>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="    font-size: 13px;">
+                                    Status
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of statuss; let i = index">
+                                      <ng-container>
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.selected" (click)="statusList(r)">
+                                          {{r.statusTitle}}
+                                        </mat-checkbox>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="    font-size: 13px;">
+                                    Priority
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of prioritys; let i = index">
+                                      <ng-container>
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.selected" (click)="priorityList(r)">
+                                          {{r.priorityTitle}}
+                                        </mat-checkbox>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                            </mat-accordion>
+                          </div>
+                        </mat-menu>
+                      </li> -->
+                      <li>
+                        <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                          Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item matTooltip="XLSX" (click)="downloadExcel()">
+                            <img src="assets/images/icons/xlsx.png" alt="">
+                            <span class="ms-1">Download Excel</span>
+                          </button>
+
+                        </mat-menu>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table  table-bordered table-sm row-border " id="datatableexample">
+                <thead>
+                  <tr>
+                    <th>no#</th>
+                    <th>Program</th>
+                    <th>Action</th>
+                    <th>Priority</th>
+                    <th>Objective</th>
+                    <th>Target Date</th>
+                    <th>Status</th>
+                    <th>Site</th>
+                    <th>Technology</th>>
+                  </tr>
+                </thead>
+
+                <div *ngIf="isTableLoading" class="tbl-spinner" style="margin: auto;">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+                <tbody>
+                  <tr *ngFor="let act of mitigationResult ; let i= index">
+                    <th style="text-align:center!important;" scope="row">{{i+1}}</th>
+                    <td width="20%">{{act.programTitle}}</td>
+                    <td width="30%" style="text-align: left!important;" data-toggle="tooltip" class="link" role="button"
+                      (click)="editMitigationAction(act)" matTooltip="View" [style.cursor]="'pointer'">
+                      <u>{{act.actionTitle}}</u>
+                    </td>
+                    <td>{{act.priorityTitle}}</td>
+                    <td width="20%">{{act.objectiveOutcome}}</td>
+                    <td>{{act.targetDate|date}}</td>
+                    <td *ngIf="act.rework == 0">{{act.statusTitle?act.statusTitle:"Pending"}}</td>
+                    <td *ngIf="act.rework == 1">{{act.statusTitle?act.statusTitle:"Pending"}}*</td>
+                    <td>{{act.siteTitle}}</td>
+                    <td>{{act.technologyTitle}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> No. </th>
+                  <td mat-cell *matCellDef="let region ; let i = index"> {{i+1}} </td>
+                </ng-container>
+                <ng-container matColumnDef="programTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Program </th>
+                  <td mat-cell *matCellDef="let region"> {{region.programTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actionTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Action Title </th>
+                  <td mat-cell *matCellDef="let region"><u> {{region.actionTitle}}</u> </td>
+                </ng-container>
+                <ng-container matColumnDef="mitigationTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Mitigation Title </th>
+                  <td mat-cell *matCellDef="let region"> {{region.mitigationTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="mitigationDescription">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Mitigation Description </th>
+                  <td mat-cell *matCellDef="let region">{{region.mitigationDescription}}</td>
+                </ng-container>
+                <ng-container matColumnDef="priorityTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Priority Title </th>
+                  <td mat-cell *matCellDef="let region"> {{region.priorityTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="objectiveOutcome">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Objective Outcome </th>
+                  <td mat-cell *matCellDef="let region"> {{region.objectiveOutcome}} </td>
+                </ng-container>
+                <ng-container matColumnDef="targetDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Target Date </th>
+                  <td mat-cell *matCellDef="let region"> {{region.targetDate | date}} </td>
+                </ng-container>
+                <ng-container matColumnDef="statusTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status Title </th>
+                  <td mat-cell *matCellDef="let region"> {{region.statusTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef style="padding-left:50px!important; padding-right:50px!important">Actions</th>
+                  <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="editMitigationAction(row)"
+                      class="tbl-action-btn" matTooltip="EDIT">
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+                    <button mat-icon-button color="primary" (click)="$event.stopPropagation()" matTooltip="VIEW"
+                      (click)="viewMitigationAction(row)">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteMitigationAction(row)"
+                      class="tbl-action-btn" matTooltip="DELETE">
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editMitigationAction(row)"
+                  [style.cursor]="'pointer'" matRipple></tr>
+              </table>
+              <div *ngIf="isTableLoading" class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
+              </div>
+              <div *ngIf="!isTableLoading" class="no-results"
+                [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                No results
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

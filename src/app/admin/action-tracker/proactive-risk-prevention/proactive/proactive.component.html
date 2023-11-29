@@ -1,0 +1,154 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'Action Tracker'" [items]="[]"
+        [active_item]="'Proactive Risk Prevention'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ms-0">
+                      <li class="dropdown">
+                        <h2>Proactives</h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                        <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                          class="browser-default search-field" aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="m-l-10" matTooltip="ADD">
+                          <button mat-mini-fab color="primary" (click)="addRisk()">
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="m-l-10" matTooltip="FILTER DATA">
+                          <button mat-mini-fab color="accent" (click)="addColumns()">
+                            <mat-icon>view_column</mat-icon>
+                          </button>
+                        </div>
+                      </li>                    
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="export-button m-l-10" matTooltip="XLSX">
+                          <img src="assets/images/icons/xlsx.png" alt=""
+                            (click)="exporter.exportTable('xlsx', {fileName:'assets-list', sheet: 'sheet1'})" />
+                        </div>
+                      </li>
+                      <li>
+                        <div class="export-button m-l-10" matTooltip="CSV">
+                          <img src="assets/images/icons/csv.png" alt="" (click)="exporter.exportTable('csv')" />
+                        </div>
+                      </li>
+                      <li>
+                        <div class="export-button m-l-10" matTooltip="JSON">
+                          <img src="assets/images/icons/json.png" alt="" (click)="exporter.exportTable('json')" />
+                        </div>
+                      </li>
+                      <li>
+                        <div class="export-button m-l-10" matTooltip="TXT">
+                          <img src="assets/images/icons/txt.png" alt="" (click)="exporter.exportTable('txt')" />
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> No. </th>
+                  <td mat-cell *matCellDef="let region ; let i = index"> {{i+1}} </td>
+                </ng-container>
+                <ng-container matColumnDef="proactivetitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                  <td mat-cell *matCellDef="let region"> {{region.proactivetitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="recommendations">
+                  <th mat-header-cell *matHeaderCellDef> Recommendations </th>
+                  <td mat-cell *matCellDef="let region"> {{region.recommendations}} </td>
+                </ng-container>
+                <ng-container matColumnDef="guidelines">
+                  <th mat-header-cell *matHeaderCellDef> Guidelines </th>
+                  <td mat-cell *matCellDef="let region"> {{region.guidelines}} </td>
+                </ng-container>
+                <ng-container matColumnDef="auditPreperatoryChecklist">
+                  <th mat-header-cell *matHeaderCellDef> Audit Checklist </th>
+                  <td mat-cell *matCellDef="let region"> {{region.auditPreperatoryChecklist}} </td>
+                </ng-container>
+                <ng-container matColumnDef="criticalityTitle">
+                  <th mat-header-cell *matHeaderCellDef> Criticality </th>
+                  <td mat-cell *matCellDef="let region"> {{region.criticalityTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="categoryTitle">
+                  <th mat-header-cell *matHeaderCellDef> Category </th>
+                  <td mat-cell *matCellDef="let region"> {{region.categoryTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="exposureTitle">
+                  <th mat-header-cell *matHeaderCellDef> Exposure </th>
+                  <td mat-cell *matCellDef="let region"> {{region.exposureTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="sourceTitle">
+                  <th mat-header-cell *matHeaderCellDef> Source </th>
+                  <td mat-cell *matCellDef="let region"> {{region.sourceTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="themeTitle">
+                  <th mat-header-cell *matHeaderCellDef> Theme </th>
+                  <td mat-cell *matCellDef="let region"> {{region.themeTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="sites">
+                  <th mat-header-cell *matHeaderCellDef> sites </th>
+                  <td mat-cell *matCellDef="let region"> {{region.sites}} </td>
+                </ng-container>
+                <ng-container matColumnDef="proactiveReference">
+                  <th mat-header-cell *matHeaderCellDef> Reference </th>
+                  <td mat-cell *matCellDef="let region"> {{region.proactiveReference}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef style="padding:0 50px!important">Actions</th>
+                  <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="updateRisk(row)"
+                      class="tbl-action-btn" matTooltip="EDIT">
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+                    <button mat-icon-button color="primary" (click)="$event.stopPropagation()" matTooltip="VIEW"
+                      (click)="viewRisk(row)">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteRisk(row)"
+                      class="tbl-action-btn" matTooltip="DELETE">
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewRisk(row)"
+                  [style.cursor]="'pointer'" matRipple></tr>
+              </table>
+              <div *ngIf="isTableLoading" class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
+              </div>
+              <div *ngIf="!isTableLoading" class="no-results"
+                [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                No results
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

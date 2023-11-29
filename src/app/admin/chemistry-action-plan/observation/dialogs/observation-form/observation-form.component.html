@@ -1,0 +1,182 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="observationForm">
+            <div class="row m-b-0">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 m-b-0">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Regions</mat-label>
+                        <mat-select formControlName="regionId" (selectionChange)="getSites($event.value)">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of regions"
+                                [value]="reg.regionId">{{reg.regionTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('regionId').hasError('required')" >
+                            Region is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 m-b-0">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Sites</mat-label>
+                        <mat-select formControlName="siteId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let site of sites"
+                                [value]="site.siteId">{{site.siteTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('siteId').hasError('required')" >
+                            Site is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                    
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Observation</mat-label>
+                        <textarea matInput formControlName="observationTitle" rows="3"></textarea>
+                        <mat-error *ngIf="observationForm.get('observationTitle').hasError('required')" >
+                            Observation is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Action</mat-label>
+                        <textarea matInput formControlName="actionTitle" rows="3"></textarea>
+                        <mat-error *ngIf="observationForm.get('actionTitle').hasError('required')">
+                            Action is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priorityId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let reg of prioritys"
+                                [value]="reg.priorityId">{{reg.priorityTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('priorityId').hasError('required')" >
+                            Priority is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Target Date</mat-label>
+                        <input matInput [matDatepicker]="picker4" formControlName="targetDate" >
+                        <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                        <mat-error *ngIf="observationForm.get('targetDate').hasError('required')" >
+                            Target Date  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Department</mat-label>
+                        <mat-select formControlName="deptId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of depts"
+                                [value]="d.deptId">{{d.deptTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('deptId').hasError('required')" >
+                            Department is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Assigned To</mat-label>
+                        <mat-select formControlName="userId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let u of users"
+                                [value]="u.userId">{{u.userName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('userId').hasError('required')" >
+                            User is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Reference Number</mat-label>
+                        <input matInput formControlName="referenceNumber" >
+                        <mat-error *ngIf="observationForm.get('referenceNumber').hasError('required')" >
+                            Reference Number is required
+                        </mat-error>
+                        <mat-error *ngIf="observationForm.get('referenceNumber').hasError('maxlength')" >
+                            Max length of 20 is allowed
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" >
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="startDate" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="observationForm.get('startDate').hasError('required')" >
+                            Start Date  is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="statusId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let d of statuss"
+                                [value]="d.statusId">{{d.statusTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="observationForm.get('statusId').hasError('required')" >
+                            Status is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" >
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Suggestion</mat-label>
+                        <textarea matInput formControlName="suggestion" rows="3" ></textarea>
+                        <mat-error *ngIf="observationForm.get('suggestion').hasError('required')" >
+                            Suggestion is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Remarks/Response from the site</mat-label>
+                        <textarea matInput formControlName="remarks" rows="3" ></textarea>
+                        <mat-error *ngIf="observationForm.get('remarks').hasError('required')" >
+                            Remarks are required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-12">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" [type]="submit" [disabled]="!observationForm.valid" 
+                            [mat-dialog-close]="observation" (click)="submit()">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>              
+            </div>
+        </form>
+    </div>
+</div>

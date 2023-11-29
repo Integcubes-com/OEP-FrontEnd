@@ -1,0 +1,207 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Running Hours'" [items]="[]" [active_item]="'Site Next Outages'"></app-breadcrumb>
+      </div>
+      <div class="card" *ngIf="displayFilter">
+        <div class="row m-4 p-0">
+          <h5 class="card-title">Filter By:</h5>
+       
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Regions</mat-label>
+              <mat-select [(ngModel)]="filterObj.regionId" (selectionChange)="getSite($event.value)">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let d of regions" [value]="d.regionId">{{d.regionTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Sites</mat-label>
+              <mat-select [(ngModel)]="filterObj.siteId"  (selectionChange)="getEquipments($event.value)">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Unit</mat-label>
+              <mat-select [(ngModel)]="filterObj.equipmentId">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let rf of equipments" [value]="rf.equipmentId">{{rf.siteTitle +"-"+rf.unit}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pb-0">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Outage</mat-label>
+              <mat-select [(ngModel)]="filterObj.outageId">
+                <mat-option [value]="-1">--All--</mat-option>
+                <mat-option *ngFor="let rf of nextOutages" [value]="rf.outageId">{{rf.outageTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-1 pb-0">
+            <div class="float-start">
+              <button mat-mini-fab color="accent" matTooltip="SEARCH" aria-label="Example icon button with a bookmark icon"
+                (click)="getSiteNextOutages()">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>Site Next Outages</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                        <!-- <li>
+                          <div class="m-l-10" matTooltip="ADD">
+                            <button mat-mini-fab color="primary" (click)="addSiteNextOutages()">
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                          </div>
+                        </li> -->
+                        <li>
+                          <div class="m-l-10" matTooltip="FILTER DATA">
+                            <button mat-mini-fab color="warn" (click)="toggleFilter()">
+                              <mat-icon>filter_list</mat-icon>
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-4">
+                        <ul class="header-buttons">
+                          <li>
+                            <div class="export-button m-l-10" matTooltip="XLSX">
+                              <img src="assets/images/icons/xlsx.png" alt=""
+                                (click)="exporter.exportTable('xlsx', {fileName:'assets-list', sheet: 'sheet1'})" />
+                            </div>
+                          </li>
+                          <li>
+                            <div class="export-button m-l-10" matTooltip="CSV">
+                              <img src="assets/images/icons/csv.png" alt="" (click)="exporter.exportTable('csv')" />
+                            </div>
+                          </li>
+                          <li>
+                            <div class="export-button m-l-10" matTooltip="JSON">
+                              <img src="assets/images/icons/json.png" alt="" (click)="exporter.exportTable('json')" />
+                            </div>
+                          </li>
+                          <li>
+                            <div class="export-button m-l-10" matTooltip="TXT">
+                              <img src="assets/images/icons/txt.png" alt="" (click)="exporter.exportTable('txt')" />
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                  </div>
+                </div>
+                <table mat-table [dataSource]="dataSource" matSort matTableExporter
+                #exporter="matTableExporter">
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let region ; let i = index"> {{i+1}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="siteTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Plant </th>
+                    <td mat-cell *matCellDef="let region"> {{region.siteTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="regionTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+                    <td mat-cell *matCellDef="let region"> {{region.regionTitle}} </td>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="outageTitle">
+                    <th mat-header-cell *matHeaderCellDef> Outage Title </th>
+                    <td mat-cell *matCellDef="let region"> {{region.outageTitle}} </td>
+                  </ng-container>
+                  unit
+                  <ng-container matColumnDef="unit">
+                    <th mat-header-cell *matHeaderCellDef>Unit</th>
+                    <td mat-cell *matCellDef="let region">{{region.unit}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="outageLevel">
+                    <th mat-header-cell *matHeaderCellDef>Outage Level</th>
+                    <td mat-cell *matCellDef="let region">{{region.outageLevel}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="nextOutageDate">
+                    <th mat-header-cell *matHeaderCellDef>Start Date</th>
+                    <td mat-cell *matCellDef="let region">{{region.nextOutageDate | date}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="runningHours">
+                    <th mat-header-cell *matHeaderCellDef>Minimum Hours</th>
+                    <td mat-cell *matCellDef="let region">{{region.runningHours}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="actualStartDate">
+                    <th mat-header-cell *matHeaderCellDef>Actual Start Date</th>
+                    <td mat-cell *matCellDef="let region">{{region.actualStartDate  | date}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="actualEndDate">
+                    <th mat-header-cell *matHeaderCellDef>Actual End Date</th>
+                    <td mat-cell *matCellDef="let region">{{region.actualEndDate  | date}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="nextOutageEndDate">
+                    <th mat-header-cell *matHeaderCellDef>End Date</th>
+                    <td mat-cell *matCellDef="let region">{{region.nextOutageEndDate | date}}</td>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="outageDurationInDays">
+                    <th mat-header-cell *matHeaderCellDef>Outage Duration</th>
+                    <td mat-cell *matCellDef="let region">{{region.outageDurationInDays}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="padding-left:30px!important; padding-right:30px!important">Actions</th>
+                    <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="updateSiteNextOutages(row)"
+                        class="tbl-action-btn" matTooltip="EDIT">
+                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
+                      <button mat-icon-button color="primary" (click)="$event.stopPropagation()" matTooltip="VIEW"
+                        (click)="viewSiteNextOutages(row)">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <!-- <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteSiteNextOutages(row)"
+                        class="tbl-action-btn" matTooltip="DELETE">
+                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                      </button> -->
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewSiteNextOutages(row)"
+                    [style.cursor]="'pointer'" matRipple></tr>
+                </table>
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+                <div *ngIf="!isTableLoading" class="no-results"
+                  [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                  No results
+                </div>
+                <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
