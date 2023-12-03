@@ -133,25 +133,39 @@ selectedYear: number = new Date().getFullYear();
         this.monthlyKPI.map(a=>{
         
           if(a.groupId == 1){
-            this.obj3+=a.indicatorWeight;
+            if(a.isParent == false){
+              this.obj3+=a.indicatorWeight;
+            }
           }
           if(a.groupId == 2){
+            if(a.isParent == false){
             this.obj4+=a.indicatorWeight;
+            }
           }
           if(a.groupId == 3){
+            if(a.isParent == false){
             this.obj5+=a.indicatorWeight;
+            }
           }
           if(a.groupId == 4){
+            if(a.isParent == false){
             this.obj6+=a.indicatorWeight;
+            }
           }
           if(a.groupId == 5){
+            if(a.isParent == false){
             this.obj7+=a.indicatorWeight;
+            }
           }
           if(a.groupId == 6){
+            if(a.isParent == false){
             this.obj1+=a.indicatorWeight;
+            }
           }
           if(a.groupId == 7){
+            if(a.isParent == false){
             this.obj2+=a.indicatorWeight;
+            }
           }
         })
         // this.monthlyKPI.map(a=>
@@ -166,6 +180,13 @@ selectedYear: number = new Date().getFullYear();
       },
       error:err=>{this.errorMessage = err;this.showNotification('black', err, 'bottom', 'center')}
     })
+  }
+  tooltipMessage(k: any): string {
+    if (k.notApplicable || !k.isDisplay || k.isParent) {
+      return 'You cannot edit this field.';
+    } else {
+      return ''; // Empty string when tooltip is not needed
+    }
   }
   showNotification(colorName, text, placementFrom, placementAlign) {
     this.snackBar.open(text, "", {

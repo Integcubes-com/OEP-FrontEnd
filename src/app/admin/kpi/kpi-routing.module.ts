@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MonthlyKpiComponent } from './monthly-kpi/monthly-kpi.component';
 import { AssignGroupComponent } from './assign-group/assign-group.component';

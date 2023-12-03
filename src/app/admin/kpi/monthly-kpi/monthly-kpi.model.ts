@@ -25,6 +25,8 @@ export class KPIData {
     factor:number
     weightedScore:number
     notApplicable:boolean;
+    isParent:boolean;
+    isDisplay:boolean;
 }
 // export class KPIInterface {
 //     measurementTitle: string

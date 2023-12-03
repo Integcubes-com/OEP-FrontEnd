@@ -15,12 +15,16 @@ export class ConfigurationService {
   private readonly saveKPIUrl =  `${environment.apiUrl}/KPIConfigurator/saveKpi`
 private readonly deleteKPIUrl = `${environment.apiUrl}/KPIConfigurator/deleteKpi`
 private readonly getFormulaUrl = `${environment.apiUrl}/KPIConfigurator/getFormula`
+private readonly saveKPIIndicator = `${environment.apiUrl}/KPIConfigurator/saveIndicator`
 
 
   constructor(private http: HttpClient) { }
 
   deleteKpi(kpi:KPIConfigurations):Observable<KPIConfigurations[]>{
     return this.http.post<KPIConfigurations[]>(this.deleteKPIUrl, kpi)
+  }
+  saveKpiIndicator(kpi:KPIIndicator):Observable<KPIIndicator[]>{
+    return this.http.post<KPIIndicator[]>(this.saveKPIIndicator, kpi)
   }
   getKPIs(userId:number, siteId:number):Observable<KPIConfigurations[]>{
     let data = {userId, siteId};

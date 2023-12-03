@@ -9,9 +9,10 @@ import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroy
 import { CSites } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { ConfigurationService } from './configuration.service';
-import { KPIConfigurations } from './configuration.model';
+import { KPIConfigurations, KPIIndicator } from './configuration.model';
 import { DeleteComponent } from './dialogs/delete/delete.component';
 import { FormComponent } from './dialogs/form/form.component';
+import { KpiFormComponent } from './dialogs/kpi-form/kpi-form.component';
 
 @Component({
   selector: 'app-configuration',
@@ -45,7 +46,29 @@ export class ConfigurationComponent extends UnsubscribeOnDestroyAdapter implemen
     this.getSites();
 
   }
-
+  addKpi(){
+    const dialogRef = this.dialog.open(KpiFormComponent, {
+      width: '750px',
+      data: {
+        kpi: new KPIIndicator({}),
+        action: "add",
+      },
+      
+    });
+    dialogRef.afterClosed().subscribe((result: KPIIndicator) => {
+      if (result) {
+        this.subs.sink = this.dataService.saveKpiIndicator(result).subscribe({
+          next: data => {
+           this.showNotification('snackbar-success', result.indicatorTitle + ' has been deleted sucessfully', 'bottom', 'center');
+          },
+          error: err => {
+            this.errorMessage = err;
+            this.showNotification('black', err, 'bottom', 'center');
+          }
+        })
+      }
+    })
+  }
   add(){
     const dialogRef = this.dialog.open(FormComponent, {
       width: '750px',

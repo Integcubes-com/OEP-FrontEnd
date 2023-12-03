@@ -56,13 +56,13 @@
           </div>
           <div class="body" *ngFor="let kpi of monthlyKPI | unique:'groupId'">
             <h6 class="ms-4">{{kpi.groupCode + ") " + kpi.groupTitle}} 
-              <span *ngIf="kpi.groupId == 1"><strong>{{"Weight:" + obj3}}</strong></span>
-              <span *ngIf="kpi.groupId == 2"><strong>{{"Weight:" + obj4}}</strong></span>
-              <span *ngIf="kpi.groupId == 3"><strong>{{"Weight:" + obj5}}</strong></span>
-              <span *ngIf="kpi.groupId == 4"><strong>{{"Weight:" + obj6}}</strong></span>
-              <span *ngIf="kpi.groupId == 5"><strong>{{"Weight:" + obj7}}</strong></span>
-              <span *ngIf="kpi.groupId == 6"><strong>{{"Weight:" + obj1}}</strong></span>
-              <span *ngIf="kpi.groupId == 7"><strong>{{"Weight:" + obj2}}</strong></span>
+              <span *ngIf="kpi.groupId == 1"><strong>Weight: {{obj3|number}}</strong></span>
+              <span *ngIf="kpi.groupId == 2"><strong>Weight: {{obj4|number}}</strong></span>
+              <span *ngIf="kpi.groupId == 3"><strong>Weight: {{obj5|number}}</strong></span>
+              <span *ngIf="kpi.groupId == 4"><strong>Weight: {{obj6|number}}</strong></span>
+              <span *ngIf="kpi.groupId == 5"><strong>Weight: {{obj7|number}}</strong></span>
+              <span *ngIf="kpi.groupId == 6"><strong>Weight: {{obj1|number}}</strong></span>
+              <span *ngIf="kpi.groupId == 7"><strong>Weight: {{obj2|number}}</strong></span>
           </h6>
             <div class="body table-responsive">
               <table class="table table-bordered">
@@ -89,9 +89,9 @@
                       <td> {{k.indicatorWeight}}</td>
                       <!-- style="background-color: #D3F9D3!important" -->
                       <!-- background-color: #D3F9D3!important; -->
-                      <td ><input type="number" [disabled]="k.notApplicable"
+                      <td ><input type="number" [disabled]="k.notApplicable || !k.isDisplay || k.isParent"
                           style="border:none; width:100px " [ngStyle]="{ 'background-color': k.color }" [(ngModel)]="k.value"
-                          (change)="checkScore(k)"></td>
+                          (change)="checkScore(k)"[matTooltip]="tooltipMessage(k)"></td>
                       <td>
                         <mat-checkbox [(ngModel)]="k.notApplicable"></mat-checkbox>
                       </td>
@@ -105,8 +105,9 @@
                         <!-- style="background-color: #D3F9D3!important" -->
                         <!-- background-color: #D3F9D3!important -->
                         <textarea type="text" rows="4"
-                          [disabled]="k.notApplicable" style="border:none;width:100px" [ngStyle]="{ 'background-color': k.color }" 
-                          [(ngModel)]="k.comment"></textarea>
+                          [disabled]="k.notApplicable || !k.isDisplay || k.isParent" style="border:none;width:100px" [ngStyle]="{ 'background-color': k.color }" 
+                          [(ngModel)]="k.comment"
+                          [matTooltip]="tooltipMessage(k)"></textarea>
                     </ng-container>
                   </tr>
                 </tbody>

@@ -15,6 +15,8 @@ export class KPIConfigurations {
     measurementTitle: string
     annualTargetTitle: string
     classificationTitle: string
+    isParent:boolean;
+    isDisplay:boolean;
     constructor(reg) {
         this.infoId = reg.infoId ? reg.infoId : -1
     }
@@ -27,11 +29,16 @@ export interface KPIIndicatorGroup {
     groupWeight: number
 }
 
-export interface KPIIndicator {
-    groupId: number,
-    indicatorId: number,
-    indicatorTitle: string,
-    indicatorCode: string,
+export class KPIIndicator {
+    groupId: number;
+    indicatorId: number;
+    indicatorTitle: string;
+    indicatorCode: string;
+    isDisplay:boolean=false;
+    isParent:boolean=false;
+    constructor(reg) {
+        this.groupId = reg.groupId ? reg.groupId : -1
+    }
 }
 export interface formulaType{
     formulaTypeId:number

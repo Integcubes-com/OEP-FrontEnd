@@ -30,6 +30,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { DeleteComponent } from './configuration/dialogs/delete/delete.component';
 import { FormComponent } from './configuration/dialogs/form/form.component';
+import { KpiFormComponent } from './configuration/dialogs/kpi-form/kpi-form.component';
 
 
 
@@ -43,6 +44,7 @@ import { FormComponent } from './configuration/dialogs/form/form.component';
     ConfigurationComponent,
     DeleteComponent,
     FormComponent,
+    KpiFormComponent,
   ],
   imports: [
     CommonModule,

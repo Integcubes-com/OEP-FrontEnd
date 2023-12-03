@@ -15,7 +15,7 @@
     <div mat-dialog-content>
         <form class="register-form m-4" [formGroup]="form">
             <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
                         <mat-label>Group</mat-label>
                         <mat-select formControlName="groupId"  (selectionChange)="getIndicator(form.value.groupId)">
@@ -26,12 +26,12 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
                         <mat-label>Indicator</mat-label>
                         <mat-select formControlName="indicatorId">
                             <mat-option>None</mat-option>
-                            <mat-option *ngFor="let g of indicator" [value]="g.indicatorId">{{g.indicatorTitle}}</mat-option>
+                            <mat-option *ngFor="let g of indicator" [value]="g.indicatorId">{{g.indicatorCode + " " +g.indicatorTitle}}</mat-option>
                         </mat-select> <mat-error *ngIf="form.get('indicatorId').hasError('required')">
                             Indicator is required
                         </mat-error>
