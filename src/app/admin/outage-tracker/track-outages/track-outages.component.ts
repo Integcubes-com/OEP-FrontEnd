@@ -9,7 +9,6 @@ import { User } from 'src/app/core/models/user';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { APISaveData, OT_OutageStatus, OT_OutageTrackerFilter, OT_outageTracker } from './track-outages.model';
 import { TrackOutagesService } from './track-outages.service';
-import { TrackOutagesFormComponent } from './dialogs/track-outages-form/track-outages-form.component';
 import { CSites } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { TrackOutagesForm2Component } from './dialogs/track-outages-form2/track-outages-form2.component';
@@ -135,7 +134,6 @@ export class TrackOutagesComponent extends UnsubscribeOnDestroyAdapter implement
         });
         dialogRef.afterClosed().subscribe((result: APISaveData) => {
           if (result) {
-            debugger;
             this.subs.sink = this.dataService.saveAction(this.user.id, result).subscribe({
               next:data=>{
                 this.getActions()

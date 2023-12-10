@@ -33,6 +33,12 @@ export interface APISaveData{
 export interface OTApiData{
     monthList:OTDate[]
     outageData:OTData
+    userData:OTUser[]
+}
+export interface OTUser{
+    userId:number
+    userName:string
+    name:string
 }
 export interface OTDate{
     date:Date,

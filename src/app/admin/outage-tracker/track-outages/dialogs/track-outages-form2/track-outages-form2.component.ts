@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, DialogPosition } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
-import { APISaveData, OTData, OTDate, OT_outageTracker } from '../../track-outages.model';
+import { APISaveData, OTData, OTDate, OTUser, OT_outageTracker } from '../../track-outages.model';
 import { TrackOutagesService } from '../../track-outages.service';
 import { TrackOutagesFormComponent } from '../track-outages-form/track-outages-form.component';
 import { User } from 'src/app/core/models/user';
@@ -25,6 +25,7 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
     outageTracker: new OT_outageTracker,
     monthlyData: null
   }
+  userData:OTUser[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   constructor(
@@ -35,10 +36,9 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
     public dialog: MatDialog
   ) {
     super()
-    debugger;
-
     this.action = { ...this.data?.outageAction }
     this.monthList = [...this.data.dataOt.monthList];
+    this.userData = [...this.data.dataOt.userData];
     if (this.data.dataOt.outageData == null) {
       this.otData = new OTData({})
       this.conc = this.monthList[0].monthId;
@@ -117,7 +117,6 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
   }
   submit() {
     if (this.actionForm.valid) {
-      debugger;
       this.action.notApplicable = this.actionForm.value.notApplicable;
       this.Apidata.outageTracker = { ...this.action };
       this.otData.progress = +this.actionForm.value.progress;
