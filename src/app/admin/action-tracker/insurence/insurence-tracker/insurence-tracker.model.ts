@@ -10,7 +10,8 @@ export class InsurenceTracker {
 
     documentTypeTitle: string;
     type: string;
-
+    clusterId: number;
+    clusterTitle: string;
     action: string;
     targetDate: Date;
     statusId: number;
@@ -46,6 +47,12 @@ export class InsurenceTracker {
     reportFile: File;
     reportAttahced: boolean;
     reportName: string;
+    adminComment: string;
+    reviewerComment: string;
+    isCompleted: boolean;
+    rework: boolean;
+    clusterReviewed: boolean;
+    implementedDate:Date;
     constructor(reg) {
         this.insurenceActionTrackerId = reg.insurenceActionTrackerId ? reg.insurenceActionTrackerId : -1;
     }

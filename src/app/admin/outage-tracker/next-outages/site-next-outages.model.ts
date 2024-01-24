@@ -29,7 +29,9 @@ export interface OMA_ContractOutageFilter{
     clusterId:number;
     siteId:number;
     equipmentId:number;
-    outageId:number
+    outageId:number;
+    startDate:Date;
+    endDate:Date;
 }
 export interface OT_IEquipments {
     equipmentId:number

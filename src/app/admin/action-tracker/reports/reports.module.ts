@@ -24,6 +24,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ReportsRoutingModule } from './reports-routing.module';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { SiteEquipmentComponent } from './site-equipment/site-equipment.component';
+import { TilDetailComponent } from './til-detail/til-detail.component';
+import { TilActionComponent } from './til-action/til-action.component';
 
 
 
@@ -33,7 +35,9 @@ import { SiteEquipmentComponent } from './site-equipment/site-equipment.componen
     InsuranceTrackerComponent,
     TilsComponent,
     TilsTrackerComponent,
-    SiteEquipmentComponent
+    SiteEquipmentComponent,
+    TilDetailComponent,
+    TilActionComponent
   ],
   imports: [
     MatTableExporterModule,

@@ -59,6 +59,12 @@ export class ActionTrackerEndUser {
     outageId:number
     unitStatus:string
     tilNumber:string
+    adminComment:string
+    reviewerComment: string;
+    isCompleted: boolean;
+    rework: boolean;
+    clusterReviewed: boolean;
+    implementedDate:Date;
     constructor(reg) {
         this.tilActionTrackerId = reg.tilActionTrackerId ? this.tilActionTrackerId : -1;
     }
@@ -66,6 +72,11 @@ export class ActionTrackerEndUser {
 export interface tataBudget {
     budgetId: number,
     budgetName: string,
+}
+export interface unitTypes {
+    outageTypeId: number,
+    title: string,
+    isSelected:boolean,
 }
 export interface tataSAP{
     sapPlanningTitle:string,
@@ -81,7 +92,8 @@ export interface tatapart{
 }
 export interface tataFinalImplementation{
     finalImpId,
-    finalImpTitle
+    finalImpTitle,
+    isSelected:boolean,
 }
 export interface tataStatus{
     statusId:number;
@@ -103,4 +115,5 @@ export interface ActionTilInterfaceApi{
     statusList:tataStatus[],
     oemSeverity:TSeverity[],
     tilFocus:TFocus[]
+    outageTypes:unitTypes[],
 }

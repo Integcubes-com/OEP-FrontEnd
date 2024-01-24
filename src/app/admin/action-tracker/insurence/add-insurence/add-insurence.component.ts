@@ -11,7 +11,7 @@ import { AddInsurenceFormComponent } from './dialog/add-insurence-form/add-insur
 import { ConfirmDeleteComponent } from './dialog/confirm-delete/confirm-delete.component';
 import { InsurenceRecommendation, InsurenceRecommendationApi, IRecommendationType, IRFilter, IRInsurenceStatus, IRNomacStatus, IRPriority, IRProactive, IRRegion, IRSite, IRSource } from './insurence.model';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-import { CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
 import { AddColumnsComponent } from './dialog/add-columns/add-columns.component';
 
 @Component({
@@ -45,7 +45,9 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
 
   regions: CRegions[];
   sites: CSites[];
+  cluster:CCluster[];
 
+  clusterFilterList:any[]=[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   priority: IRPriority[];
@@ -78,7 +80,16 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
     this.getInterfaces();
     this.getSites(-1);
     this.getRegion();
+    this.getClusters();
 
+  }
+  getClusters(){
+    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   downloadReport(rec: InsurenceRecommendation) {
     this.subs.sink = this.dataService.downloadReport(rec.recommendationId).subscribe({
@@ -104,7 +115,7 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
     })
   }
   getRegion() {
-    this.subs.sink = this.dataService2.getRegions(this.user.id, -1, -1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id, -1, -1).subscribe({
       next: data => { this.regions = [...data] },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') }
     })
@@ -138,7 +149,8 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
   }
   getRecommendations() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getRecommendationsList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.nomacStatusFilterList.toString(), this.insuranceStatusFilterList.toString(), this.priorityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getRecommendationsList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.nomacStatusFilterList.toString(), this.insuranceStatusFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString()
+    ).subscribe({
       next: data => {
         this.apiObj = { ...data };
         this.recommendations = [...data.reommendations]
@@ -271,7 +283,6 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
       if (result) {
         this.subs.sink = this.dataService.saveRecommendations(result, this.user.id).subscribe({
           next: data => {
-            debugger;
             if (result.insuranceReport instanceof File) {
               this.subs.sink = this.dataService.uploadPDF(result, data, this.user.id).subscribe({
                 next: data => {
@@ -373,6 +384,15 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
       this.priorityFilterList.splice(index, 1);
     }
   }
+  clusterListFn(cluster: CCluster) {
+    let index = this.clusterFilterList.indexOf(cluster.clusterId);
+    if (index == -1) {
+      this.clusterFilterList.push(cluster.clusterId);
+    }
+    else {
+      this.clusterFilterList.splice(index, 1);
+    }
+  }
   insuranceStatusListFn(company: IRInsurenceStatus) {
     let index = this.insuranceStatusFilterList.indexOf(company.insurenceStatusId);
     if (index == -1) {
@@ -392,6 +412,7 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
     this.sourceFilterList.length = 0;
     this.nomacStatusFilterList.length = 0;
     this.insuranceStatusFilterList.length = 0;
+    this.clusterFilterList.length = 0;
     this.priorityFilterList.length = 0;
     this.regions.map(a => a.isSelected = false)
     this.sites.map(a => a.isSelected = false)
@@ -399,5 +420,6 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
     this.sources.map(a => a.isSelected = false)
     this.insurenceStatuss.map(a => a.isSelected = false)
     this.priority.map(a=>a.isSelected = false)
+    this.cluster.map(a=>a.isSelected = false)
   }
 }

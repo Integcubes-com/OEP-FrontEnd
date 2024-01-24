@@ -12,7 +12,7 @@ import { SiteEquipmentService } from './site-equipment.service';
 import { User } from 'src/app/core/models/user';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { FleetEquipmentComponent } from '../../common-dialogs/fleet-equipment/fleet-equipment.component';
-import { CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
 
 @Component({
   selector: 'app-site-equipment-main',
@@ -30,6 +30,7 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
   oems: SESiteEquipmentOME[];
   equipmetTypes: SESiteEquipmentType[];
   fleet: SEFleet[];
+  cluster:CCluster[];
   isTableLoading: boolean;
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
@@ -49,6 +50,7 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
   modelFilterList:any[]=[];
   oemFilterList:any[]=[];
   eqTypeFilterList:any[]=[];
+  clusterFilterList:any[]=[];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   ngAfterViewInit() {
@@ -64,6 +66,15 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
     this.getRegions();
     this.getUsers();
     this.getSiteEquipment();
+    this.getClusters();
+  }
+  getClusters(){
+    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   getUsers(){
     this.subs.sink = this.dataService2.getUsers(this.user.id,-1,-1 ).subscribe({
@@ -92,7 +103,7 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
     })
   }
   getRegions(){
-    this.subs.sink = this.dataService2.getRegions(this.user.id, -1 , -1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id, -1 , -1).subscribe({
       next:data=>{
         this.regions = [...data]
       },
@@ -119,7 +130,7 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
 
   getSiteEquipment() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getSiteEquipments(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.modelFilterList.toString(), this.eqTypeFilterList.toString(), this.oemFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getSiteEquipments(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.modelFilterList.toString(), this.eqTypeFilterList.toString(), this.oemFilterList.toString(), this.clusterFilterList.toString()).subscribe({
       next: data => {
         this.SiteEquipments = [...data.siteEquipment];
         this.dataSource.data = [...this.SiteEquipments];
@@ -275,12 +286,22 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
           this.oemFilterList.splice(index, 1);
         }
       }
+      clusterListFn(cluster: CCluster) {
+        let index = this.clusterFilterList.indexOf(cluster.clusterId);
+        if (index == -1) {
+          this.clusterFilterList.push(cluster.clusterId);
+        }
+        else {
+          this.clusterFilterList.splice(index, 1);
+        }
+      }
 
       filterFn(){
         this.getSiteEquipment();
       }
       clearFn(){
         this.regionsFilterList.length = 0;
+        this.clusterFilterList.length = 0;
         this.sitesFilterList.length = 0;
         this.modelFilterList.length = 0;
         this.eqTypeFilterList.length = 0;
@@ -290,5 +311,7 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
         this.fleet.map(a=>a.isSelected = false)
         this.equipmetTypes.map(a=>a.isSelected = false)
         this.oems.map(a=>a.isSelected = false)
+        this.cluster.map(a=>a.isSelected = false)
+
       }
 }

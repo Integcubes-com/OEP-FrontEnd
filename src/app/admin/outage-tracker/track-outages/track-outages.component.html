@@ -119,6 +119,10 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Phase Number </th>
                     <td mat-cell *matCellDef="let region"> Phase {{region.phaseNumber}} </td>
                   </ng-container>
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action Owners </th>
+                    <td mat-cell *matCellDef="let region">  {{region.name | nameRemover:nameToRemove}} </td>
+                  </ng-container>
                   <ng-container matColumnDef="phaseTitle">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Phase Title </th>
                     <td mat-cell *matCellDef="let region"> {{region.phaseTitle}} </td>

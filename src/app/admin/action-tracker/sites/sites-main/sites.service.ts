@@ -23,7 +23,6 @@ export class SitesService {
 
   getSites(userId:number, regionList:string, countryList:string, technologyList:string): Observable<SitesI[]> {
     let data = {'userId':userId, 'regionList':regionList, 'countryList':countryList, 'technologyList':technologyList}
-    debugger;
     return this.http.post<SitesI[]>(this.getSitesURL, data)
   }
   getInterfaces(userId:number):Observable<SPStatus[]> {

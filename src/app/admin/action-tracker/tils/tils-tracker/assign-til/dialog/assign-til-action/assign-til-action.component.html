@@ -206,6 +206,30 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
+                <div class="row" *ngIf="userZ.id == 22">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Admin Comment</mat-label>
+                            <textarea type="text" matInput formControlName="adminComment"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row" *ngIf="data.mode == 'review'">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <mat-checkbox  formControlName="isCompleted" (change)="setCompleted($event)">Completed</mat-checkbox>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <mat-checkbox formControlName="rework" (change)="setRework($event)">Rework</mat-checkbox>
+                    </div>
+                </div>
+                <div class="row" *ngIf="actionForm.value.reviewerComment || data.mode == 'review' ">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" >
+                        <mat-form-field  class="example-full-width" appearance="outline">
+                            <mat-label>Reviewer Comment</mat-label>
+                            <textarea type="text" matInput formControlName="reviewerComment" [readonly]="data.mode != 'review'"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
                 <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="data.mode == 'edit' || data.mode == 'add'">
                     <mat-form-field class="example-full-width" appearance="outline">
                         <mat-label>Status</mat-label>
@@ -232,7 +256,7 @@
             </div>
             <div class="row" >
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
-                        <div class="example-button-row float-start" [hidden]="data.mode == 'action' || data.mode == 'add'">
+                        <div class="example-button-row float-start" [hidden]="data.mode == 'action' || data.mode == 'add' || data.mode == 'review'">
                             <button mat-raised-button color="success" (click)="viewEvidence()">
                                 <mat-icon>insert_drive_file</mat-icon>Evidence</button>
                         </div>

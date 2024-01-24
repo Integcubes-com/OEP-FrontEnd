@@ -14,7 +14,7 @@ import { ViewActionComponent } from './dialogs/view-action/view-action.component
 import { IATAPIData, InsurenceTracker, ITCompany, ITFilterObj, ITRecommendation, ITSource, ITStatus, ITUser } from './insurence-tracker.model';
 import { InsurenceTrackerService } from './insurence-tracker.service';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-import { CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
 
 @Component({
   selector: 'app-insurence-tracker',
@@ -33,6 +33,10 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
     department: -1,
     source: -1
   }
+  
+  cluster:CCluster[];
+
+  clusterFilterList:any[]=[];
   selectedSites: CSites[];
   displayFilter: Boolean = false;
   recInsurence: InsurenceRecommendation[];
@@ -62,7 +66,7 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
   constructor(private snackBar: MatSnackBar, private dataService: InsurenceTrackerService, private dataService2: CommonService, public dialog: MatDialog,) {
     super();
   }
-  displayedColumns: string[] = ['id', 'regionTitle', 'siteTitle', 'recommendationReference', 'action', 'priorityTitle','actions'];
+  displayedColumns: string[] = ['id', 'regionTitle', 'siteTitle','cluster', 'recommendationReference', 'action', 'priorityTitle','actions'];
   dataSource: MatTableDataSource<InsurenceTracker>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -80,6 +84,16 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
     this.getSites(-1);
     this.getRegions();
     this.getUsers();
+    this.getClusters();
+
+  }
+  getClusters(){
+    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   //Get Requests
   getUsers() {
@@ -89,7 +103,7 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
     })
   }
   getRegions() {
-    this.subs.sink = this.dataService2.getRegions(this.user.id, -1, -1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id, -1, -1).subscribe({
       next: data => { this.regions = [...data] },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') }
     })
@@ -122,7 +136,7 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
   }
   getActionTracker() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTrackerList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.departmentFilterList.toString(), this.priorityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTrackerList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.departmentFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString()).subscribe({
       next: data => {
         this.actionTrackers = [...data.tracker];
         this.dataSource.data = [...this.actionTrackers];
@@ -305,12 +319,21 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
       this.priorityFilterList.splice(index, 1);
     }
   }
-
+  clusterListFn(cluster: CCluster) {
+    let index = this.clusterFilterList.indexOf(cluster.clusterId);
+    if (index == -1) {
+      this.clusterFilterList.push(cluster.clusterId);
+    }
+    else {
+      this.clusterFilterList.splice(index, 1);
+    }
+  }
   filterFn() {
     this.getActionTracker();
   }
   clearFn() {
     this.regionsFilterList.length = 0;
+    this.clusterFilterList.length = 0;
     this.sitesFilterList.length = 0;
     this.sourceFilterList.length = 0;
     this.departmentFilterList.length = 0;
@@ -321,5 +344,7 @@ export class InsurenceTrackerComponent extends UnsubscribeOnDestroyAdapter imple
     this.companies.map(a => a.isSelected = false)
     this.sources.map(a => a.isSelected = false)
     this.priority.map(a=>a.isSelected = false)
+    this.cluster.map(a=>a.isSelected = false)
+
   }
 }

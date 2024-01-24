@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { User } from 'src/app/core/models/user';
 
 @Component({
   selector: 'app-table-colm',
@@ -7,35 +8,19 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./table-colm.component.sass']
 })
 export class TableColmComponent {
+  userZ: User = JSON.parse(localStorage.getItem('currentUser'));
 
   dialogTitle:string="Selected Columns";
   allCols:any[]=[
-    // {colName:"assignedToTitle", isSelected:false},
-    // {colName:"statusTitle", isSelected:false},
-    // {colName:"statusScore", isSelected:false},
-    // {colName:"companyTitle", isSelected:false},
-    // {colName:"comments", isSelected:false},
-    // {colName:"closureDate", isSelected:false},
-    // {colName:"evidenceAvailableScore", isSelected:false},
-    // {colName:"dayStatusTitle", isSelected:false},
-    // {colName:"dayStatusScore", isSelected:false},
-    // {colName:"calcStatus", isSelected:false},
-    // {colName:"calcEvid", isSelected:false},
-    // {colName:"calcDate", isSelected:false},
-    // {colName:"completionScore", isSelected:false},
-    // {colName:"scoreDetails", isSelected:false},
+
     
     {colName:"siteTitle",code:"Site", isSelected:false},
     {colName:"closureDate",code:"Closure Date", isSelected:false},
     {colName:"comments",code:"Comments", isSelected:false},
-
-    
     {colName:"regionTitle",code:"Region", isSelected:false},
     {colName:"recommendationReference",code:"Recommendation Reference", isSelected:false},
     {colName:"recommendationTitle",code:"Recommendation", isSelected:false},
     {colName:"action",code:"Action", isSelected:false},
-    // {colName:"insurenceStatusTitle", isSelected:false},
-    // {colName:"nomacStatusTitle", isSelected:false},
     {colName:"priorityTitle",code:"Priority", isSelected:false},
     {colName:"targetDate",code:"Target", isSelected:false},
     {colName:"daysToTarget",code:"Days To Target", isSelected:false},
@@ -45,7 +30,13 @@ export class TableColmComponent {
     {colName:"evidenceAvailable",code:"Evidence Available", isSelected:false},
     {colName:"documentTypeTitle",code:"Document Type", isSelected:false},
     {colName:"type",code:"type", isSelected:false},
-    // {colName:"actions", isSelected:false},
+    {colName:"cluster",code:"Cluster", isSelected:false},
+    {colName:"reviewerComment",code:"Cluster Comment", isSelected:false},
+    {colName:"implementedDate",code:"Implemented Date", isSelected:false},
+    {colName:"clusterReviewed",code:"Review Status", isSelected:false},
+    {colName:"adminComment",code:"Admin Comment", isSelected:false},
+
+
 
     
 

@@ -15,6 +15,8 @@ export class TilsTrackerService {
   private readonly deleteTilsActionURL = `${environment.apiUrl}/AssignTilAction/deleteAssignedActions`
   private readonly getUpdateUsersURL = `${environment.apiUrl}/AssignTilAction/getUsersActions`
   private readonly saveURL = `${environment.apiUrl}/AssignTilAction/saveUsersActions`
+  private readonly copyURL = `${environment.apiUrl}/AssignTilAction/copyAction`
+  
   private readonly getSitesURL = `${environment.apiUrl}/AssignTilAction/getFilterSites`
   private readonly getEqURL = `${environment.apiUrl}/AssignTilAction/getFilterEq`
   private readonly getAPTURL = `${environment.apiUrl}/AssignTilAction/getTAT`
@@ -62,25 +64,26 @@ export class TilsTrackerService {
   }
   getUpdateUsers(actionPackage: TilActionPackage): Observable<TAPEditData> {
     return this.http.post<TAPEditData>(this.getUpdateUsersURL, actionPackage).pipe(
-      tap(data => console.log(JSON.stringify(data))),
     )
   }
   updateActioPackage(data:TASubmitObj, userId:number):Observable<TilActionPackage>{
     let dataz = {"userId":userId, "data":data}
     return this.http.post<TilActionPackage>(this.saveURL,dataz).pipe(
-      tap(data => console.log(JSON.stringify(data))),
+    )
+  }
+  copyActioPackage(data:TilActionPackage, userId:number):Observable<TilActionPackage>{
+    let dataz = {"userId":userId, "data":data}
+    return this.http.post<TilActionPackage>(this.copyURL,dataz).pipe(
     )
   }
   getSites(regionId:number, userId: number): Observable<TAPSites[]> {
     let data = { "regionId": regionId , "userId":userId }
     return this.http.post<TAPSites[]>(this.getSitesURL, data).pipe(
-      tap(data => console.log(JSON.stringify(data))),
     )
   }
   getEq(siteId:number, userId: number): Observable<TAPEquipment[]> {
     let data = { "siteId": siteId , "userId":userId }
     return this.http.post<TAPEquipment[]>(this.getEqURL, data).pipe(
-      tap(data => console.log(JSON.stringify(data))),
     )
   }
 

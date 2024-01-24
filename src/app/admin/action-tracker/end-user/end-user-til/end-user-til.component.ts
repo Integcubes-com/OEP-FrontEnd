@@ -7,11 +7,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/app/core/models/user';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { EndUserTilService } from './end-user-til.service';
-import { TilActionPackage, TAPEquipment, TAPPriority, TAPBudgetSource, TAPUser } from '../../tils/tils-tracker/tils-tracker-assignment.model';
+import { TilActionPackage, TAPEquipment, TAPPriority, TAPBudgetSource } from '../../tils/tils-tracker/tils-tracker-assignment.model';
 import { AssignTilActionComponent } from '../../tils/tils-tracker/assign-til/dialog/assign-til-action/assign-til-action.component';
-import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget } from './til-tracker.model';
+import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget, unitTypes } from './til-tracker.model';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-import { CSites, CRegions, CUsers, CCountry } from 'src/app/shared/common-interface/common-interface';
+import { CSites, CRegions, CUsers, CCluster } from 'src/app/shared/common-interface/common-interface';
 import { TableColmTilComponent } from './table-colm/table-colm.component';
 import { TSeverity, TFocus } from '../../tils/add-tils/add-tils.model';
 export interface TAFilterObj {
@@ -42,6 +42,12 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     regionId: -1,
     siteId: -1
   }
+  quarterData=[
+    {title:'Quarter 1', id:1, isSelected:false},
+    {title:'Quarter 2', id:2, isSelected:false},
+    {title:'Quarter 3', id:3, isSelected:false},
+    {title:'Quarter 4', id:4, isSelected:false},
+  ]
   statusList: tataStatus[];
   displayFilter: Boolean = false;
   sites: CSites[];
@@ -63,6 +69,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
   daysToTargetList = [
     { title: 'Closed', isSelected: false },
     { title: 'OverDue', isSelected: false },
+    { title: 'Implemented', isSelected: false },
     { title: 'Less than a week', isSelected: false },
     { title: 'Less than a Month', isSelected: false },
     { title: 'Less than 6 Month', isSelected: false },
@@ -70,17 +77,26 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     { title: 'Greate than 6 Month', isSelected: false },
     { title: 'NotDue', isSelected: false },
   ]
+  
+  cluster:CCluster[];
+
+  clusterFilterList:any[]=[];
   //  'OverDue', 'Less than a week', 'Less than a Month', 'Less than 6 Month', 'Greate than 6 Month', 'Greate than 6 Month', 'NotDue']
   //Filter Lists
   regionsFilterList:any[]=[];
   sitesFilterList:any[]=[];
+  unitTypeFilterList:any[]=[];
   sapFilterList:any[]=[];
   statusFilterList:any[]=[];
+  finalImplementationList:any[]=[];
   equipmentFilterList:any[]=[];
   daysToTargetFilterList:any[]=[];
   tilFocusFilterList: any[] = [];
   soverityFilterList: any[] = [];
   priorityFilterList: any[] = [];
+  unitTypes:unitTypes[]=[];
+  quaterFilterList:any[] = [];
+
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   errorMessage: string;
@@ -99,6 +115,15 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     this.getRegions();
     this.getSites(-1);
     this.getUsers();
+    this.getClusters();
+  }
+  getClusters(){
+    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   getUsers(){
     this.subs.sink = this.dataService2.getUsers(this.user.id,-1,-1).subscribe({
@@ -112,7 +137,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     this.displayFilter = !this.displayFilter;
   }
   getRegions(){
-    this.subs.sink = this.dataService2.getRegions(this.user.id,-1,-1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id,-1,-1).subscribe({
       next:data=>{this.regions = [...data]; this.regions[0].isSelected = true; this.regionsFilterList.push(this.regions[0].regionId);     this.getActions();
       },
       error:err=>{this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center')}
@@ -130,7 +155,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
   }
   getActions() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString()).subscribe({
       next: data => {
         this.action= [...data.action]
         this.dataSource.data = [...this.action]
@@ -153,6 +178,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
         this.statusList = [...data.statusList]
         this.tilSeveritys = [...data.oemSeverity];
         this.tilFocuss = [...data.tilFocus];
+        this.unitTypes = [...data.outageTypes];
       },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
@@ -359,18 +385,58 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
       this.daysToTargetFilterList.splice(index, 1);
     }
   }
+  
+  finalImplementationFn(days: tataFinalImplementation) {
+    let index = this.finalImplementationList.indexOf(days.finalImpId);
+    if (index == -1) {
+      this.finalImplementationList.push(days.finalImpId);
+    }
+    else {
+      this.finalImplementationList.splice(index, 1);
+    }
+  }
+  unitTypesListFn(days: unitTypes) {
+    let index = this.unitTypeFilterList.indexOf(days.outageTypeId);
+    if (index == -1) {
+      this.unitTypeFilterList.push(days.outageTypeId);
+    }
+    else {
+      this.unitTypeFilterList.splice(index, 1);
+    }
+  }
+  clusterListFn(cluster: CCluster) {
+    let index = this.clusterFilterList.indexOf(cluster.clusterId);
+    if (index == -1) {
+      this.clusterFilterList.push(cluster.clusterId);
+    }
+    else {
+      this.clusterFilterList.splice(index, 1);
+    }
+  }
   filterFn(){
     this.getActions();
   }
+  quaterListFn(num:any){
+    let index = this.quaterFilterList.indexOf(num.id);
+    if (index == -1) {
+      this.quaterFilterList.push(num.id);
+    }
+    else {
+      this.quaterFilterList.splice(index, 1);
+    }
+  }
   clearFn(){
     this.regionsFilterList.length = 0;
+    this.quaterFilterList.length = 0;
     this.sitesFilterList.length = 0;
     this.sapFilterList.length = 0;
     this.statusFilterList.length = 0;
     this.equipmentFilterList.length = 0;
     this.daysToTargetFilterList.length = 0;
+    this.clusterFilterList.length = 0;
     this.tilFocusFilterList.length = 0;
     this.soverityFilterList.length = 0;
+    this.unitTypeFilterList.length = 0;
     this.priorityFilterList.length = 0;
     this.regions.map(a=>a.isSelected = false)
     this.sites.map(a=>a.isSelected = false)
@@ -381,5 +447,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     this.tilFocuss.map(a=>a.isSelected = false)
     this.tilSeveritys.map(a=>a.isSelected = false)
     this.priority.map(a=>a.isSelected = false)
+    this.quarterData.map(a => a.isSelected = false)
+    this.cluster.map(a => a.isSelected = false)
   }
 }

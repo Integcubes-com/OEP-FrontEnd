@@ -9,6 +9,8 @@ import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroy
 import { tataStatus, ActionTrackerEndUser, tataBudget, tatapart, tataFinalImplementation, tataEv, tataSAP } from 'src/app/admin/action-tracker/end-user/end-user-til/til-tracker.model';
 import { CUsers } from 'src/app/shared/common-interface/common-interface';
 import { FileUploadDialogComponent } from 'src/app/admin/action-tracker/file-upload-dialog/file-upload-dialog.component';
+import { User } from 'src/app/core/models/user';
+import { FileUploadDialogService } from 'src/app/admin/action-tracker/file-upload-dialog/file-upload-dialog.service';
 
 @Component({
   selector: 'app-assign-til-action',
@@ -32,6 +34,8 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
   sapPlaning: tataSAP[]
   dialogTitle: string;
   file:File;
+  userZ: User = JSON.parse(localStorage.getItem('currentUser'));
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ActionFormComponent>,
@@ -39,6 +43,8 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
     public dialog: MatDialog,
     private dataService: TilsTrackerService,
     private snackBar: MatSnackBar,
+    public docService: FileUploadDialogService
+
   ) {
     super();
     this.userId = this.data.userId
@@ -59,6 +65,25 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
       this.actionForm = this.buildFrom()
 
       this.removeValidators();
+      this.checkFiles();
+      this.actionForm.get('evidenceId').disable();
+
+    }
+    checkFiles(){
+      this.docService.getAttachedFileListTil(this.action.tapId, this.action.siteEquipmentId,this.userZ.id).subscribe({
+        next:data=>{
+          if(data.length==0){
+            this.action.evidenceId = 1;
+            this.actionForm.get('evidenceId').setValue(1)
+          }
+          else{
+            this.action.evidenceId = 2;
+            this.actionForm.get('evidenceId').setValue(2)
+          }
+        },
+        error:err=>{        this.showNotification('black', err, 'bottom', 'center');
+      }
+      })
     }
     removeValidators() {
       if(this.userId === 22){
@@ -72,6 +97,15 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
           this.actionForm.get(key).disable();
           this.actionForm.get(key).clearValidators();
           this.actionForm.get(key).updateValueAndValidity();
+        }
+      }
+      if (this.data.mode == "review") {
+        for (const key in this.actionForm.controls) {
+          if (!["adminComment", "isCompleted","rework", "reviewerComment"].includes(key)) {
+            this.actionForm.get(key).disable();
+            this.actionForm.get(key).clearValidators();
+            this.actionForm.get(key).updateValueAndValidity();
+          }
         }
       }
     }
@@ -90,6 +124,18 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
           mode:'edit'
         },
       });
+    }
+    setCompleted(event: any) {
+      if (event.checked) {
+        this.actionForm.get('isCompleted')?.setValue(true);
+        this.actionForm.get('rework')?.setValue(false);
+      } 
+    }
+    setRework(event: any){
+      if (event.checked) {
+        this.actionForm.get('rework')?.setValue(true);
+        this.actionForm.get('isCompleted')?.setValue(false);
+      } 
     }
     viewEvidence(){
       const dialogPosition: DialogPosition = {
@@ -136,26 +182,36 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
       }
     }
     submit(): void {
-      this.action.siteStatusDetail = this.actionForm.value.siteStatusDetail;
-      this.action.partServiceId = this.actionForm.value.partServiceId;
-      this.action.partServiceTitle = this.part.find(a=>a.partId == this.action.partServiceId)?.partTitle
-      this.action.planningId = this.actionForm.value.planningId;
-      this.action.planningTitle = this.sapPlaning.find(a=>a.sapPlanningId ==  this.action.planningId)?.sapPlanningTitle
-      this.action.finalImplementationId = this.actionForm.value.finalImplementationId;
-      this.action.finalImplementationTitle = this.finalImplementation.find(a=>a.finalImpId == this.action.finalImplementationId)?.finalImpTitle
-      this.action.evidenceId = this.actionForm.value.evidenceId;
-      this.action.evidenceTitle = this.evidence.find(a=>a.evidenceId == this.action.evidenceId)?.evidenceTitle
-      this.action.statusId = this.actionForm.value.statusid
-      this.action.statustitle = this.statusList.find(a=>a.statusId == this.action.statusId)?.statustitle
-      this.action.tilReport = this.actionForm.value.tilreport
-      this.action.targetDate = this.actionForm.value?.targetDate;
-      this.action.budgetId = this.actionForm.value.budget;
-      this.action.budgetTitle = this.budget.find(a=>a.budgetId == this.action.budgetId)?.budgetName;
-      this.action.assignedToId = this.actionForm.value.assignedToId
-      this.action.assignedToTitle = this.users.find(a=>a.userId == this.action?.assignedToId)?.userName
 
-     
-
+      if(this.data.mode == 'review'){
+        this.action.clusterReviewed = true;
+        this.action.reviewerComment = this.actionForm.value.reviewerComment;
+        this.action.rework = this.actionForm.value.rework;
+        this.action.isCompleted = this.actionForm.value.isCompleted;
+      }
+      else{
+        this.action.clusterReviewed = false;
+        this.action.rework = false;
+        this.action.isCompleted = false;
+        this.action.siteStatusDetail = this.actionForm.value.siteStatusDetail;
+        this.action.partServiceId = this.actionForm.value.partServiceId;
+        this.action.partServiceTitle = this.part.find(a=>a.partId == this.action.partServiceId)?.partTitle
+        this.action.planningId = this.actionForm.value.planningId;
+        this.action.planningTitle = this.sapPlaning.find(a=>a.sapPlanningId ==  this.action.planningId)?.sapPlanningTitle
+        this.action.finalImplementationId = this.actionForm.value.finalImplementationId;
+        this.action.finalImplementationTitle = this.finalImplementation.find(a=>a.finalImpId == this.action.finalImplementationId)?.finalImpTitle
+        this.action.evidenceId = this.actionForm.value.evidenceId;
+        this.action.evidenceTitle = this.evidence.find(a=>a.evidenceId == this.action.evidenceId)?.evidenceTitle
+        this.action.statusId = this.actionForm.value.statusid
+        this.action.statustitle = this.statusList.find(a=>a.statusId == this.action.statusId)?.statustitle
+        this.action.tilReport = this.actionForm.value.tilreport
+        this.action.targetDate = this.actionForm.value?.targetDate;
+        this.action.budgetId = this.actionForm.value.budget;
+        this.action.budgetTitle = this.budget.find(a=>a.budgetId == this.action.budgetId)?.budgetName;
+        this.action.assignedToId = this.actionForm.value.assignedToId
+        this.action.assignedToTitle = this.users.find(a=>a.userId == this.action?.assignedToId)?.userName
+        this.action.adminComment = this.actionForm.value.adminComment;
+      }      
   }
   buildFrom(): FormGroup {
     return this.fb.group({
@@ -178,6 +234,10 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
       assignedToId: [this.action.assignedToId ],
       reportPath: [],
       tilreport: [],
+      adminComment:[this.action.adminComment],
+      isCompleted:[this.action.isCompleted],
+      rework:[this.action.isCompleted],
+      reviewerComment:[this.action.reviewerComment],
     })
   }
   onNoClick(): void {

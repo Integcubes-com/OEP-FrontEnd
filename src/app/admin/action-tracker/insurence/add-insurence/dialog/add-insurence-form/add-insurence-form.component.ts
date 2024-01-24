@@ -208,7 +208,7 @@ export class AddInsurenceFormComponent extends UnsubscribeOnDestroyAdapter {
     }
   }
   getSites(regionId:number){
-    this.subs.sink = this.dataService.getSites(this.user.id,regionId,-1).subscribe({
+    this.subs.sink = this.dataService.getUpdatedSites(this.user.id,regionId,-1,-1).subscribe({
       next:data=>{this.sites = [...data]},
       error:err=>{this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center')}
     })

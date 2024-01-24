@@ -9,7 +9,7 @@ import { SEUser, SiteEquipment, SERegions, SESites, SEFleet, SEFilter, SESiteEqu
 import { SiteEquipmentService } from '../../site-equipment/site-equipment-main/site-equipment.service';
 import { User } from 'src/app/core/models/user';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-import { CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
 
 @Component({
   selector: 'app-site-equipment',
@@ -21,7 +21,7 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
   apiUser: CUsers[];
   SiteEquipments: SiteEquipment[];
   errorMessage: string;
-
+cluster:CCluster[]=[];
   oems: SESiteEquipmentOME[];
   equipmetTypes: SESiteEquipmentType[];
   regions: CRegions[];
@@ -39,6 +39,8 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
   modelFilterList:any[]=[];
   oemFilterList:any[]=[];
   eqTypeFilterList:any[]=[];
+  clusterFilterList:any[]=[];
+
   displayedColumns: string[] = ['id', 'regionTitle', 'siteTitle', 'model', 'unitSN','nextOutage','outageType','details','responsibleName','unitCOD','unit'];
   dataSource: MatTableDataSource<SiteEquipment>;
   filterObj:SEFilter={
@@ -65,6 +67,16 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
     this.getSite(-1);
     this.getRegions();
     this.getUsers();
+    this.getClusters();
+
+  }
+  getClusters(){
+    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   getUsers(){
     this.subs.sink = this.dataService2.getUsers(this.user.id,-1,-1 ).subscribe({
@@ -93,7 +105,7 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
     })
   }
   getRegions(){
-    this.subs.sink = this.dataService2.getRegions(this.user.id, -1 , -1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id, -1 , -1).subscribe({
       next:data=>{
         this.regions = [...data]
       },
@@ -106,7 +118,7 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
 
   getSiteEquipment() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getSiteEquipments(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.modelFilterList.toString(), this.eqTypeFilterList.toString(), this.oemFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getSiteEquipments(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.modelFilterList.toString(), this.eqTypeFilterList.toString(), this.oemFilterList.toString(),this.clusterFilterList.toString()).subscribe({
       next: data => {
         this.SiteEquipments = [...data.siteEquipment];
         this.dataSource.data = [...this.SiteEquipments];
@@ -263,13 +275,23 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
           this.oemFilterList.splice(index, 1);
         }
       }
-
+      clusterListFn(cluster: CCluster) {
+        let index = this.clusterFilterList.indexOf(cluster.clusterId);
+        if (index == -1) {
+          this.clusterFilterList.push(cluster.clusterId);
+        }
+        else {
+          this.clusterFilterList.splice(index, 1);
+        }
+      }
       filterFn(){
         this.getSiteEquipment();
       }
       clearFn(){
         this.regionsFilterList.length = 0;
         this.sitesFilterList.length = 0;
+        this.clusterFilterList.length = 0;
+
         this.modelFilterList.length = 0;
         this.eqTypeFilterList.length = 0;
         this.oemFilterList.length = 0;
@@ -278,5 +300,7 @@ export class SiteEquipmentComponent extends UnsubscribeOnDestroyAdapter implemen
         this.fleet.map(a=>a.isSelected = false)
         this.equipmetTypes.map(a=>a.isSelected = false)
         this.oems.map(a=>a.isSelected = false)
+        this.cluster.map(a=>a.isSelected = false)
+
       }
 }

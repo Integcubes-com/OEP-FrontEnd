@@ -24,8 +24,8 @@ export class InsurenceTrackerService {
     let data = {'userId':userId, "filter":filterObj};
     return this.http.post<IATAPIData>(this.getInsurenceTrackerURL,data)
   }
-  getActionTrackerList(userId:number,regionList:string, siteList:string, sourceList:string, department:string, priorityList:string): Observable<IATAPIData> {
-    let data = {userId,regionList,siteList,sourceList,department,priorityList};
+  getActionTrackerList(userId:number,regionList:string, siteList:string, sourceList:string, department:string, priorityList:string,clusterList:string): Observable<IATAPIData> {
+    let data = {userId,regionList,siteList,sourceList,department,priorityList,clusterList};
     return this.http.post<IATAPIData>(this.getInsurenceTrackerURL,data)
   }
   getInterfaces(userId:number): Observable<IAInterface> {

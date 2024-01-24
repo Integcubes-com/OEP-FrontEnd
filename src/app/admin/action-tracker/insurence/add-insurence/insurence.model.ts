@@ -36,6 +36,8 @@ export class InsurenceRecommendation {
     report:string;
     reportAttahced:boolean;
     reportName:string;
+    clusterId:number;
+    clusterTitle:string;
     constructor(reg) {
         this.recommendationId = reg.recommendationId ? reg.recommendationId : -1;
         this.nomacStatusId = reg.nomacStatusId ? reg.nomacStatusId : 2;

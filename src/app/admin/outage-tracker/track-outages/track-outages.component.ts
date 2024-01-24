@@ -25,7 +25,7 @@ export class TrackOutagesComponent extends UnsubscribeOnDestroyAdapter implement
   isTableLoading: boolean;
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
-
+  nameToRemove:any[]=[	"admin", "n.maheta"];
   //Varaibles
   sites: CSites[];
   status: OT_OutageStatus[];
@@ -41,7 +41,7 @@ export class TrackOutagesComponent extends UnsubscribeOnDestroyAdapter implement
   displayFilter: Boolean = false;
 
   constructor(private snackBar: MatSnackBar, private dataService: TrackOutagesService, private dataService2: CommonService, public dialog: MatDialog,) { super() }
-  displayedColumns: string[] = ['id', 'siteTitle', 'unit', 'phaseNumber', 'phaseTitle', 'phaseReadDesc', 'outageTitle', 'nextOutageDate', 'statusTitle', 'actions'];
+  displayedColumns: string[] = ['id', 'siteTitle', 'unit', 'phaseNumber', 'phaseTitle', 'phaseReadDesc', 'outageTitle', 'nextOutageDate', 'statusTitle','name', 'actions'];
   dataSource: MatTableDataSource<OT_outageTracker>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -59,7 +59,7 @@
                     <td mat-cell *matCellDef="let region">{{region.unit}}</td>
                   </ng-container>
                   <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef style="padding-left:50px!important; padding-right:50px!important">Actions</th>
+                    <th mat-header-cell *matHeaderCellDef >Actions</th>
                     <td mat-cell class="action-button" *matCellDef="let row; let i=index;" class="pr-0">
                       <button mat-icon-button (click)="$event.stopPropagation()" (click)="updateSiteNextOutages(row)"
                         class="tbl-action-btn" matTooltip="EDIT">

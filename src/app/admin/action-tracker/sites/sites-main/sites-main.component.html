@@ -30,11 +30,11 @@
                                             </li>
                                             <li>
                                                 <div class="m-l-10" matTooltip="FILTER DATA">
-                                                  <button mat-mini-fab color="accent" (click)="addColumns()">
-                                                    <mat-icon>view_column</mat-icon>
-                                                  </button>
+                                                    <button mat-mini-fab color="accent" (click)="addColumns()">
+                                                        <mat-icon>view_column</mat-icon>
+                                                    </button>
                                                 </div>
-                                              </li> 
+                                            </li>
                                         </ul>
                                     </div>
                                     <div class="col-4">
@@ -318,9 +318,10 @@
                                         <td mat-cell *matCellDef="let site"> {{site.externalCommunication}} </td>
                                     </ng-container>
                                     <ng-container matColumnDef="actions">
-                                        <th mat-header-cell *matHeaderCellDef style="padding:auto 50px!important">Actions
+                                        <th mat-header-cell *matHeaderCellDef style="padding-left:50px!important;padding-right:50px!important;">
+                                            Actions
                                         </th>
-                                        <td mat-cell class="action-button" *matCellDef="let row; let i=index;"
+                                        <td mat-cell class="action-button" style="margin:auto"*matCellDef="let row; let i=index;"
                                             class="pr-0">
                                             <button mat-icon-button (click)="$event.stopPropagation()"
                                                 (click)="updateSite(row)" class="tbl-action-btn" matTooltip="EDIT">

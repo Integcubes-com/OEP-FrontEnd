@@ -207,6 +207,23 @@
                                   </div>
                                 </mat-panel-description>
                               </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Cluster
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                                        {{r.clusterTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
                                <!--<mat-expansion-panel class="mt-0">
                                 <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                   <mat-panel-title style="font-size: 13px;">

@@ -26,6 +26,7 @@ export class AddColumnsComponent {
     {colName:"year",code:"Year", isSelected:false},
     {colName:"type",code:"Type", isSelected:false},
     {colName:"report",code:"Report", isSelected:false},
+    {colName:"cluster",code:"Cluster", isSelected:false},
     // {colName:"actions", isSelected:false},
 
     

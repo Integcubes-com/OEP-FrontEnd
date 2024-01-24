@@ -32,6 +32,7 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
   isTableLoading: boolean;
   selectedTechnologyList:CTechnology[];
   users:CUsers[];
+  cluster:CCluster[];
   regionListObj:any[] = [];
   addColumns(){
     const dialogRef = this.dialog.open(ColumnFilterComponent, {
@@ -46,7 +47,6 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
   }
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
-  cluster:CCluster[];
   errorMessage: string;
   constructor(private dataService: SitesService, private dataService2: CommonService, private snackBar: MatSnackBar, private dialog: MatDialog) {
     super()

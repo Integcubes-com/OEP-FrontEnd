@@ -96,7 +96,7 @@
                         <mat-label>Status</mat-label>
                         <mat-select formControlName="statusId" #user (selectionChange)="checker(user.value, 'status')">
                             <mat-option>None</mat-option>
-                            <mat-option *ngFor="let status of statuss" [value]="status.statusId">{{status.statusTitle}}</mat-option>
+                            <mat-option *ngFor="let status of statuss|TilExclude:[1]:actionTracker.statusId" [value]="status.statusId">{{status.statusTitle}}</mat-option>
                           </mat-select>
                         <mat-error *ngIf="trackingForm.get('statusId').hasError('required')">
                             Status is required
@@ -156,7 +156,31 @@
                     </mat-form-field>
                 </div>
             </div>
-          
+            <div class="row" *ngIf="userZ.id == 22">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Admin Comment</mat-label>
+                        <textarea type="text" matInput formControlName="adminComment"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+           
+            <div class="row" *ngIf="data.action == 'review'">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <mat-checkbox  formControlName="isCompleted" (change)="setCompleted($event)">Completed</mat-checkbox>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <mat-checkbox formControlName="rework" (change)="setRework($event)">Rework</mat-checkbox>
+                </div>
+            </div>
+            <div class="row" *ngIf="trackingForm.value.reviewerComment || data.action == 'review'">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" >
+                    <mat-form-field  class="example-full-width" appearance="outline">
+                        <mat-label>Reviewer Comment</mat-label>
+                        <textarea type="text" matInput formControlName="reviewerComment" [readonly]="data.action != 'review'"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
             <!-- <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <label>File</label>
@@ -169,6 +193,7 @@
                         <mat-icon>insert_drive_file</mat-icon>Evidence</button>
                 </div>
             </div>
+ 
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
                     <!-- <div class="example-button-row float-start" >
@@ -178,12 +203,13 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-6">
                     <div class="example-button-row float-end">
-                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!trackingForm.valid || evidenceStatus"
+                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!trackingForm.valid || evidenceStatus "
                             [mat-dialog-close]="actionTracker">Save</button>
                         <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
                     </div>
                 </div>
             </div>
-        </form>
+                   </form>
+
     </div>
 </div>

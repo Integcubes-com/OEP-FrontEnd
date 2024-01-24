@@ -49,6 +49,12 @@ const routes: Routes =
     loadChildren:()=>
     import('./proactive-risk-prevention/proactive-risk-prevention.module').then((m)=>m.ProactiveRiskPreventionModule)
   },
+  {
+    path:'model-equipment',
+    loadChildren:()=>
+    import('./model-equipment/model-equipment.module').then((m)=>m.ModelEquipmentModule)
+  },
+
   ]
 
 @NgModule({

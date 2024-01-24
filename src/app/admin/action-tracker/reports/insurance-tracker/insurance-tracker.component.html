@@ -3,7 +3,7 @@
       <div class="block-header">
         <app-breadcrumb [title]="'Reports'" [items]="[]" [active_item]="'Tracker'"></app-breadcrumb>
       </div>
-      <div class="card" *ngIf="displayFilter">
+      <!-- <div class="card" *ngIf="displayFilter">
         <div class="row m-4 p-0">
           <h5 class="card-title">Filter By:</h5>
           <div class="col-md-3">
@@ -92,7 +92,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="row clearfix">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="card">
@@ -183,6 +183,23 @@
                                       <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
                                         [(ngModel)]="r.isSelected" (click)="siteListFn(r)">
                                         {{r.siteTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Cluster
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                                        {{r.clusterTitle}}
                                       </mat-checkbox>
                                     </div>
                                   </div>
@@ -347,6 +364,23 @@
                   <ng-container matColumnDef="comments">
                     <th mat-header-cell *matHeaderCellDef> Comments </th>
                     <td mat-cell *matCellDef="let action"> {{action.comments}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="cluster">
+                    <th mat-header-cell *matHeaderCellDef> Cluster </th>
+                    <td mat-cell *matCellDef="let recommendation"> {{recommendation.clusterTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="reviewerComment">
+                    <th mat-header-cell *matHeaderCellDef> Reviewer Comment </th>
+                    <td mat-cell *matCellDef="let action"> {{action.reviewerComment}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="implementedDate">
+                    <th mat-header-cell *matHeaderCellDef> Implemented Date </th>
+                    <td mat-cell *matCellDef="let action"> {{action.implementedDate}} </td>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="clusterReviewed">
+                    <th mat-header-cell *matHeaderCellDef> Review </th>
+                    <td mat-cell *matCellDef="let action"> {{action.clusterReviewed?'Reviewed':'Not Reviewed'}} </td>
                   </ng-container>
                   <ng-container matColumnDef="closureDate">
                     <th mat-header-cell *matHeaderCellDef> Closure Date </th>

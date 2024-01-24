@@ -8,6 +8,8 @@ import { EndUserInsuranceService } from '../../end-user-insurance.service';
 import { CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
 import { ReturnedDocumnet } from '../../../../file-upload-dialog/file-upload.model';
 import { FileUploadDialogComponent } from 'src/app/admin/action-tracker/file-upload-dialog/file-upload-dialog.component';
+import { User } from 'src/app/core/models/user';
+import { FileUploadDialogService } from 'src/app/admin/action-tracker/file-upload-dialog/file-upload-dialog.service';
 
 @Component({
   selector: 'app-insurance-form',
@@ -33,6 +35,7 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
   errorMessage: string;
   users: CUsers[];
   filteredArray: CUsers[];
+  userZ: User = JSON.parse(localStorage.getItem('currentUser'));
 
   constructor
     (
@@ -41,15 +44,15 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
       private fb: FormBuilder,
       private snackBar: MatSnackBar,
       private dataService: EndUserInsuranceService,
-      public dialog: MatDialog
+      public dialog: MatDialog,
+      public docService: FileUploadDialogService
     ) {
     super()
-
-    if (this.data.action == "edit") {
+    if (this.data.action == "edit" || this.data.action == 'review') {
       this.dialogTitle = this.data.tracker.action;
       this.actionTracker = { ...this.data.tracker }
     }
-    if (this.data.action == "add") {
+    else if (this.data.action == "add") {
       this.dialogTitle = "New Recommendation";
       this.actionTracker = new InsurenceTracker({});
     }
@@ -64,8 +67,48 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
     this.dayStatuss = [...data.dayStatuss];
     this.evidenceStatuss = [...data.evidenceStatuss];
     this.trackingForm = this.buildForm();
+    this.trackingForm.get('evidenceAvailable').disable();
+
+    if(this.data.action == 'review'){
+      this.disableReviewFileds();
+    }
+  }
+  disableReviewFileds(){
+    this.trackingForm.get('statusId').disable();
+    this.trackingForm.get('statusId').clearValidators();
+
+    this.trackingForm.get('assignedTo').disable();
+    this.trackingForm.get('assignedTo').clearValidators();
+
+    this.trackingForm.get('comments').disable();
+    this.trackingForm.get('comments').clearValidators();
+
+    this.trackingForm.get('evidenceAvailable').disable();
+    this.trackingForm.get('evidenceAvailable').clearValidators();
+
+    this.trackingForm.get('reviewerComment').setValidators(Validators.required);
+
+    this.trackingForm.updateValueAndValidity();
+
+  }
+  checkFiles(){
+    this.docService.getAttachedFileList(this.actionTracker.insurenceActionTrackerId, this.userZ.id).subscribe({
+      next:data=>{
+        if(data.length==0){
+          this.actionTracker.evidenceAvailableId = 1;
+          this.trackingForm.get('evidenceAvailable').setValue(1)
+        }
+        else{
+          this.actionTracker.evidenceAvailableId = 2;
+          this.trackingForm.get('evidenceAvailable').setValue(2)
+        }
+      },
+      error:err=>{        this.showNotification('black', err, 'bottom', 'center');
+    }
+    })
   }
   ngOnInit(): void {
+   this.checkFiles();
     this.trackingForm.get('assignedTo')?.valueChanges.subscribe(
       value => {
         const filterValue = value.toLowerCase();
@@ -73,6 +116,11 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
       }
     );  }
   uploadEvidence() {
+    let mode='edit';
+    if(this.data.action == "review"){
+      mode = 'view'
+    }
+
     const dialogPosition: DialogPosition = {
       right: 30 + 'px'
     };
@@ -84,10 +132,12 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
       data: {
         actionTracker: this.actionTracker,
         action: 'insurance',
-        mode: 'edit'
+        mode: 'mode'
       },
     });
-
+    dialogRef.afterClosed().subscribe((result: any) => {
+      this.checkFiles();
+    });
   }
   checker(val: number, type: string) {
     if (this.trackingForm.value.evidenceAvailable==2 && this.trackingForm.value.statusId ==1) {
@@ -99,6 +149,18 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
     }
 
   }
+  setCompleted(event: any) {
+    if (event.checked) {
+      this.trackingForm.get('isCompleted')?.setValue(true);
+      this.trackingForm.get('rework')?.setValue(false);
+    } 
+  }
+  setRework(event: any){
+    if (event.checked) {
+      this.trackingForm.get('rework')?.setValue(true);
+      this.trackingForm.get('isCompleted')?.setValue(false);
+    } 
+  }
   buildForm(): FormGroup {
     return this.fb.group({
       statusId: [this.actionTracker.statusId, [Validators.required]],
@@ -107,6 +169,10 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
       // closureDate: [this.actionTracker.closureDate, [Validators.required]],
       evidenceAvailable: [this.actionTracker.evidenceAvailableId, [Validators.required]],
       fileAttachment: [],
+      adminComment:[this.actionTracker.adminComment],
+      isCompleted:[this.actionTracker.isCompleted],
+      rework:[this.actionTracker.isCompleted],
+      reviewerComment:[this.actionTracker.reviewerComment],
       // calcStatus: [this.actionTracker.calcStatus, [Validators.required]],
       // calcEvid: [this.actionTracker.calcEvid, [Validators.required]],
       // calcDate: [this.actionTracker.calcDate, [Validators.required]],
@@ -117,22 +183,35 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
   }
   submit() {
     if (this.trackingForm.valid) {
-      this.actionTracker.statusId = this.trackingForm.value.statusId;
-      this.actionTracker.statusTitle = this.statuss.find(a => a.statusId == this.actionTracker.statusId)?.statusTitle;
-      this.actionTracker.statusScore = this.statuss.find(a => a.statusId == this.actionTracker.statusId)?.statusScore;
-      this.actionTracker.evidenceAvailableId = this.trackingForm.value.evidenceAvailable;
-      this.actionTracker.evidenceAvailable = this.evidenceStatuss.find(a => a.evidenceId == this.actionTracker.evidenceAvailableId)?.evidenceTitle;
-      this.actionTracker.evidenceAvailableScore = this.evidenceStatuss.find(a => a.evidenceId == this.actionTracker.evidenceAvailableId)?.evidenceScore;
-      
-      this.actionTracker.assignedToId = this.trackingForm.value.assignedTo;
-      this.actionTracker.assignedToTitle = this.users.find(a => a.userId == this.actionTracker.assignedToId)?.name;
+      if(this.data.action == "review"){
+        this.actionTracker.clusterReviewed = true;
+        this.actionTracker.reviewerComment = this.trackingForm.value.reviewerComment;
+        this.actionTracker.rework = this.trackingForm.value.rework;
+        this.actionTracker.isCompleted = this.trackingForm.value.isCompleted;
+      }
+      else{
+        this.actionTracker.clusterReviewed = false;
+        this.actionTracker.statusId = this.trackingForm.value.statusId;
+        this.actionTracker.statusTitle = this.statuss.find(a => a.statusId == this.actionTracker.statusId)?.statusTitle;
+        this.actionTracker.statusScore = this.statuss.find(a => a.statusId == this.actionTracker.statusId)?.statusScore;
+        this.actionTracker.evidenceAvailableId = this.trackingForm.value.evidenceAvailable;
+        this.actionTracker.evidenceAvailable = this.evidenceStatuss.find(a => a.evidenceId == this.actionTracker.evidenceAvailableId)?.evidenceTitle;
+        this.actionTracker.evidenceAvailableScore = this.evidenceStatuss.find(a => a.evidenceId == this.actionTracker.evidenceAvailableId)?.evidenceScore;
+        
+        this.actionTracker.assignedToId = this.trackingForm.value.assignedTo;
+        this.actionTracker.assignedToTitle = this.users.find(a => a.userId == this.actionTracker.assignedToId)?.name;
+  
+        this.actionTracker.assignedToTitle = this.trackingForm.value.assignedTo;
+        this.actionTracker.assignedToId = this.users.find(a => a.name=== this.actionTracker.assignedToTitle)?.userId;
+  
+        this.actionTracker.comments = this.trackingForm.value.comments;
+        this.actionTracker.adminComment = this.trackingForm.value.adminComment;
+  
+  
+        // this.actionTracker.closureDate = this.trackingForm.value.closureDate;
+        this.actionTracker.reportFile = this.trackingForm.value.fileAttachment;
+      }
 
-      this.actionTracker.assignedToTitle = this.trackingForm.value.assignedTo;
-      this.actionTracker.assignedToId = this.users.find(a => a.name=== this.actionTracker.assignedToTitle)?.userId;
-
-      this.actionTracker.comments = this.trackingForm.value.comments;
-      // this.actionTracker.closureDate = this.trackingForm.value.closureDate;
-      this.actionTracker.reportFile = this.trackingForm.value.fileAttachment;
     }
   }
   onNoClick() {

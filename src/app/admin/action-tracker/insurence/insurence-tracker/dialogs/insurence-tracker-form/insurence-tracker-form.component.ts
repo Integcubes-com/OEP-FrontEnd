@@ -70,7 +70,7 @@ export class InsurenceTrackerFormComponent extends UnsubscribeOnDestroyAdapter{
     }
   }
   getSites(regionId:number){
-    this.subs.sink = this.dataService2.getSites(this.user.id,regionId,-1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedSites(this.user.id,regionId,-1,-1).subscribe({
       next:data=>{
 
           this.sites = [...data];

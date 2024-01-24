@@ -240,6 +240,23 @@
                                   </div>
                                 </mat-panel-description>
                               </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Cluster
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                                        {{r.clusterTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
                             </mat-accordion>
                           </div>
                         </mat-menu>
@@ -291,6 +308,10 @@
                     <ng-container matColumnDef="referenceNumber">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference Number </th>
                       <td mat-cell *matCellDef="let recommendation"> {{recommendation.referenceNumber}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="cluster">
+                      <th mat-header-cell *matHeaderCellDef> Cluster </th>
+                      <td mat-cell *matCellDef="let recommendation"> {{recommendation.clusterTitle}} </td>
                     </ng-container>
                     <ng-container matColumnDef="significance">
                       <th mat-header-cell *matHeaderCellDef> Significance </th>

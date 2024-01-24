@@ -14,6 +14,8 @@ export class EndUserInsuranceService {
 
   private readonly saveUserURL = `${environment.apiUrl}/EndUserInsuranceTracker/getUsersActions`
   private readonly saveInsurenceTrackerURL = `${environment.apiUrl}/EndUserInsuranceTracker/endUserStausInsurenceActionTracker`
+  private readonly saveReviewInsurenceTrackerURL = `${environment.apiUrl}/EndUserInsuranceTracker/reviewerInsurenceActionTracker`
+
   private readonly getInsurenceTrackerURL = `${environment.apiUrl}/EndUserInsuranceTracker/getInsurenceActionTracker`
   private readonly getInsurenceTrackerReportURL = `${environment.apiUrl}/EndUserInsuranceTracker/getInsurenceActionTrackerReport`
 
@@ -28,16 +30,14 @@ export class EndUserInsuranceService {
   
   constructor(private http: HttpClient) { }
   
-  getActionTracker(userId:number, regionList:string, siteList:string, sourceList:string, statusList:string, dayList:string, companyList:string,priorityList): Observable<IATAPIData> {
-    let data = {userId, regionList, siteList, sourceList, statusList, dayList, companyList, priorityList};
+  getActionTracker(userId:number, regionList:string, siteList:string, sourceList:string, statusList:string, dayList:string, companyList:string,priorityList:string, clusterList:string,quaterList:string): Observable<IATAPIData> {
+    let data = {userId, regionList, siteList, sourceList, statusList, dayList, companyList, priorityList,clusterList,quaterList};
     return this.http.post<IATAPIData>(this.getInsurenceTrackerURL,data).pipe(
-      tap(data => console.log(JSON.stringify(data))),
     )
   }
-  getActionTrackerReport(userId:number, regionList:string, siteList:string, sourceList:string, statusList:string, dayList:string, companyList:string,priorityList): Observable<IATAPIData> {
-    let data = {userId, regionList, siteList, sourceList, statusList, dayList, companyList, priorityList};
+  getActionTrackerReport(userId:number, regionList:string, siteList:string, sourceList:string, statusList:string, dayList:string, companyList:string,priorityList,clusterList:string): Observable<IATAPIData> {
+    let data = {userId, regionList, siteList, sourceList, statusList, dayList, companyList, priorityList,clusterList};
     return this.http.post<IATAPIData>(this.getInsurenceTrackerReportURL,data).pipe(
-      tap(data => console.log(JSON.stringify(data))),
     )
   }
   uploadPDF(data:InsurenceTracker,action:InsurenceTracker, userId:number):Observable<any>{
@@ -46,7 +46,6 @@ export class EndUserInsuranceService {
     formData.append('iatId', data.insurenceActionTrackerId.toString());
     formData.append('userId', userId.toString());
     return this.http.post<any>(this.uploadFileURL, formData).pipe(
-      tap(data => console.log(JSON.stringify(data))),
     )
   }
   downloadReport(iatId: number): Observable<any> {
@@ -62,6 +61,10 @@ export class EndUserInsuranceService {
   saveActionTracker(action:InsurenceTracker, userId:number):Observable<InsurenceTracker>{
     let data = {"insurenceAction":action,"userId":userId};
     return this.http.post<InsurenceTracker>(this.saveInsurenceTrackerURL,data)
+  }
+  saveReviewActionTracker(action:InsurenceTracker, userId:number):Observable<InsurenceTracker>{
+    let data = {"insurenceAction":action,"userId":userId};
+    return this.http.post<InsurenceTracker>(this.saveReviewInsurenceTrackerURL,data)
   }
   getInsuranceRecommendation(userId:number, recommendationId:number): Observable<InsurenceRecommendation[]> {
     let data = { "userId":userId ,"recommendationId":recommendationId}

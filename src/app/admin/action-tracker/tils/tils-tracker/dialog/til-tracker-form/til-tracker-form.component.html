@@ -102,7 +102,7 @@
                 </div>
             </div> -->
             <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
                         <mat-label>Applicability tracking</mat-label>
                         <mat-select #eq (selectionChange)="addChip(eq.value, 'equipment')" formControlName="equipmentIds" [disabled]="view">
@@ -118,7 +118,57 @@
                             </button>
                         </mat-chip>
                     </mat-chip-list>
+                </div> -->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-label>Applicability tracking</mat-label>
+                    <mat-chip-list>
+                        <mat-chip color="accent" (click)="openTeamMembersPanel()" #teamMembersPanelOrigin>
+                            Add
+                            <button matChipRemove (click)="openTeamMembersPanel()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </mat-chip>
+                        <ng-template #teamMembersPanel>
+                            <div class="card p-4" style="max-height: 15rem; overflow-y: auto;">
+                                            <input type="text"
+                                            placeholder="Enter unit name" (input)="filterTeamMembers($event)"
+                                            [maxLength]="30" #newTeamMembersInput>
+                                <div class="mt-2">
+                                    <ng-container *ngFor="let s of sites">
+                                        <div>
+                                            <mat-checkbox class="flex items-center h-10 min-h-10"
+                                            [checked]="checkerSites(s)"
+                                            [disableRipple]="true" [color]="'primary'"
+                                            (change)="changeSelection($event.checked, s)"
+                                                (click)="$event.stopPropagation()">
+                                                {{ s.siteTitle }}
+                                            </mat-checkbox>
+                                        </div>
+                                        <ng-container *ngFor="let e of selectedEq; trackBy: trackByFn">
+                                            <div class="ms-4" *ngIf="s.siteId == e.siteId">
+                                                <mat-checkbox class="flex items-center h-10 min-h-10"
+                                                [checked]="checker(e)"
+                                                [disableRipple]="true" [color]="'primary'"
+                                                    (change)="toggleTeamMembersSelection(e)"
+                                                    (click)="$event.stopPropagation()">
+                                                    {{ e.unit }}
+                                                </mat-checkbox>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <mat-chip color="primary" *ngFor="let u of equipmentList" (removed)="removeChip(u, 'equipment')"
+                        selected>
+                        {{u.unit}}
+                        <button matChipRemove [disabled]="view">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    </mat-chip-list>
                 </div>
+
             </div>
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
@@ -269,7 +319,7 @@
                     </mat-form-field>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row float-end">

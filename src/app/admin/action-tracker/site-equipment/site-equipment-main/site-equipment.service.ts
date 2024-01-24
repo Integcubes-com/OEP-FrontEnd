@@ -24,10 +24,10 @@ export class SiteEquipmentService {
   //     tap(data=>console.log(JSON.stringify(data))),
   //   )
   // }
-  getSiteEquipments(userId:number, regionList:string, siteList:string, modelList:string, eqTypeList:string, oemList:string):Observable<SEAPIData>{
-    let data ={userId, regionList,siteList,modelList,eqTypeList, oemList}
+  getSiteEquipments(userId: number, regionList: string, siteList: string, modelList: string, eqTypeList: string, oemList: string, clusterList: string): Observable<SEAPIData> {
+    let data = { userId, regionList, siteList, modelList, eqTypeList, oemList, clusterList }
     return this.http.post<SEAPIData>(this.getSiteEquipmentURL, data).pipe(
-      tap(data=>console.log(JSON.stringify(data))),
+      tap(data => console.log(JSON.stringify(data))),
     )
   }
   getInterfaces(userId:number):Observable<SEInterfaceAPI>{

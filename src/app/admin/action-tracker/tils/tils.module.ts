@@ -31,6 +31,7 @@ import { AssignTilComponent } from './tils-tracker/assign-til/assign-til.compone
 import { DeleteTilActionComponent } from './tils-tracker/assign-til/dialog/delete-til-action/delete-til-action.component';
 import { AssignTilActionComponent } from './tils-tracker/assign-til/dialog/assign-til-action/assign-til-action.component';
 import { TableColsComponent } from './add-tils/dialog/table-cols/table-cols.component';
+import { CopyAlertComponent } from './tils-tracker/dialog/copy-alert/copy-alert.component';
 
 
 
@@ -47,6 +48,7 @@ import { TableColsComponent } from './add-tils/dialog/table-cols/table-cols.comp
     DeleteTilActionComponent,
     AssignTilActionComponent,
     TableColsComponent,
+    CopyAlertComponent,
 
   ],
   imports: [

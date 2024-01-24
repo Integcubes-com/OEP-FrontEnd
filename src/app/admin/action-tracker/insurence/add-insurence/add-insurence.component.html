@@ -67,6 +67,23 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <mat-expansion-panel class="mt-0">
+          <mat-expansion-panel-header (click)="$event.stopPropagation()">
+            <mat-panel-title style="font-size: 13px;">
+              Cluster
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-panel-description>
+            <div class="row">
+              <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                  [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                  {{r.clusterTitle}}
+                </mat-checkbox>
+              </div>
+            </div>
+          </mat-panel-description>
+        </mat-expansion-panel>
         <div class="col-md-1 pb-0">
           <div class="float-end">
             <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
@@ -247,6 +264,23 @@
                                 </div>
                               </mat-panel-description>
                             </mat-expansion-panel>
+                            <mat-expansion-panel class="mt-0">
+                              <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                <mat-panel-title style="font-size: 13px;">
+                                  Cluster
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <mat-panel-description>
+                                <div class="row">
+                                  <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                                    <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                      [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                                      {{r.clusterTitle}}
+                                    </mat-checkbox>
+                                  </div>
+                                </div>
+                              </mat-panel-description>
+                            </mat-expansion-panel>
                           </mat-accordion>
                         </div>
                       </mat-menu>
@@ -300,11 +334,16 @@
                     <th mat-header-cell *matHeaderCellDef> Significance </th>
                     <td mat-cell *matCellDef="let recommendation"> {{recommendation.significance}} </td>
                   </ng-container>
+                  <ng-container matColumnDef="cluster">
+                    <th mat-header-cell *matHeaderCellDef> Cluster </th>
+                    <td mat-cell *matCellDef="let recommendation"> {{recommendation.clusterTitle}} </td>
+                  </ng-container>
                   <ng-container matColumnDef="report">
                     <th mat-header-cell *matHeaderCellDef> Report </th>
                     <td mat-cell *matCellDef="let recommendation"> <i matTooltip="DOWNLOAD" (click)="$event.stopPropagation()" (click)="downloadReport(recommendation)" *ngIf="recommendation.reportAttahced" style="color:rgb(0, 81, 255);"class="material-icons">file_download</i><span *ngIf="!recommendation.reportAttahced">No File</span>
                     </td>
                   </ng-container>
+
                   <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef> Type </th>
                     <td mat-cell *matCellDef="let recommendation"> {{recommendation.type}} </td>

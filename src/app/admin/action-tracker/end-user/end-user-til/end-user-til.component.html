@@ -3,7 +3,7 @@
     <div class="block-header">
       <app-breadcrumb [title]="'TILs'" [items]="[]" [active_item]="'Action Tracking'"></app-breadcrumb>
     </div>
-    <div class="card" *ngIf="displayFilter">
+    <!-- <div class="card" *ngIf="displayFilter">
       <div class="row m-4 p-0">
         <h5 class="card-title">Filter By:</h5>
         <div class="col-md-3">
@@ -92,7 +92,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row clearfix">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card">
@@ -182,6 +182,23 @@
                               <mat-expansion-panel class="mt-0">
                                 <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                   <mat-panel-title style="font-size: 13px;">
+                                    Cluster
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                                        {{r.clusterTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
                                     Sites
                                   </mat-panel-title>
                                 </mat-expansion-panel-header>
@@ -225,6 +242,40 @@
                                       <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
                                         [(ngModel)]="r.isSelected" (click)="statusListFn(r)">
                                         {{r.statustitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Final Implementation
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of finalImplementation; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="finalImplementationFn(r)">
+                                        {{r.finalImpTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Unit Status
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of unitTypes; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="unitTypesListFn(r)">
+                                        {{r.title}}
                                       </mat-checkbox>
                                     </div>
                                   </div>
@@ -278,6 +329,23 @@
                                         {{r.focusTitle}}
                                       </mat-checkbox>
                                     </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Quarters
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let d of quarterData">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        (click)="quaterListFn(d)" [(ngModel)]="d.isSelected">
+                                        {{d.title}} </mat-checkbox>
+                                    </div>
+                                    
                                   </div>
                                 </mat-panel-description>
                               </mat-expansion-panel>
@@ -374,6 +442,10 @@
                     </div> -->
                 </div>
               </div>
+              <div *ngIf="isTableLoading" class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
+              </div>
               <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
                 <ng-container matColumnDef="id">
                   <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -382,6 +454,10 @@
                 <ng-container matColumnDef="tapTitle">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Package Title </th>
                   <td mat-cell *matCellDef="let act"> {{act.tapTitle}} </td>
+                </ng-container>
+                 <ng-container matColumnDef="unitStatus">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Status </th>
+                  <td mat-cell *matCellDef="let act"> {{act.unitStatus}} </td>
                 </ng-container>
                 <ng-container matColumnDef="targetDate">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Target Date </th>
@@ -410,6 +486,14 @@
                 <ng-container matColumnDef="actionDescription">
                   <th mat-header-cell *matHeaderCellDef> Action Description </th>
                   <td mat-cell *matCellDef="let act"> {{act.actionDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="planningTitle">
+                  <th mat-header-cell *matHeaderCellDef> Sap Planning </th>
+                  <td mat-cell *matCellDef="let act"> {{act.planningTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="adminComment">
+                  <th mat-header-cell *matHeaderCellDef> Admin Comment </th>
+                  <td mat-cell *matCellDef="let recommendation"> {{recommendation.adminComment}} </td>
                 </ng-container>
                 <ng-container matColumnDef="siteEquipmentTitle">
                   <th mat-header-cell *matHeaderCellDef>Equipment </th>
@@ -455,6 +539,10 @@
                   <th mat-header-cell *matHeaderCellDef> Action </th>
                   <td mat-cell *matCellDef="let act"> {{act.action}} </td>
                 </ng-container> -->
+                <ng-container matColumnDef="cluster">
+                  <th mat-header-cell *matHeaderCellDef> Cluster </th>
+                  <td mat-cell *matCellDef="let recommendation"> {{recommendation.clusterTitle}} </td>
+                </ng-container>
                 <ng-container matColumnDef="finalImplementationTitle">
                   <th mat-header-cell *matHeaderCellDef> Final Implementation Title </th>
                   <td mat-cell *matCellDef="let act"> {{act.finalImplementationTitle}} </td>
@@ -487,10 +575,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewAction(row)"
                   [style.cursor]="'pointer'" matRipple></tr>
               </table>
-              <div *ngIf="isTableLoading" class="tbl-spinner">
-                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
-                </mat-progress-spinner>
-              </div>
+             
               <div *ngIf="!isTableLoading" class="no-results"
                 [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
                 No results

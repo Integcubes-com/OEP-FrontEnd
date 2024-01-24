@@ -70,28 +70,16 @@ export class SiteEquipmentFormComponent  extends UnsubscribeOnDestroyAdapter{
       }
     }
   }
-  getSites(event:number){
-    debugger;
-    if(event){
+  getSites(event: number) {
+    if (event) {
       let regionId = +event
-      if(this.data.updated){
-        this.subs.sink = this.dataService.getSites(this.user.id,regionId, -1).subscribe({
-          next:data=>{this.selectedSites=[...data]},
-          error:err=>{this.showNotification('black', err, 'bottom', 'center');}
-        })
-      }
-      else{
-        this.subs.sink = this.dataService.getSites(this.user.id,regionId, -1).subscribe({
-          next:data=>{this.selectedSites=[...data]},
-          error:err=>{this.showNotification('black', err, 'bottom', 'center');}
-        })
-      }
+      this.subs.sink = this.dataService.getUpdatedSites(this.user.id, regionId, -1,-1).subscribe({
+        next: data => { this.selectedSites = [...data] },
+        error: err => { this.showNotification('black', err, 'bottom', 'center'); }
+      })
     }
-
-
-    
-    else{
-this.selectedSites = [...this.sites]
+    else {
+      this.selectedSites = [...this.sites]
     }
   }
   getUsers(event:number){

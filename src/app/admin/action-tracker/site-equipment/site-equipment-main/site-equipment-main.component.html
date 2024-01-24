@@ -3,7 +3,7 @@
       <div class="block-header">
         <app-breadcrumb [title]="'Site Equipments'" [items]="[]" [active_item]="'Site Equipments'"></app-breadcrumb>
       </div>
-      <div class="card" *ngIf="displayFilter">
+      <!-- <div class="card" *ngIf="displayFilter">
         <div class="row m-4 p-0">
           <h5 class="card-title">Filter By:</h5>
        
@@ -52,7 +52,8 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <!-- <div class="col-md-3 pb-0">
+          
+          <div class="col-md-3 pb-0">
             <mat-form-field class="example-full-width" appearance="outline">
               <mat-label>Outage Type</mat-label>
               <mat-select [(ngModel)]="filterObj.outageTypeId">
@@ -60,7 +61,7 @@
                 <mat-option *ngFor="let rf of outageType" [value]="rf.outageTypeId">{{rf.title}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div> -->
+          </div>
           <div class="col-md-1 pb-0">
             <div class="float-end">
               <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
@@ -70,7 +71,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="row clearfix">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="card">
@@ -212,6 +213,23 @@
                                       <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
                                         [(ngModel)]="r.isSelected" (click)="oemListFn(r)">
                                         {{r.oemTitle}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Cluster
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12" *ngFor="let r of cluster; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
+                                        {{r.clusterTitle}}
                                       </mat-checkbox>
                                     </div>
                                   </div>

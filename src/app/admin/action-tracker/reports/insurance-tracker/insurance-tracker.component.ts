@@ -11,7 +11,7 @@ import { EndUserInsuranceService } from '../../end-user/end-user-insurence/end-u
 import { IRPriority, IRRegion, InsurenceRecommendation } from '../../insurence/add-insurence/insurence.model';
 import { IATAPIData, InsurenceTracker, ITRegions, ITRecommendation, ITSource, ITCompany, ITStatus, ITUser, ITDayStatus, ITEvidence } from '../../insurence/insurence-tracker/insurence-tracker.model';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-import { CSites } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CSites } from 'src/app/shared/common-interface/common-interface';
 import { FileUploadDialogComponent } from '../../file-upload-dialog/file-upload-dialog.component';
 import { TableColmComponent } from '../../end-user/end-user-insurence/dialog/table-colm/table-colm.component';
 
@@ -36,6 +36,9 @@ export class  InsuranceTrackerComponent extends UnsubscribeOnDestroyAdapter impl
   toggleFilter() {
     this.displayFilter = !this.displayFilter;
   }
+  cluster:CCluster[];
+
+  clusterFilterList:any[]=[];
   recInsurence: InsurenceRecommendation[];
   apiObj: IATAPIData;
   actionTracker: InsurenceTracker;
@@ -96,6 +99,15 @@ export class  InsuranceTrackerComponent extends UnsubscribeOnDestroyAdapter impl
     this.getRegions();
     this.getSites(-1);
     this.getInterfaces();
+    this.getClusters();
+  }
+  getClusters(){
+    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   getUsers(){
     this.subs.sink = this.dataService2.getUsers(this.user.id,-1,-1).subscribe({
@@ -105,7 +117,7 @@ export class  InsuranceTrackerComponent extends UnsubscribeOnDestroyAdapter impl
   }
 
   getRegions(){
-    this.subs.sink = this.dataService2.getRegions(this.user.id,-1,-1).subscribe({
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id,-1,-1).subscribe({
       next:data=>{this.regions = [...data]},
       error:err=>{this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center')}
     })
@@ -188,7 +200,7 @@ export class  InsuranceTrackerComponent extends UnsubscribeOnDestroyAdapter impl
   }
   getActionTracker() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTrackerReport(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.companyFilterList.toString(), this.priorityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTrackerReport(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.companyFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString()).subscribe({
       next: data => {
         this.actionTrackers = [...data.tracker];
         this.dataSource.data = [...this.actionTrackers];
@@ -347,8 +359,19 @@ export class  InsuranceTrackerComponent extends UnsubscribeOnDestroyAdapter impl
     filterFn(){
       this.getActionTracker();
     }
+    clusterListFn(cluster: CCluster) {
+      let index = this.clusterFilterList.indexOf(cluster.clusterId);
+      if (index == -1) {
+        this.clusterFilterList.push(cluster.clusterId);
+      }
+      else {
+        this.clusterFilterList.splice(index, 1);
+      }
+    }
+
     clearFn(){
       this.regionsFilterList.length = 0;
+      this.clusterFilterList.length = 0;
       this.sitesFilterList.length = 0;
       this.sourceFilterList.length = 0;
       this.statusFilterList.length = 0;
@@ -363,6 +386,7 @@ export class  InsuranceTrackerComponent extends UnsubscribeOnDestroyAdapter impl
       this.statuss.map(a=>a.isSelected = false)
       this.daysToTargetList.map(a=>a.isSelected = false)
       this.priority.map(a=>a.isSelected = false)
+      this.cluster.map(a=>a.isSelected = false)
 
     }
 }

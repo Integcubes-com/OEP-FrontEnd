@@ -14,6 +14,8 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MonthNamePipe } from "../_pipes/month.pipe";
 import { RoundedNumberPipe } from "../_pipes/RoundedNumberPipe.pipe";
 import { UniquePipe2 } from "../_pipes/unique.pipe copy";
+import { TilExcludePipe } from "../_pipes/TilsExcludePipe";
+import { OTNameRemoverPipe } from "../_pipes/otNameRemover.pipe";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -26,7 +28,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MultipleExclude,
     MonthNamePipe,
     RoundedNumberPipe,
-    UniquePipe2
+    UniquePipe2,
+    TilExcludePipe,
+    OTNameRemoverPipe
   ],
   imports: [
     CommonModule,
@@ -53,7 +57,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatExpansionModule,
     MatMenuModule,
     MonthNamePipe,
-    RoundedNumberPipe
+    RoundedNumberPipe,
+    TilExcludePipe,
+    OTNameRemoverPipe
   ],
 })
 export class SharedModule {}

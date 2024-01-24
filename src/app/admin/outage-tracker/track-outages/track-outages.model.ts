@@ -18,6 +18,7 @@ export class OT_outageTracker {
     unit:string
     startDate:Date
     endDate: Date
+    name:string
 }
 
 export interface OT_FileList {

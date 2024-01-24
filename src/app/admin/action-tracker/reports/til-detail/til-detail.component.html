@@ -1,0 +1,104 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Reports'" [items]="[]" [active_item]="'TIL DETAIL'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ms-0">
+                        <li class="dropdown">
+                          <h2>TILs</h2>
+                        </li>
+                        <li class="dropdown m-l-20">
+                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                            class="browser-default search-field" aria-label="Search box">
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-4">
+                      <ul class="header-buttons">
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="XLSX">
+                            <img src="assets/images/icons/xlsx.png" alt=""
+                              (click)="exporter.exportTable('xlsx', {fileName:'assets-list', sheet: 'sheet1'})" />
+                          </div>
+                        </li>
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="CSV">
+                            <img src="assets/images/icons/csv.png" alt="" (click)="exporter.exportTable('csv')" />
+                          </div>
+                        </li>
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="JSON">
+                            <img src="assets/images/icons/json.png" alt="" (click)="exporter.exportTable('json')" />
+                          </div>
+                        </li>
+                        <li>
+                          <div class="export-button m-l-10" matTooltip="TXT">
+                            <img src="assets/images/icons/txt.png" alt="" (click)="exporter.exportTable('txt')" />
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let til ; let i = index"> {{i+1}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="siteName">
+                    <th mat-header-cell *matHeaderCellDef>Site </th>
+                    <td mat-cell *matCellDef="let til"> {{til.siteName}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="unit">
+                    <th mat-header-cell *matHeaderCellDef> Unit </th>
+                    <td mat-cell *matCellDef="let til"> {{til.unit}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let til"> {{til.actions}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="closed">
+                    <th mat-header-cell *matHeaderCellDef> Closed </th>
+                    <td mat-cell *matCellDef="let til"> {{til.closed}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="opened">
+                    <th mat-header-cell *matHeaderCellDef>Open </th>
+                    <td mat-cell *matCellDef="let til"> {{til.opened}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="inProgress">
+                    <th mat-header-cell *matHeaderCellDef> In Progress </th>
+                    <td mat-cell *matCellDef="let til"> {{til.inProgress}} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row  *matRowDef="let row; columns: displayedColumns;"
+                   matRipple></tr>
+                </table>
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
+                <div *ngIf="!isTableLoading" class="no-results"
+                [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
+                No results
+              </div>
+                <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

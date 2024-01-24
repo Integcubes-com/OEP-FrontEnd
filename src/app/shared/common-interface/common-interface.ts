@@ -16,6 +16,7 @@ export interface CRegions {
 export interface CCluster {
     clusterId:number
     clusterTitle:string
+    isSelected:boolean
 }
 export interface CUsers {
     userId: number;

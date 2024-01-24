@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { User } from 'src/app/core/models/user';
 
 @Component({
   selector: 'app-table-colm',
@@ -7,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./table-colm.component.sass']
 })
 export class TableColmTilComponent {
+  userZ: User = JSON.parse(localStorage.getItem('currentUser'));
 
   dialogTitle:string="Selected Columns";
   allCols:any[]=[
@@ -41,6 +43,12 @@ export class TableColmTilComponent {
     {colName:"focusTitle",code:"Focus/Severity", isSelected:false},
     {colName:"oemSeverityTitle",code:"OEM Severity", isSelected:false},
     {colName:"priorityTitle",code:"Priority", isSelected:false},
+    {colName:"cluster",code:"Cluster", isSelected:false},
+    {colName:"unitStatus",code:"Unit Status", isSelected:false},
+    {colName:"finalImplementationTitle",code:"Final Implementation", isSelected:false},
+    {colName:"planningTitle",code:"SAP Planning", isSelected:false},
+    {colName:"adminComment",code:"Admin Comment", isSelected:false},
+
   ];
   selectedCols:any[]=[];
 

@@ -28,7 +28,6 @@ export class ClusterMainService {
 
   deletecluster(userId:number, cluster:clusterModel): Observable<clusterModel[]> {
     let data = {userId, cluster}
-    debugger;
     return this.http.post<clusterModel[]>(this.deleteclusterURL, data)
   }
 

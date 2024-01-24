@@ -10,8 +10,8 @@ import { EndUserTilService } from '../../end-user/end-user-til/end-user-til.serv
 import { TAPBudgetSource, TAPEquipment, TAPPriority } from '../../tils/tils-tracker/tils-tracker-assignment.model';
 import { TAFilterObj } from '../../end-user/end-user-til/end-user-til.component';
 import { TilsTrackerService } from '../../tils/tils-tracker/tils-tracker.service';
-import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget } from '../../end-user/end-user-til/til-tracker.model';
-import { CSites, CRegions } from 'src/app/shared/common-interface/common-interface';
+import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget, unitTypes } from '../../end-user/end-user-til/til-tracker.model';
+import { CSites, CRegions, CCluster } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { FileUploadDialogComponent } from '../../file-upload-dialog/file-upload-dialog.component';
 import { TableColmTilComponent } from '../../end-user/end-user-til/table-colm/table-colm.component';
@@ -35,6 +35,9 @@ filterObj:TAFilterObj={
   regionId: -1,
   siteId: -1
 }
+cluster:CCluster[];
+
+clusterFilterList:any[]=[];
 statusList:tataStatus[]
 displayFilter:Boolean = false;
 priority:TAPPriority[]
@@ -43,6 +46,7 @@ equipment:TAPEquipment[]
 sites: CSites[];
 regions: CRegions[];
 selectedSites: CSites[];
+finalImplementationList:any[]=[];
 
 action: ActionTrackerEndUser[]
 budgetSource: TAPBudgetSource[]
@@ -52,6 +56,8 @@ evidence: tataEv[]
 sapPlaning: tataSAP[]
 tilSeveritys: TSeverity[];
 tilFocuss: TFocus[];
+unitTypeFilterList:any[]=[];
+
 daysToTargetList = [
   { title: 'Closed', isSelected: false },
   { title: 'OverDue', isSelected: false },
@@ -70,6 +76,8 @@ sapFilterList:any[]=[];
 statusFilterList:any[]=[];
 equipmentFilterList:any[]=[];
 daysToTargetFilterList:any[]=[];
+unitTypes:unitTypes[]=[];
+
 tilFocusFilterList: any[] = [];
 soverityFilterList: any[] = [];
 priorityFilterList:any[]=[];
@@ -91,9 +99,18 @@ priorityFilterList:any[]=[];
     this.getInterfaces();
     this.getRegions();
     this.getSites(-1);
+    this.getClusters();
+  }
+  getClusters(){
+    this.subs.sink = this.dataService3.getClusters(this.user.id,-1,-1 ).subscribe({
+      next: data => {
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
   }
   getRegions(){
-    this.subs.sink = this.dataService3.getRegions(this.user.id,-1,-1).subscribe({
+    this.subs.sink = this.dataService3.getUpdatedRegions(this.user.id,-1,-1).subscribe({
       next:data=>{this.regions = [...data]},
       error:err=>{this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center')}
     })
@@ -124,6 +141,24 @@ priorityFilterList:any[]=[];
       error:err=>{this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center')}
     })
   }
+  finalImplementationFn(days: tataFinalImplementation) {
+    let index = this.finalImplementationList.indexOf(days.finalImpId);
+    if (index == -1) {
+      this.finalImplementationList.push(days.finalImpId);
+    }
+    else {
+      this.finalImplementationList.splice(index, 1);
+    }
+  }
+  unitTypesListFn(days: unitTypes) {
+    let index = this.unitTypeFilterList.indexOf(days.outageTypeId);
+    if (index == -1) {
+      this.unitTypeFilterList.push(days.outageTypeId);
+    }
+    else {
+      this.unitTypeFilterList.splice(index, 1);
+    }
+  }
   getInterfaces() {
     this.subs.sink = this.dataService.getInterfaces(this.user.id).subscribe({
       next: data => {
@@ -133,6 +168,7 @@ priorityFilterList:any[]=[];
         this.evidence= [...data.evidence]
         this.sapPlaning= [...data.sapPlaning]
         this.equipment= [...data.equipment]
+        this.unitTypes = [...data.outageTypes];
         this.priority= [...data.priority]
         this.budget= [...data.budget]
         this.statusList = [...data.statusList]
@@ -156,7 +192,7 @@ priorityFilterList:any[]=[];
   // }
   getActions() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTrackerReport(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTrackerReport(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(),this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString()).subscribe({
       next: data => {
         this.action= [...data.action]
         this.dataSource.data = [...this.action];
@@ -300,12 +336,22 @@ priorityFilterList:any[]=[];
     filterFn(){
       this.getActions();
     }
+    clusterListFn(cluster: CCluster) {
+      let index = this.clusterFilterList.indexOf(cluster.clusterId);
+      if (index == -1) {
+        this.clusterFilterList.push(cluster.clusterId);
+      }
+      else {
+        this.clusterFilterList.splice(index, 1);
+      }
+    }
     clearFn(){
       this.regionsFilterList.length = 0;
       this.sitesFilterList.length = 0;
       this.sapFilterList.length = 0;
       this.statusFilterList.length = 0;
       this.equipmentFilterList.length = 0;
+      this.clusterFilterList.length = 0;
       this.daysToTargetFilterList.length = 0;
       this.tilFocusFilterList.length = 0;
       this.soverityFilterList.length = 0;
@@ -319,5 +365,7 @@ priorityFilterList:any[]=[];
       this.tilFocuss.map(a=>a.isSelected = false)
       this.tilSeveritys.map(a=>a.isSelected = false)
       this.priority.map(a=>a.isSelected = false)
+      this.cluster.map(a => a.isSelected = false)
+
     }
 }

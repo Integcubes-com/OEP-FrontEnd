@@ -28,6 +28,10 @@ import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-per
 import { TableColmComponent } from './end-user-insurence/dialog/table-colm/table-colm.component';
 import { TableColmTilComponent } from './end-user-til/table-colm/table-colm.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ReviewTilComponent } from './review-til/review-til.component';
+import { ReviewInsuranceComponent } from './review-insurance/review-insurance.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelPropagation: false,
@@ -40,7 +44,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     EndUserInsurenceComponent,
     InsuranceFormComponent,
     TableColmComponent,
-    TableColmTilComponent
+    TableColmTilComponent,
+    ReviewTilComponent,
+    ReviewInsuranceComponent
   ],
   imports: [
     MatTableExporterModule,
@@ -67,6 +73,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     ComponentsModule,
     SharedModule,
   ]

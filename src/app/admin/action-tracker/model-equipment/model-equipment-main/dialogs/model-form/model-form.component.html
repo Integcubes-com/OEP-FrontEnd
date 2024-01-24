@@ -1,0 +1,66 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form m-4" [formGroup]="form">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Model Title</mat-label>
+                        <input matInput formControlName="title">
+                        <mat-error *ngIf="form.get('title').hasError('required')">
+                            Title is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>OEM</mat-label>
+                        <mat-select formControlName="oemId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let f of oem"
+                                [value]="f.oemId">{{f.oemTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('oemId').hasError('required')">
+                            OEM is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="equipmentTypeId">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let f of type"
+                                [value]="f.typeId">{{f.typeTitle}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('equipmentTypeId').hasError('required')">
+                            OEM is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row float-end">
+                        <button mat-raised-button color="primary" (click)="submit()" *ngIf="data.action !='view'"
+                            [disabled]="!form.valid" >Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -15,6 +15,7 @@ import { User } from 'src/app/core/models/user';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
+import { CopyAlertComponent } from './dialog/copy-alert/copy-alert.component';
 
 @Component({
   selector: 'app-tils-tracker',
@@ -143,9 +144,9 @@ export class TilsTrackerComponent extends UnsubscribeOnDestroyAdapter implements
       if (result) {
         this.subs.sink = this.dataService.updateActioPackage(result, this.user.id).subscribe({
           next: data => {
-
-            this.actions.unshift({ ...data });
-            this.dataSource.data = [...this.actions];
+            this.getTils();
+            // this.actions.unshift({ ...data });
+            // this.dataSource.data = [...this.actions];
             this.showNotification('snackbar-success', result.action.actionTitle + ' has been added sucessfully', 'bottom', 'center');
           },
           error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
@@ -228,9 +229,7 @@ export class TilsTrackerComponent extends UnsubscribeOnDestroyAdapter implements
           if (result) {
             this.subs.sink = this.dataService.updateActioPackage(result, this.user.id).subscribe({
               next: data => {
-                let index = this.actions.findIndex(a => a.packageId === result.action.packageId);
-                this.actions[index] = { ...data };
-                this.dataSource.data = [...this.actions];
+                this.getTils();
                 this.showNotification('snackbar-success', result.action.actionTitle + ' has been added sucessfully', 'bottom', 'center');
               },
               error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
@@ -250,7 +249,24 @@ export class TilsTrackerComponent extends UnsubscribeOnDestroyAdapter implements
         til: this.til,
       },
     });
-    dialogRef.afterClosed().subscribe((result: TILs) => {
+
+  }
+  copyPackage(actionPackage: TilActionPackage){
+    const dialogRef = this.dialog.open(CopyAlertComponent, {
+      data: {
+        actionPacakage: actionPackage,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result: TilActionPackage) => {
+      if (result) {
+        this.subs.sink = this.dataService.copyActioPackage(result, this.user.id).subscribe({
+          next: data => {
+            this.showNotification('snackbar-success', result.actionTitle + ' has been added sucessfully', 'bottom', 'center');
+          this.getTils();
+          },
+          error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+        })
+      }
     });
   }
   deleteAction(actionPackage: TilActionPackage) {

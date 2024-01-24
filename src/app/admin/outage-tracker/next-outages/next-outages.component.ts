@@ -33,7 +33,9 @@ export class NextOutagesComponent extends UnsubscribeOnDestroyAdapter implements
     clusterId: -1,
     siteId: -1,
     equipmentId: -1,
-    outageId: -1
+    outageId: -1,
+    startDate:null,
+    endDate:null
   }
 
   //common variables

@@ -291,12 +291,16 @@
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
                       <button mat-icon-button (click)="$event.stopPropagation()"  color="primary" matTooltip="VIEW Action Package" (click)="viewPackage(row)"
-                        aria-label="Example icon button with a menu icon">
+                        >
                         <mat-icon>visibility</mat-icon>
                       </button>
-                      <button mat-icon-button (click)="$event.stopPropagation()"  color="accent" matTooltip="VIEW TILs" (click)="viewTil(row)"
-                        aria-label="Example icon button with a menu icon">
+                      <!-- <button mat-icon-button (click)="$event.stopPropagation()"  color="accent" matTooltip="VIEW TILs" (click)="viewTil(row)"
+                       >
                         <mat-icon>visibility</mat-icon>
+                      </button> -->
+                      <button mat-icon-button (click)="$event.stopPropagation()"   color="accent" matTooltip="COPY" (click)="copyPackage(row)"
+                        >
+                        <mat-icon style="font-size: 17px!important;">file_copy</mat-icon>
                       </button>
                     </td>
                   </ng-container>
