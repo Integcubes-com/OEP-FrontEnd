@@ -2,13 +2,21 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { KPIConfigurations, KPIIndicator, KPIIndicatorGroup, formulaType } from '../../configuration.model';
 import { ConfigurationService } from '../../configuration.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from 'src/app/core/models/user';
 import { CSites } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-
+function nonZeroValidator(): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    const value = control.value;
+    if (isNaN(value) || value === 0) {
+      return { 'nonZero': true }; // Validation failed
+    }
+    return null; // Validation passed
+  };
+}
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -113,7 +121,7 @@ export class FormComponent extends UnsubscribeOnDestroyAdapter {
       groupId: [this.kpi.groupId, [Validators.required]],
       indicatorId: [this.kpi.indicatorId, [Validators.required]],
       infoWeight: [this.kpi.infoWeight, [Validators.required]],
-      factor: [this.kpi.factor, [Validators.required]],
+      factor: [this.kpi.factor, [Validators.required, nonZeroValidator()]],
       unit: [this.kpi.unit, [Validators.required]],
       formulaType: [this.kpi.formulaType, [Validators.required]],
       measurementTitle: [this.kpi.measurementTitle, [Validators.required]],

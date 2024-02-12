@@ -74,6 +74,9 @@
                         <mat-error *ngIf="form.get('factor').hasError('required')">
                             Factor is required
                         </mat-error>
+                        <mat-error *ngIf="form.get('factor').hasError('nonZero')">
+                            Zero can not be a factor
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">

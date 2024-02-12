@@ -70,11 +70,13 @@
                       </section>
                 </div>
             </div>
+            <!-- <div class="font-weight-bold p-t-5 msl-3 font-17">
+                Owners</div>
             <mat-chip-list>
                 <mat-chip color="primary" *ngFor="let u of userData" selected>
-                    {{u.name}}
+                    {{u.name | nameRemover:nameToRemove}}
                 </mat-chip>
-            </mat-chip-list>
+            </mat-chip-list> -->
                     <div class="row mt-4">      
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-6">
                     <div class="example-button-row float-start">

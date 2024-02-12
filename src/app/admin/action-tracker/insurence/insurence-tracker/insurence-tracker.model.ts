@@ -7,7 +7,6 @@ export class InsurenceTracker {
     recommendationId: number;
     recommendationTitle: string;
     recommendationReference: string;
-
     documentTypeTitle: string;
     type: string;
     clusterId: number;
@@ -31,11 +30,9 @@ export class InsurenceTracker {
     calcEvid: number;
     calcDate: number;
     completionScore: string;
-
     priorityTitle: string;
     insurenceStatusTitle: string
     nomacStatusTitle: string
-
     daysToTarget: string;
     scoreDetails: string;
     siteId: number;

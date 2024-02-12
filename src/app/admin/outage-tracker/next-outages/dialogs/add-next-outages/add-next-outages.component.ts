@@ -6,6 +6,7 @@ import { OT_IEquipments, OT_NextOutages, OT_SiteNextOutage } from '../../site-ne
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NextOutagesService } from '../../next-outages.service';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-next-outages',
@@ -66,7 +67,7 @@ export class AddNextOutagesComponent extends UnsubscribeOnDestroyAdapter {
     this.siteNextOutages.siteTitle = this.sites.find(a => a.siteId == this.siteNextOutages.siteId)?.siteTitle;
     this.siteNextOutages.outageId = this.outageForm.value.outageTypeId;
     this.siteNextOutages.outageTitle = this.nextOutages.find(a => a.outageId == this.siteNextOutages.outageId)?.outageTitle;
-    this.siteNextOutages.nextOutageDate = this.outageForm.value.nextOutageDate;
+    this.siteNextOutages.nextOutageDate = moment.utc(this.outageForm.value.nextOutageDate).local().format('YYYY-MM-DDTHH:mm:SS.sss');
     this.siteNextOutages.equipmentId = this.outageForm.value.equipmentId;
     this.siteNextOutages.outageDurationInDays = this.outageForm.value.outageDurationInDays;
     this.siteNextOutages.unit = this.equipments.find(a => a.equipmentId == this.siteNextOutages?.equipmentId)?.unit;

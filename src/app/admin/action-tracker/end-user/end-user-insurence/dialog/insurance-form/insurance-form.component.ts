@@ -95,12 +95,12 @@ export class InsuranceFormComponent extends UnsubscribeOnDestroyAdapter implemen
     this.docService.getAttachedFileList(this.actionTracker.insurenceActionTrackerId, this.userZ.id).subscribe({
       next:data=>{
         if(data.length==0){
-          this.actionTracker.evidenceAvailableId = 1;
-          this.trackingForm.get('evidenceAvailable').setValue(1)
-        }
-        else{
           this.actionTracker.evidenceAvailableId = 2;
           this.trackingForm.get('evidenceAvailable').setValue(2)
+        }
+        else{
+          this.actionTracker.evidenceAvailableId = 1;
+          this.trackingForm.get('evidenceAvailable').setValue(1)
         }
       },
       error:err=>{        this.showNotification('black', err, 'bottom', 'center');

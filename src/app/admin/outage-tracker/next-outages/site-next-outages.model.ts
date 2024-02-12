@@ -8,7 +8,7 @@ export class OT_SiteNextOutage {
     unit: string;
     outageId: number;
     outageTitle: string;
-    nextOutageDate: Date;
+    nextOutageDate: string;
     nextOutageEndDate:Date;
     runningHours:number;
     outageDurationInDays:number;

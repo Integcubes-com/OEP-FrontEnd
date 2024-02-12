@@ -442,6 +442,10 @@
                       </div> -->
                   </div>
                 </div>
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
                 <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
                   <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -571,10 +575,7 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewAction(row)"
                     [style.cursor]="'pointer'" matRipple></tr>
                 </table>
-                <div *ngIf="isTableLoading" class="tbl-spinner">
-                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
-                  </mat-progress-spinner>
-                </div>
+               
                 <div *ngIf="!isTableLoading" class="no-results"
                   [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
                   No results

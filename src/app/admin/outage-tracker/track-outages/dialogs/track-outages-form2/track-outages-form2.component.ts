@@ -25,6 +25,7 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
     outageTracker: new OT_outageTracker,
     monthlyData: null
   }
+  nameToRemove:any[]=['Mr. Test','Nikhil Maheta'];
   userData:OTUser[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));

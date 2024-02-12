@@ -42,8 +42,8 @@ export class MonthlyKpiComponent extends UnsubscribeOnDestroyAdapter implements 
   { title: 'December', number: 12 },
  ]
 
-selectedMonth: number = 0;
-selectedYear: number = new Date().getFullYear();
+// selectedMonth: number = new Date().getMonth();
+// selectedYear: number = new Date().getFullYear();
   // siteData:KPIInterface[];
   monthlyKPI:KPIData[];
   sites:CSites[];
@@ -104,7 +104,7 @@ selectedYear: number = new Date().getFullYear();
       next:data=>{
         this.sites = [...data];
         this.filterObj.siteId = this.sites[0].siteId;
-        this.filterObj.monthId = new Date().getMonth();
+        this.filterObj.monthId = new Date().getMonth() + 1;
         this.filterObj.yearId = new Date().getFullYear();
         this.getKPI();
       },
