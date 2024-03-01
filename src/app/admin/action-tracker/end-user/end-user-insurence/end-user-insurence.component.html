@@ -233,6 +233,23 @@
                                 <mat-expansion-panel class="mt-0">
                                   <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                     <mat-panel-title style="font-size: 13px;">
+                                      Year
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12 cs-style" *ngFor="let r of year; let i = index">
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="yearListFn(r)">
+                                          {{r.year}}
+                                        </mat-checkbox>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="font-size: 13px;">
                                       Source
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -315,6 +332,23 @@
                                     </div>
                                   </mat-panel-description>
                                 </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="font-size: 13px;">
+                                      Insurance Issue Year
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12 cs-style" *ngFor="let r of issueYear; let i = index">
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="issueYearListFn(r)">
+                                          {{r.year}}
+                                        </mat-checkbox>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
                               </mat-accordion>
                             </div>
                           </mat-menu>
@@ -358,6 +392,10 @@
                   <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef> Action </th>
                     <td mat-cell *matCellDef="let action"> {{action.action}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actionClosedTitle">
+                    <th mat-header-cell *matHeaderCellDef> Action Closed By </th>
+                    <td mat-cell *matCellDef="let action"> {{action.actionClosedTitle }} </td>
                   </ng-container>
                   <ng-container matColumnDef="assignedTo">
                     <th mat-header-cell *matHeaderCellDef> Assigned To </th>

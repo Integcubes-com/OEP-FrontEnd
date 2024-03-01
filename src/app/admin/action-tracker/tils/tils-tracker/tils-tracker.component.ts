@@ -158,7 +158,6 @@ export class TilsTrackerComponent extends UnsubscribeOnDestroyAdapter implements
     let actionUsers = [];
     this.subs.sink = this.dataService.getUpdateUsers(action).subscribe({
       next: data => {
-        // actionUsers = [...data.users];   
         const dialogRef = this.dialog.open(TilTrackerFormComponent, {
           width: '750px',
           data: {

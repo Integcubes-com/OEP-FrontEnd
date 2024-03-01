@@ -13,7 +13,7 @@ import { TAPBudgetSource, TilActionPackage, TAPEquipment, TAPPriority } from '..
 import { TAFilterObj } from '../end-user-til/end-user-til.component';
 import { EndUserTilService } from '../end-user-til/end-user-til.service';
 import { TableColmTilComponent } from '../end-user-til/table-colm/table-colm.component';
-import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget, unitTypes } from '../end-user-til/til-tracker.model';
+import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget, unitTypes, Year } from '../end-user-til/til-tracker.model';
 import { User } from 'src/app/core/models/user';
 
 @Component({
@@ -87,7 +87,8 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
   priorityFilterList: any[] = [];
   unitTypes:unitTypes[]=[];
   quaterFilterList:any[] = [];
-
+  yearList:any[]=[];
+  year:Year[]=[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   errorMessage: string;
@@ -100,7 +101,18 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  calcYears(){
+    let i = 2015;
+    for(i; i<= 2050; i++){
+      let y:Year = {
+        year: i,
+        isSelected: false
+      }
+      this.year.push({...y})
+    }
+  }
   ngOnInit(): void {
+    this.calcYears();
     this.dataSource = new MatTableDataSource<ActionTrackerEndUser>(this.action);
     this.getInterfaces();
     this.getRegions();
@@ -148,7 +160,7 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
   }
   getActions() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString(),this.yearList.toString()).subscribe({
       next: data => {
         this.action= [...data.action]
         this.dataSource.data = [...this.action]
@@ -342,6 +354,15 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
       this.sitesFilterList.splice(index, 1);
     }
   }
+  yearListFn(year:Year){
+    let index = this.yearList.indexOf(year.year);
+    if (index == -1) {
+      this.yearList.push(year.year);
+    }
+    else {
+      this.yearList.splice(index, 1);
+    }
+  }
   sapListFn(sap: tataSAP) {
     let index = this.sapFilterList.indexOf(sap.sapPlanningId);
     if (index == -1) {
@@ -430,6 +451,8 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
     this.soverityFilterList.length = 0;
     this.unitTypeFilterList.length = 0;
     this.priorityFilterList.length = 0;
+    this.yearList.length = 0;
+
     this.regions.map(a=>a.isSelected = false)
     this.sites.map(a=>a.isSelected = false)
     this.equipment.map(a=>a.isSelected = false)
@@ -441,6 +464,7 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
     this.priority.map(a=>a.isSelected = false)
     this.quarterData.map(a => a.isSelected = false)
     this.cluster.map(a => a.isSelected = false)
+    this.year.map(a => a.isSelected = false)
 
   }
 

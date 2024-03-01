@@ -1,6 +1,11 @@
 export class TilEvaluationForm {
     teId: number;
     teSummary: string;
+    reviewStatus: number;
+    evaluated: boolean;
+    mandatory: boolean;
+    critical: boolean;
+    safetyCritical: boolean;
     constructor(reg) {
         this.teId = reg.teId ? reg.teId : -1;
         this.teSummary = reg.teSummary ? reg.teSummary : "";

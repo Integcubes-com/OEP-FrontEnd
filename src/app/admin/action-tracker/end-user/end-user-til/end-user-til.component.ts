@@ -9,7 +9,7 @@ import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroy
 import { EndUserTilService } from './end-user-til.service';
 import { TilActionPackage, TAPEquipment, TAPPriority, TAPBudgetSource } from '../../tils/tils-tracker/tils-tracker-assignment.model';
 import { AssignTilActionComponent } from '../../tils/tils-tracker/assign-til/dialog/assign-til-action/assign-til-action.component';
-import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget, unitTypes } from './til-tracker.model';
+import { tataStatus, ActionTrackerEndUser, tatapart, tataFinalImplementation, tataEv, tataSAP, tataBudget, unitTypes, Year } from './til-tracker.model';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { CSites, CRegions, CUsers, CCluster } from 'src/app/shared/common-interface/common-interface';
 import { TableColmTilComponent } from './table-colm/table-colm.component';
@@ -81,7 +81,6 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
   cluster:CCluster[];
 
   clusterFilterList:any[]=[];
-  //  'OverDue', 'Less than a week', 'Less than a Month', 'Less than 6 Month', 'Greate than 6 Month', 'Greate than 6 Month', 'NotDue']
   //Filter Lists
   regionsFilterList:any[]=[];
   sitesFilterList:any[]=[];
@@ -96,7 +95,8 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
   priorityFilterList: any[] = [];
   unitTypes:unitTypes[]=[];
   quaterFilterList:any[] = [];
-
+  yearList:any[]=[];
+  year:Year[]=[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   errorMessage: string;
@@ -109,7 +109,19 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+  calcYears(){
+    let i = 2015;
+    for(i; i<= 2050; i++){
+      let y:Year = {
+        year: i,
+        isSelected: false
+      }
+      this.year.push({...y})
+    }
+  }
   ngOnInit(): void {
+    this.calcYears();
     this.dataSource = new MatTableDataSource<ActionTrackerEndUser>(this.action);
     this.getInterfaces();
     this.getRegions();
@@ -155,7 +167,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
   }
   getActions() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString(), this.yearList.toString()).subscribe({
       next: data => {
         this.action= [...data.action]
         this.dataSource.data = [...this.action]
@@ -242,9 +254,6 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
             else{
               this.getActions();
             }
-            // let index = this.action.findIndex(a => a.tilActionTrackerId === data.tilActionTrackerId);
-            // this.action[index] = { ...result };
-            // this.dataSource.data = [...this.action];
             this.showNotification('snackbar-success', "Action has been Saved" + ' has been added sucessfully', 'bottom', 'center');
           },
           error: err => {
@@ -367,6 +376,15 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
       this.statusFilterList.splice(index, 1);
     }
   }
+  yearListFn(year:Year){
+    let index = this.yearList.indexOf(year.year);
+    if (index == -1) {
+      this.yearList.push(year.year);
+    }
+    else {
+      this.yearList.splice(index, 1);
+    }
+  }
   equipmentListFn(equipment: TAPEquipment) {
     let index = this.equipmentFilterList.indexOf(equipment.equipmentId);
     if (index == -1) {
@@ -438,6 +456,7 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     this.soverityFilterList.length = 0;
     this.unitTypeFilterList.length = 0;
     this.priorityFilterList.length = 0;
+    this.yearList.length = 0;
     this.regions.map(a=>a.isSelected = false)
     this.sites.map(a=>a.isSelected = false)
     this.equipment.map(a=>a.isSelected = false)
@@ -449,5 +468,6 @@ export class EndUserTilComponent extends UnsubscribeOnDestroyAdapter implements 
     this.priority.map(a=>a.isSelected = false)
     this.quarterData.map(a => a.isSelected = false)
     this.cluster.map(a => a.isSelected = false)
+    this.year.map(a=>a.isSelected = false)
   }
 }

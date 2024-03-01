@@ -65,6 +65,11 @@ export class ActionTrackerEndUser {
     rework: boolean;
     clusterReviewed: boolean;
     implementedDate:Date;
+    timingCode:string;
+    oemTimimgCodeId:number;
+    actionClosedBy:number;
+    actionClosedTitle:string;
+    actionClosureDate:Date;
     constructor(reg) {
         this.tilActionTrackerId = reg.tilActionTrackerId ? this.tilActionTrackerId : -1;
     }
@@ -116,4 +121,8 @@ export interface ActionTilInterfaceApi{
     oemSeverity:TSeverity[],
     tilFocus:TFocus[]
     outageTypes:unitTypes[],
+}
+export class Year{
+    year:number;
+    isSelected:boolean
 }

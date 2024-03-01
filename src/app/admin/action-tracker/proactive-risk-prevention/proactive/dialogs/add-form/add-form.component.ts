@@ -65,18 +65,18 @@ export class AddFormComponent  {
     return this.fb.group({
       proactiveId: [this.proactive.proactiveId, [Validators.required]],
       proactivetitle: [this.proactive.proactivetitle, [Validators.required]],
-      proactiveReference: [this.proactive.proactiveReference , [Validators.required]],
-      criticalityId:[this.proactive.criticalityId, [Validators.required]],
-      categoryId:[this.proactive.categoryId, [Validators.required]],
-      exposureId:[this.proactive.exposureId, [Validators.required]],
-      recommendations:[this.proactive.recommendations, [Validators.required]],
-      guidelines:[this.proactive.guidelines, [Validators.required]],
-      details:[this.proactive.details, [Validators.required]],
-      approachStatusId:[this.proactive.approachStatusId, [Validators.required]],
+      proactiveReference: [this.proactive.proactiveReference ],
+      criticalityId:[this.proactive.criticalityId],
+      categoryId:[this.proactive.categoryId],
+      exposureId:[this.proactive.exposureId],
+      recommendations:[this.proactive.recommendations],
+      guidelines:[this.proactive.guidelines],
+      details:[this.proactive.details],
+      approachStatusId:[this.proactive.approachStatusId],
       // expertId:[this.proactive.proactiveId, [Validators.required]],
-      sourceId:[this.proactive.sourceId, [Validators.required]],
-      themeId:[this.proactive.themeId, [Validators.required]],
-      auditPreperatoryChecklist:[this.proactive.auditPreperatoryChecklist, [Validators.required]],
+      sourceId:[this.proactive.sourceId],
+      themeId:[this.proactive.themeId],
+      auditPreperatoryChecklist:[this.proactive.auditPreperatoryChecklist],
       phaseprojectId:[""],
     })
   }
@@ -101,21 +101,21 @@ addChip(val: string) {
       this.proactive.proactiveReference = this.proactiveForm.value.proactiveReference;
 
       this.proactive.criticalityId = this.proactiveForm.value.criticalityId;
-      this.proactive.criticalityTitle = this.proactiveCriticality.find(a=>a.criticalityId == this.proactive.criticalityId).criticalityTitle;
+      this.proactive.criticalityTitle = this.proactiveCriticality.find(a=>a.criticalityId == this.proactive?.criticalityId)?.criticalityTitle;
 
 
       this.proactive.categoryId = this.proactiveForm.value.categoryId;
-      this.proactive.categoryTitle = this.proactiveCategory.find(a=>a.categoryId == this.proactive.categoryId).categoryTitle;
+      this.proactive.categoryTitle = this.proactiveCategory.find(a=>a.categoryId == this.proactive?.categoryId)?.categoryTitle;
 
 
       this.proactive.exposureId = this.proactiveForm.value.exposureId;
-      this.proactive.exposureTitle = this.proactiveExposure.find(a=>a.exposureId ==  this.proactive.exposureId).exposureTitle;
+      this.proactive.exposureTitle = this.proactiveExposure.find(a=>a.exposureId ==  this.proactive?.exposureId)?.exposureTitle;
 
       this.proactive.recommendations = this.proactiveForm.value.recommendations;
       this.proactive.guidelines = this.proactiveForm.value.guidelines;
 
       this.proactive.approachStatusId = this.proactiveForm.value.approachStatusId;
-      this.proactive.approachStatusTitle = this.proactiveApproachStatus.find(a=>a.approachStatusId == this.proactive.approachStatusId).approachStatusTitle;
+      this.proactive.approachStatusTitle = this.proactiveApproachStatus.find(a=>a.approachStatusId == this.proactive.approachStatusId)?.approachStatusTitle;
 
 
       this.proactive.details = this.proactiveForm.value.details;
@@ -124,7 +124,7 @@ addChip(val: string) {
       this.proactive.sourceId = this.proactiveForm.value.sourceId;
 
       this.proactive.themeId = this.proactiveForm.value.themeId;
-      this.proactive.themeTitle = this.proactiveProactiveTheme.find(a=>a.themeId ==  this.proactive.themeId).themeTitle;
+      this.proactive.themeTitle = this.proactiveProactiveTheme.find(a=>a.themeId ==  this.proactive.themeId)?.themeTitle;
 
 
       this.proactive.auditPreperatoryChecklist = this.proactiveForm.value.auditPreperatoryChecklist;

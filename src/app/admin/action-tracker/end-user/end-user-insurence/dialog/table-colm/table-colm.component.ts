@@ -35,7 +35,9 @@ export class TableColmComponent {
     {colName:"implementedDate",code:"Implemented Date", isSelected:false},
     {colName:"clusterReviewed",code:"Review Status", isSelected:false},
     {colName:"adminComment",code:"Admin Comment", isSelected:false},
+    {colName:"actionClosedTitle",code:"Action Closed  By", isSelected:false},
 
+    
 
 
     

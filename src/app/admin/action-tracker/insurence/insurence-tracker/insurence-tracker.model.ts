@@ -50,6 +50,7 @@ export class InsurenceTracker {
     rework: boolean;
     clusterReviewed: boolean;
     implementedDate:Date;
+    actionClosedTitle:string
     constructor(reg) {
         this.insurenceActionTrackerId = reg.insurenceActionTrackerId ? reg.insurenceActionTrackerId : -1;
     }

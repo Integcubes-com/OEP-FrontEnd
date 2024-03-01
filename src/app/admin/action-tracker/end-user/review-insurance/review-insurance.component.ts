@@ -16,6 +16,7 @@ import { TableColmComponent } from '../end-user-insurence/dialog/table-colm/tabl
 import { EUIFilterObj } from '../end-user-insurence/end-user-insurance.model';
 import { EndUserInsuranceService } from '../end-user-insurence/end-user-insurance.service';
 import { User } from 'src/app/core/models/user';
+import { Year } from '../end-user-til/til-tracker.model';
 
 @Component({
   selector: 'app-review-insurance',
@@ -84,10 +85,13 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
   daysToTargetFilterList: any[] = [];
   priorityFilterList: any[] = [];
   quaterFilterList:any[] = [];
-
+  issueYearList: any[] = [];
+  issueYear: Year[] = [];
   cluster: CCluster[];
 
   clusterFilterList: any[] = [];
+  yearList:any[]=[];
+  year:Year[]=[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   constructor(private snackBar: MatSnackBar, private dataService: EndUserInsuranceService, private dataService2: CommonService, public dialog: MatDialog,) {
@@ -102,6 +106,7 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
     this.dataSource.sort = this.sort;
   }
   ngOnInit(): void {
+    this.calcYears();
     this.dataSource = new MatTableDataSource<InsurenceTracker>(this.actionTrackers);
     this.getUsers();
     this.getRegions();
@@ -109,6 +114,17 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
     this.getInterfaces();
     this.getClusters();
 
+  }
+  calcYears(){
+    let i = 2015;
+    for(i; i<= 2050; i++){
+      let y:Year = {
+        year: i,
+        isSelected: false
+      }
+      this.year.push({...y})
+      this.issueYear.push({ ...y })
+    }
   }
   addColumns() {
     const dialogRef = this.dialog.open(TableColmComponent, {
@@ -183,7 +199,7 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
   }
   getActionTracker() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTracker(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.companyFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.quaterFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.companyFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.quaterFilterList.toString(), this.yearList.toString(), this.issueYearList.toString()).subscribe({
       next: data => {
         this.apiObj = { ...data };
         this.actionTrackers = [...data.tracker];
@@ -318,6 +334,15 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
       this.regionsFilterList.splice(index, 1);
     }
   }
+  yearListFn(year:Year){
+    let index = this.yearList.indexOf(year.year);
+    if (index == -1) {
+      this.yearList.push(year.year);
+    }
+    else {
+      this.yearList.splice(index, 1);
+    }
+  }
   siteListFn(site: CSites) {
     let index = this.sitesFilterList.indexOf(site.siteId);
     if (index == -1) {
@@ -381,6 +406,15 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
       this.priorityFilterList.splice(index, 1);
     }
   }
+  issueYearListFn(year: Year) {
+    let index = this.issueYearList.indexOf(year.year);
+    if (index == -1) {
+      this.issueYearList.push(year.year);
+    }
+    else {
+      this.issueYearList.splice(index, 1);
+    }
+  }
   filterFn() {
     this.getActionTracker();
   }
@@ -390,7 +424,8 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
     this.sitesFilterList.length = 0;
     this.sourceFilterList.length = 0;
     this.clusterFilterList.length = 0;
-    // this.statusFilterList.length = 0;
+    this.yearList.length = 0;
+    this.issueYearList.length = 0;
     this.companyFilterList.length = 0;
     this.daysToTargetFilterList.length = 0;
     this.priorityFilterList.length = 0;
@@ -402,7 +437,8 @@ export class ReviewInsuranceComponent extends UnsubscribeOnDestroyAdapter implem
     this.daysToTargetList.map(a => a.isSelected = false)
     this.priority.map(a => a.isSelected = false)
     this.quarterData.map(a => a.isSelected = false)
-
+    this.year.map(a => a.isSelected = false)
+    this.issueYear.map(a => a.isSelected = false)
   }
 
 }

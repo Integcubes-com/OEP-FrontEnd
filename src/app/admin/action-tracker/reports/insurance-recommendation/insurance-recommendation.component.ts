@@ -11,6 +11,7 @@ import { User } from 'src/app/core/models/user';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { CCluster, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
 import { AddColumnsComponent } from '../../insurence/add-insurence/dialog/add-columns/add-columns.component';
+import { Year } from '../../end-user/end-user-til/til-tracker.model';
 
 @Component({
   selector: 'app-insurance-recommendation',
@@ -59,7 +60,9 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
     nomacStatusFilterList: any[] = [];
     insuranceStatusFilterList: any[] = [];
     priorityFilterList: any[] = [];
-
+    yearList:any[]=[];
+    proactiveFilterList: any[] = [];
+    year:Year[]=[];
   constructor(private dataService: AddInsurenceService, private dataService2:CommonService,private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
   displayedColumns: string[] = ['id', 'siteTitle', 'regionTitle', 'referenceNumber', 'title', 'type', 'insuranceRecommendation', 'nomacStatusTitle', 'insurenceStatusTitle', 'report'];
   dataSource: MatTableDataSource<InsurenceRecommendation>;
@@ -73,7 +76,18 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
   toggleFilter(){
     this.displayFilter = !this.displayFilter;
   }
+  calcYears(){
+    let i = 2015;
+    for(i; i<= 2050; i++){
+      let y:Year = {
+        year: i,
+        isSelected: false
+      }
+      this.year.push({...y})
+    }
+  }
   ngOnInit(): void {
+    this.calcYears()
     this.dataSource = new MatTableDataSource<InsurenceRecommendation>(this.recommendations);
     this.getRecommendations();
     this.getInterfaces();
@@ -166,7 +180,7 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
   }
   getRecommendations() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getRecommendationsList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.nomacStatusFilterList.toString(), this.insuranceStatusFilterList.toString(),this.priorityFilterList.toString(), this.clusterFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getRecommendationsList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.nomacStatusFilterList.toString(), this.insuranceStatusFilterList.toString(),this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.yearList.toString(),this.proactiveFilterList.toString()).subscribe({
       next: data => {
         this.apiObj = { ...data };
         this.recommendations = [...data.reommendations];
@@ -191,120 +205,17 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
       this.dataSource.paginator.firstPage();
     }
   }
-  // addInsurence() {
-  //   if (this.apiObj) {
-  //     const dialogRef = this.dialog.open(AddInsurenceFormComponent, {
-  //       width: '750px',
-  //       data: {
-  //         recommend: "",
-  //         documentType: this.documentTypes,
-  //         recommendationType: this.recommendationTypes,
-  //         source: this.sources,
-  //         nomacStatus: this.nomacStatuss,
-  //         insurenceStatus: this.insurenceStatuss,
-  //         proactive: this.proactives,
-  //         region: this.regions,
-  //         site: this.sites,
-  //         priority: this.priority,
-  //         action: "add",
-  //       },
-  //     });
-  //     dialogRef.afterClosed().subscribe((result: InsurenceRecommendation) => {
-  //       if (result) {
-  //         debugger;
-  //         this.subs.sink = this.dataService.saveRecommendations(result, this.user.id).subscribe({
-  //           next: data => {
-  //             this.recommendations.unshift({ ...data });
-  //             this.dataSource.data = [...this.recommendations];
-  //             this.showNotification('snackbar-success', result.title + ' has been added sucessfully', 'bottom', 'center');
-  //           },
-  //           error: err => {
-  //             this.errorMessage = err;
-  //             this.showNotification("snackbar-error", err, "bottom", "center")
-  //           }
-  //         })
-  //       }
-  //     })
-  //   }
-  //   else {
-  //     this.showNotification('snackbar-warning', 'Please wait the data is being loaded', 'bottom', 'center');
-  //   }
 
-  // }
-  // viewInsurence(recommendation: InsurenceRecommendation){
-  //   const dialogRef = this.dialog.open(ViewInsurenceComponent, {
-  //     width: '750px',
-  //     data: {
-  //       recommend: recommendation,
-  //     },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result: InsurenceRecommendation) => {
-  //     if (result) {
-       
-  //     }
-  //   })
-  // }
-  // deleteRecommendation(recommendation: InsurenceRecommendation) {
-  //   const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-  //     data: {
-  //       recommend: recommendation,
-  //     },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result: InsurenceRecommendation) => {
-  //     if (result) {
-  //       this.subs.sink = this.dataService.deleteRecommendations(result).subscribe({
-  //         next: data => {
-  //           let index = this.recommendations.findIndex(a => a.recommendationId === recommendation.regionId);
-  //           this.recommendations.splice(index, 1);
-  //           this.dataSource.data = [...this.recommendations];
-  //           this.showNotification('snackbar-success', result.title + ' has been added sucessfully', 'bottom', 'center');
-  //         },
-  //         error: err => {
-  //           this.errorMessage = err;
-  //           this.showNotification("snackbar-error", err, "bottom", "center")
-  //         }
-  //       })
-      
-  //     }
-  //   })
-  // }
-  // updateRecommendation(recommendation: InsurenceRecommendation) {
-  //   this.recommendation = { ...recommendation };
-  //   const dialogRef = this.dialog.open(AddInsurenceFormComponent, {
-  //     width: '750px',
-  //     data: {
-  //       recommend: this.recommendation,
-  //       documentType: this.documentTypes,
-  //       recommendationType: this.recommendationTypes,
-  //       source: this.sources,
-  //       nomacStatus: this.nomacStatuss,
-  //       insurenceStatus: this.insurenceStatuss,
-  //       proactive: this.proactives,
-  //       region: this.regions,
-  //       site: this.sites,
-  //       priority: this.priority,
-  //       action: "edit",
-  //     },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result: InsurenceRecommendation) => {
-  //     if (result) {
-  //       debugger;
-  //       this.subs.sink = this.dataService.saveRecommendations(result, this.user.id).subscribe({
-  //         next: data => {
-  //           let index = this.recommendations.findIndex(a => a.recommendationId === result.regionId);
-  //           this.recommendations[index] = { ...result };
-  //           this.dataSource.data = [...this.recommendations];
-  //           this.showNotification('snackbar-success', result.title + ' has been added sucessfully', 'bottom', 'center');
-  //         },
-  //         error: err => {
-  //           this.errorMessage = err;
-  //           this.showNotification("snackbar-error", err, "bottom", "center")
-  //         }
-  //       })
-  //     }
-  //   });
-  // }
   //Filters
+  yearListFn(year:Year){
+    let index = this.yearList.indexOf(year.year);
+    if (index == -1) {
+      this.yearList.push(year.year);
+    }
+    else {
+      this.yearList.splice(index, 1);
+    }
+  }
   regionListFn(region: CRegions) {
     let index = this.regionsFilterList.indexOf(region.regionId);
     if (index == -1) {
@@ -330,6 +241,15 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
     }
     else {
       this.priorityFilterList.splice(index, 1);
+    }
+  }
+  proactiveListFn(proactive:IRProactive){
+    let index = this.proactiveFilterList.indexOf(proactive.proactiveId);
+    if (index == -1) {
+      this.proactiveFilterList.push(proactive.proactiveId);
+    }
+    else {
+      this.proactiveFilterList.splice(index, 1);
     }
   }
   sourceListFn(source: IRSource) {
@@ -371,6 +291,8 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
     this.clusterFilterList.length = 0;
     this.insuranceStatusFilterList.length = 0;
     this.priorityFilterList.length = 0;
+    this.yearList.length = 0;
+
     this.regions.map(a => a.isSelected = false)
     this.sites.map(a => a.isSelected = false)
     this.nomacStatuss.map(a => a.isSelected = false)
@@ -378,6 +300,7 @@ export class InsuranceRecommendationComponent  extends UnsubscribeOnDestroyAdapt
     this.insurenceStatuss.map(a => a.isSelected = false)
     this.priority.map(a=>a.isSelected = false)
     this.cluster.map(a=>a.isSelected = false)
+    this.year.map(a=>a.isSelected = false)
 
   }
 }

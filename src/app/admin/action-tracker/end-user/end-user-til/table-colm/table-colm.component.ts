@@ -12,27 +12,10 @@ export class TableColmTilComponent {
 
   dialogTitle:string="Selected Columns";
   allCols:any[]=[
-    // {colName:"assignedToTitle", isSelected:false},
-    // {colName:"statusTitle", isSelected:false},
-    // {colName:"statusScore", isSelected:false},
-    // {colName:"companyTitle", isSelected:false},
-    // {colName:"comments", isSelected:false},
-    // {colName:"closureDate", isSelected:false},
-    // {colName:"evidenceAvailableScore", isSelected:false},
-    // {colName:"dayStatusTitle", isSelected:false},
-    // {colName:"dayStatusScore", isSelected:false},
-    // {colName:"calcStatus", isSelected:false},
-    // {colName:"calcEvid", isSelected:false},
-    // {colName:"calcDate", isSelected:false},
-    // {colName:"completionScore", isSelected:false},
-    // {colName:"scoreDetails", isSelected:false},
-
     {colName:"siteTitle",code:"Site", isSelected:false},
     {colName:"regionTitle",code:"Region", isSelected:false},
     {colName:"tilNumber",code:"TIL Number", isSelected:false},
     {colName:"tilAction",code:"TIL Action", isSelected:false},
-    // {colName:"action", isSelected:false},
-    // {colName:"tilTitle", isSelected:false},
     {colName:"siteEquipmentTitle",code:"Site Equipment", isSelected:false},
     {colName:"tilDescription",code:"TIL Description", isSelected:false},
     {colName:"targetDate",code:"Target Date", isSelected:false},
@@ -47,8 +30,15 @@ export class TableColmTilComponent {
     {colName:"unitStatus",code:"Unit Status", isSelected:false},
     {colName:"finalImplementationTitle",code:"Final Implementation", isSelected:false},
     {colName:"planningTitle",code:"SAP Planning", isSelected:false},
+    {colName:"timingCode",code:"Timing Code", isSelected:false},
+    {colName:"tilTitle",code:"Til Title", isSelected:false},
     {colName:"adminComment",code:"Admin Comment", isSelected:false},
 
+    {colName:"actionClosedTitle",code:"Action Closed By", isSelected:false},
+    {colName:"actionClosureDate",code:"Action Closure Date", isSelected:false},
+
+
+    
   ];
   selectedCols:any[]=[];
 

@@ -11,15 +11,16 @@ import { EvaluationFormComponent } from './dialogs/evaluation-form/evaluation-fo
 import { ViewFormComponent } from './dialogs/view-form/view-form.component';
 import { TilEvaluationService } from './til-evaluation.service';
 import { AddTilsService } from '../../tils/add-tils/add-tils.service';
+import { TILEvaluation, tilReviewStatus } from './til-evaluation.model';
 
 @Component({
   selector: 'app-til-evaluation',
   templateUrl: './til-evaluation.component.html',
   styleUrls: ['./til-evaluation.component.sass']
 })
-export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implements OnInit, AfterViewInit{
-  
-  filterObj:TFilterObj={
+export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implements OnInit, AfterViewInit {
+
+  filterObj: TFilterObj = {
     startDate: null,
     endDate: null,
     documentId: -1,
@@ -30,10 +31,10 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
   isTableLoading: boolean;
   apiObj: TAPIData;
 
-  displayFilter:Boolean = false;
+  displayFilter: Boolean = false;
 
   til: TILs;
-  tils: TILs[];
+  tils: TILEvaluation[];
 
   tilComponents: TComponent[];
   tilDocTypes: TDocType[];
@@ -45,8 +46,8 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
   tilReviewStatuss: TReviewStatus[];
   tilSites: TSite[];
   tilSources: TSource[];
+  tilReviewStatus: tilReviewStatus[];
 
-  
   //Filter Lists
 
   documentFilterList: any[] = [];
@@ -54,11 +55,12 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
   reviewFormFilterList: any[] = [];
   tilFocusFilterList: any[] = [];
   soverityFilterList: any[] = [];
+  tilReviewStatusList: any[] = [];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
-  constructor(private dataService2: AddTilsService,private dataService: TilEvaluationService, private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
-  displayedColumns: string[] = ['id', 'tilNumber', 'tilTitle', 'oemTimingTitle', 'documentTypeTitle', 'sourceTitle', 'reviewForumtitle', 'report','actions'];  
-  dataSource: MatTableDataSource<TILs>;
+  constructor(private dataService2: AddTilsService, private dataService: TilEvaluationService, private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
+  displayedColumns: string[] = ['id', 'tilNumber', 'tilTitle', 'oemTimingTitle', 'documentTypeTitle', 'sourceTitle', 'reviewForumtitle', 'reviewTitle', 'report', 'actions'];
+  dataSource: MatTableDataSource<TILEvaluation>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -66,19 +68,19 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  toggleFilter(){
+  toggleFilter() {
     this.displayFilter = !this.displayFilter;
   }
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<TILs>(this.tils);
+    this.dataSource = new MatTableDataSource<TILEvaluation>(this.tils);
     this.getInterfaces();
     this.getTils();
   }
   getTils() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService2.getTilsList(this.user.id, this.documentFilterList.toString(), this.reviewStatusFilterList.toString(), this.reviewFormFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getTils(this.user.id, this.documentFilterList.toString(), this.reviewStatusFilterList.toString(), this.reviewFormFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString()).subscribe({
       next: data => {
-        this.tils = [...data.tils]
+        this.tils = [...data]
         this.dataSource.data = [...this.tils];
         this.isTableLoading = false;
       },
@@ -86,7 +88,7 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
     })
   }
   getInterfaces() {
-    this.subs.sink = this.dataService2.getInterfaces(this.user.id).subscribe({
+    this.subs.sink = this.dataService.getInterfaces(this.user.id).subscribe({
       next: data => {
         this.tilDocTypes = [...data.tilDocType];
         this.tilComponents = [...data.tilComponent];
@@ -96,6 +98,7 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
         this.tilSources = [...data.tilSource];
         this.tilReviewForums = [...data.reviewForum];
         this.tilReviewStatuss = [...data.reviewStatus];
+        this.tilReviewStatus = [...data.tilReviewStatus]
       },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
@@ -140,17 +143,15 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
       width: '750px',
       data: {
         til: til,
+        status:this.tilReviewStatus
       },
     });
-    dialogRef.afterClosed().subscribe((result: TILs) => {
+    dialogRef.afterClosed().subscribe((result: TILEvaluation) => {
       if (result) {
-
         if (result.technicalReviewId) {
           this.subs.sink = this.dataService.saveReviewUrl(result, this.user.id).subscribe({
             next: data => {
-              let index = this.tils.findIndex(a => a.tilId === result.tilId);
-              this.tils[index] = { ...data };
-              this.dataSource.data = [...this.tils];
+              this.getTils()
               this.showNotification('snackbar-success', result.tilTitle + ' has been added sucessfully', 'bottom', 'center');
             },
             error: err => {
@@ -178,65 +179,65 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
       panelClass: colorName,
     });
   }
-      //Filters
-      focusListFn(source: TFocus) {
-        let index = this.tilFocusFilterList.indexOf(source.focusId);
-        if (index == -1) {
-          this.tilFocusFilterList.push(source.focusId);
-        }
-        else {
-          this.tilFocusFilterList.splice(index, 1);
-        }
-      }
-      severityListFn(source: TSeverity) {
-        let index = this.soverityFilterList.indexOf(source.oemSeverityId);
-        if (index == -1) {
-          this.soverityFilterList.push(source.oemSeverityId);
-        }
-        else {
-          this.soverityFilterList.splice(index, 1);
-        }
-      }
-      documentListFn(source: TDocType) {
-        let index = this.documentFilterList.indexOf(source.typeId);
-        if (index == -1) {
-          this.documentFilterList.push(source.typeId);
-        }
-        else {
-          this.documentFilterList.splice(index, 1);
-        }
-      }
-  
-      reviewStatusListFn(status: TReviewStatus) {
-        let index = this.reviewStatusFilterList.indexOf(status.reviewStatusId);
-        if (index == -1) {
-          this.reviewStatusFilterList.push(status.reviewStatusId);
-        }
-        else {
-          this.reviewStatusFilterList.splice(index, 1);
-        }
-      }
-  
-      reviewFormListFn(company: TReviewForum) {
-        let index = this.reviewFormFilterList.indexOf(company.reviewFormId);
-        if (index == -1) {
-          this.reviewFormFilterList.push(company.reviewFormId);
-        }
-        else {
-          this.reviewFormFilterList.splice(index, 1);
-        }
-      }
-    
-      filterFn() {
-        this.getTils();
-      }
-  
-      clearFn() {
-        this.documentFilterList.length = 0;
-        this.reviewStatusFilterList.length = 0;
-        this.reviewFormFilterList.length = 0;
-        this.tilDocTypes.map(a => a.isSelected = false)
-        this.tilReviewStatuss.map(a => a.isSelected = false)
-        this.tilReviewForums.map(a => a.isSelected = false)
-      }
+  //Filters
+  focusListFn(source: TFocus) {
+    let index = this.tilFocusFilterList.indexOf(source.focusId);
+    if (index == -1) {
+      this.tilFocusFilterList.push(source.focusId);
+    }
+    else {
+      this.tilFocusFilterList.splice(index, 1);
+    }
+  }
+  severityListFn(source: TSeverity) {
+    let index = this.soverityFilterList.indexOf(source.oemSeverityId);
+    if (index == -1) {
+      this.soverityFilterList.push(source.oemSeverityId);
+    }
+    else {
+      this.soverityFilterList.splice(index, 1);
+    }
+  }
+  documentListFn(source: TDocType) {
+    let index = this.documentFilterList.indexOf(source.typeId);
+    if (index == -1) {
+      this.documentFilterList.push(source.typeId);
+    }
+    else {
+      this.documentFilterList.splice(index, 1);
+    }
+  }
+
+  reviewStatusListFn(status: tilReviewStatus) {
+    let index = this.reviewStatusFilterList.indexOf(status.tesId);
+    if (index == -1) {
+      this.reviewStatusFilterList.push(status.tesId);
+    }
+    else {
+      this.reviewStatusFilterList.splice(index, 1);
+    }
+  }
+
+  reviewFormListFn(company: TReviewForum) {
+    let index = this.reviewFormFilterList.indexOf(company.reviewFormId);
+    if (index == -1) {
+      this.reviewFormFilterList.push(company.reviewFormId);
+    }
+    else {
+      this.reviewFormFilterList.splice(index, 1);
+    }
+  }
+
+  filterFn() {
+    this.getTils();
+  }
+
+  clearFn() {
+    this.documentFilterList.length = 0;
+    this.reviewStatusFilterList.length = 0;
+    this.reviewFormFilterList.length = 0;
+    this.tilDocTypes.map(a => a.isSelected = false)
+    this.tilReviewStatuss.map(a => a.isSelected = false)
+    this.tilReviewForums.map(a => a.isSelected = false)
+  }
 }

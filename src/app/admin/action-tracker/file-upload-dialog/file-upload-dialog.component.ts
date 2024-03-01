@@ -103,7 +103,6 @@ export class FileUploadDialogComponent extends UnsubscribeOnDestroyAdapter imple
     
   }
   downloadReport(uploadDoc:any){
-    debugger;
     this.subs.sink = this.dataService.downloadReport(uploadDoc.filePath).subscribe({
       next: data => { 
         if(data.body.size < 100){

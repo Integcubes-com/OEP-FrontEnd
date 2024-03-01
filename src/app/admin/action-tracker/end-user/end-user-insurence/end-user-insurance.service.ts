@@ -30,8 +30,8 @@ export class EndUserInsuranceService {
   
   constructor(private http: HttpClient) { }
   
-  getActionTracker(userId:number, regionList:string, siteList:string, sourceList:string, statusList:string, dayList:string, companyList:string,priorityList:string, clusterList:string,quaterList:string): Observable<IATAPIData> {
-    let data = {userId, regionList, siteList, sourceList, statusList, dayList, companyList, priorityList,clusterList,quaterList};
+  getActionTracker(userId:number, regionList:string, siteList:string, sourceList:string, statusList:string, dayList:string, companyList:string,priorityList:string, clusterList:string,quaterList:string, yearList:string, issueYearList:string): Observable<IATAPIData> {
+    let data = {userId, regionList, siteList, sourceList, statusList, dayList, companyList, priorityList,clusterList,quaterList,yearList,issueYearList};
     return this.http.post<IATAPIData>(this.getInsurenceTrackerURL,data).pipe(
     )
   }

@@ -21,12 +21,33 @@
                         <textarea matInput formControlName="technicalEvaluation"></textarea>
                     </mat-form-field>
                 </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="reviewStatus">
+                            <mat-option *ngFor="let s of status"
+                                [value]="s.tesId">{{s.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <mat-checkbox formControlName="evaluated">Evaluated</mat-checkbox>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <mat-checkbox formControlName="mandatory">Mandatory</mat-checkbox>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <mat-checkbox formControlName="safetyCritical">Safety Critical</mat-checkbox>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                        <mat-checkbox formControlName="critical">Critical</mat-checkbox>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row float-end">
-                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!tilEvaluationForm.valid"
-                            [mat-dialog-close]="til">Save</button>
+                        <button mat-raised-button color="primary" (click)="submit()"
+                            [disabled]="!tilEvaluationForm.valid" [mat-dialog-close]="til">Save</button>
                         <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
                     </div>
                 </div>

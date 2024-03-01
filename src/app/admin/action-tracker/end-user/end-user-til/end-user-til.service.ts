@@ -25,8 +25,8 @@ export class EndUserTilService {
   private readonly reportURL = `${environment.apiUrl}/AssignTilAction/downloadFile`
 
   constructor(private http: HttpClient) { }
-  getActionTracker(userId: number, regionList:string, siteList:string, equipmentList:string, sapList:string, statusList:string,daysList:string, focusList:string, severityList:string, priorityList:string,clusterList:string,finalImpList:string,unitStatusList:string, quarterList:string): Observable<ActionTilAddAPI> {
-    let userID = {userId, regionList, siteList, equipmentList, sapList, statusList, daysList, focusList, severityList, priorityList,clusterList,finalImpList,unitStatusList,quarterList};
+  getActionTracker(userId: number, regionList:string, siteList:string, equipmentList:string, sapList:string, statusList:string,daysList:string, focusList:string, severityList:string, priorityList:string,clusterList:string,finalImpList:string,unitStatusList:string, quarterList:string, yearList:string): Observable<ActionTilAddAPI> {
+    let userID = {userId, regionList, siteList, equipmentList, sapList, statusList, daysList, focusList, severityList, priorityList,clusterList,finalImpList,unitStatusList,quarterList,yearList};
     return this.http.post<ActionTilAddAPI>(this.getURL,userID).pipe(
     )
   }
@@ -67,7 +67,6 @@ export class EndUserTilService {
     });
   }
   saveActionTracker(action:ActionTrackerEndUser, userId:number):Observable<ActionTrackerEndUser>{
-    debugger;
     let data = {"action":action, "userId":userId}
     return this.http.post<ActionTrackerEndUser>(this.saveURL,data).pipe(
      

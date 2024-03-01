@@ -6,6 +6,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { TilActionReport } from './til-action.model';
+import { CCluster, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
+import { Timing, Focus, Severity, Status, Unit } from '../til-detail/til-detail.model';
+import { User } from 'src/app/core/models/user';
+import { CommonService } from 'src/app/shared/common-service/common.service';
 
 @Component({
   selector: 'app-til-action',
@@ -19,21 +23,63 @@ export class TilActionComponent extends UnsubscribeOnDestroyAdapter implements O
   isTableLoading: boolean;
   detailReport: TilActionReport[];
   dataSource: MatTableDataSource<TilActionReport>;
-  displayedColumns: string[] = ['id','regionTitle', 'clusterTitle', 'siteName', 'unit', 'tilNumber','statusTitle'];
-
+  displayedColumns: string[] = ['id', 'regionTitle', 'clusterTitle', 'siteName', 'unit', 'tilNumber','oemSeverityTitle','timingCode','focusTitle', 'statusTitle'];
+  user: User = JSON.parse(localStorage.getItem('currentUser'));
+  timing: Timing[]
+  focus: Focus[]
+  severity: Severity[]
+  status: Status[]
+  clusters: CCluster[]
+  regions: CRegions[]
+  sites: CSites[]
+  units: Unit[]
+  timingFilterList: any[] = []
+  focusFilterList: any[] = []
+  severityFilterList: any[] = []
+  statusFilterList: any[] = []
+  clustersFilterList: any[] = []
+  regionsFilterList: any[] = []
+  sitesFilterList: any[] = []
+  unitsFilterList: any[] = []
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
   constructor(private dataService: TilActionService,
+    private dataService2: CommonService,
     private snackBar: MatSnackBar) { super() }
-
+  getRegions() {
+    this.subs.sink = this.dataService2.getUpdatedRegions(this.user.id, -1, -1).subscribe({
+      next: data => { this.regions = [...data] },
+      error: err => { this.showNotification('black', err, 'bottom', 'center') }
+    })
+  }
+  getSites() {
+    this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, -1, -1, -1).subscribe({
+      next: data => { this.sites = [...data] },
+      error: err => { this.showNotification('black', err, 'bottom', 'center') }
+    })
+  }
+  getClusters() {
+    this.subs.sink = this.dataService2.getClusters(this.user.id, -1, -1).subscribe({
+      next: data => { this.clusters = [...data] },
+      error: err => { this.showNotification('black', err, 'bottom', 'center') }
+    })
+  }
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<TilActionReport>(this.detailReport);
+    this.getData();
+    this.getInterface();
+    this.getRegions();
+    this.getSites();
+    this.getClusters();
 
+
+  }
+  getData() {
     this.isTableLoading = true;
 
-    this.subs.sink = this.dataService.getActionTracker().subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.regionsFilterList.toString(), this.clustersFilterList.toString(), this.sitesFilterList.toString(), this.unitsFilterList.toString(), this.statusFilterList.toString(), this.timingFilterList.toString(), this.focusFilterList.toString(), this.severityFilterList.toString()).subscribe({
       next: data => {
         this.detailReport = [...data];
         this.dataSource.data = [...this.detailReport];
@@ -42,7 +88,90 @@ export class TilActionComponent extends UnsubscribeOnDestroyAdapter implements O
       },
       error: err => { this.showNotification('black', err, 'bottom', 'center') },
     })
-
+  }
+  getInterface() {
+    this.subs.sink = this.dataService.getInterfaces(this.user.id).subscribe({
+      next: data => {
+        this.timing = [...data.timing];
+        this.focus = [...data.focus];
+        this.severity = [...data.severity];
+        this.status = [...data.status]
+        this.units = [...data.unit]
+      },
+      error: err => { this.showNotification('black', err, 'bottom', 'center') },
+    })
+  }
+  regionList(region: CRegions) {
+    let index = this.regionsFilterList.indexOf(region.regionId);
+    if (index == -1) {
+      this.regionsFilterList.push(region.regionId);
+    }
+    else {
+      this.regionsFilterList.splice(index, 1);
+    }
+  }
+  clusterList(cluster: CCluster) {
+    let index = this.clustersFilterList.indexOf(cluster.clusterId);
+    if (index == -1) {
+      this.clustersFilterList.push(cluster.clusterId);
+    }
+    else {
+      this.clustersFilterList.splice(index, 1);
+    }
+  }
+  siteList(site: CSites) {
+    let index = this.sitesFilterList.indexOf(site.siteId);
+    if (index == -1) {
+      this.sitesFilterList.push(site.siteId);
+    }
+    else {
+      this.sitesFilterList.splice(index, 1);
+    }
+  }
+  unitList(unit: Unit) {
+    let index = this.unitsFilterList.indexOf(unit.equipmentId);
+    if (index == -1) {
+      this.unitsFilterList.push(unit.equipmentId);
+    }
+    else {
+      this.unitsFilterList.splice(index, 1);
+    }
+  }
+  timingList(timing: Timing) {
+    let index = this.timingFilterList.indexOf(timing.timingId);
+    if (index == -1) {
+      this.timingFilterList.push(timing.timingId);
+    }
+    else {
+      this.timingFilterList.splice(index, 1);
+    }
+  }
+  focusList(focus: Focus) {
+    let index = this.focusFilterList.indexOf(focus.focusId);
+    if (index == -1) {
+      this.focusFilterList.push(focus.focusId);
+    }
+    else {
+      this.focusFilterList.splice(index, 1);
+    }
+  }
+  severityList(severity: Severity) {
+    let index = this.severityFilterList.indexOf(severity.oemSeverityId);
+    if (index == -1) {
+      this.severityFilterList.push(severity.oemSeverityId);
+    }
+    else {
+      this.severityFilterList.splice(index, 1);
+    }
+  }
+  statusList(status: Status) {
+    let index = this.statusFilterList.indexOf(status.tasId);
+    if (index == -1) {
+      this.statusFilterList.push(status.tasId);
+    }
+    else {
+      this.statusFilterList.splice(index, 1);
+    }
   }
   showNotification(colorName, text, placementFrom, placementAlign) {
     this.snackBar.open(text, "", {
@@ -59,5 +188,4 @@ export class TilActionComponent extends UnsubscribeOnDestroyAdapter implements O
       this.dataSource.paginator.firstPage();
     }
   }
-
 }

@@ -128,16 +128,6 @@
                     </div>
                     <div class="col-5">
                       <ul class="header-buttons">
-                        <!-- <li class="me-2">
-                          <mat-date-range-input [rangePicker]="picker" hidden>
-                            <input matStartDate placeholder="Start date">
-                            <input matEndDate placeholder="End date">
-                          </mat-date-range-input>
-                          <button mat-icon-button color="primary" (click)="picker.open()">
-                            <mat-icon>calendar_today</mat-icon>
-                          </button>
-                          <mat-date-range-picker #picker></mat-date-range-picker>
-                        </li> -->
                         <li class="me-2">
                           <button mat-raised-button color="primary" mat-raised-button color="filter" [matMenuTriggerFor]="menu1">Filter
                             <mat-icon>filter_list</mat-icon>
@@ -233,6 +223,23 @@
                                 <mat-expansion-panel class="mt-0">
                                   <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                     <mat-panel-title style="font-size: 13px;">
+                                      Year
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12 cs-style" *ngFor="let r of year; let i = index">
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="yearListFn(r)">
+                                          {{r.year}}
+                                        </mat-checkbox>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="font-size: 13px;">
                                       Source
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -247,26 +254,6 @@
                                     </div>
                                   </mat-panel-description>
                                 </mat-expansion-panel>
-                                <!-- <mat-expansion-panel class="mt-0">
-                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
-                                    <mat-panel-title style="font-size: 13px;">
-                                      Status
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                  <mat-panel-description>
-                                    <div class="row">
-                                      <div class="col-md-12" *ngFor="let r of statuss; let i = index">
-                                        <ng-container *ngIf="r.statusId == 4">
-                                          <mat-checkbox (click)="$event.stopPropagation()" class="example-margin" [(ngModel)]="r.isSelected"
-                                          (click)="statusListFn(r)">
-                                          {{r.statusTitle}}
-                                        </mat-checkbox>
-                                        </ng-container>
-                                     
-                                      </div>
-                                    </div>
-                                  </mat-panel-description>
-                                </mat-expansion-panel> -->
                                 <mat-expansion-panel class="mt-0">
                                   <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                     <mat-panel-title style="font-size: 13px;">
@@ -313,6 +300,23 @@
                                         <mat-checkbox (click)="$event.stopPropagation()" class="example-margin" [(ngModel)]="r.isSelected"
                                           (click)="priorityListFn(r)">
                                           {{r.priorityTitle}}
+                                        </mat-checkbox>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="font-size: 13px;">
+                                      Insurance Issue Year
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12 cs-style" *ngFor="let r of issueYear; let i = index">
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="issueYearListFn(r)">
+                                          {{r.year}}
                                         </mat-checkbox>
                                       </div>
                                     </div>

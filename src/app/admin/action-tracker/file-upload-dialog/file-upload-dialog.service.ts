@@ -60,20 +60,6 @@ export class FileUploadDialogService {
     });
   }
 
-  //   // Encode the URL parameter using encodeURIComponent
-
-  // // Append the encoded URL to the base URL
-  // const downloadUrl = `${this.downloadFileUrl}/${encodedUrl}`;
-
-  // // Set the request headers to specify the response type as 'blob'
-  // const headers = new HttpHeaders({
-  //   responseType: 'blob',
-  //   observe: 'response',
-  // });
-
-  // // Send the POST request with the encoded URL and headers
-  // return this.http.post(downloadUrl, null, { headers });
-  // }
 
   getAttachedFileList(iatId:number , userId :number): Observable<ReturnedDocumnet[]> {
     let data = {iatId, userId}

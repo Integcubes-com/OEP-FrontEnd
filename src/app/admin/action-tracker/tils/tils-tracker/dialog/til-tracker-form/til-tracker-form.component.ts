@@ -1,9 +1,9 @@
-import { Component, ElementRef, Inject, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Inject, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TILs, TComponent, TDocType, TEquipment, TSeverity, TSeverityTiming, TFocus, TReviewForum, TReviewStatus, TSite, TSource } from '../../../add-tils/add-tils.model';
+import { TILs } from '../../../add-tils/add-tils.model';
 import { TilsFormComponent } from '../../../add-tils/dialog/tils-form/tils-form.component';
-import { TilActionPackage, TAPEquipment, TAPPriority, TAPUser, TAPBudgetSource, TAPReviewStatus, TAPActionClosure, TAPOutage, TASubmitObj, TAPRegions, TAPSites } from '../../tils-tracker-assignment.model';
+import { TilActionPackage, TAPEquipment, TAPPriority, TAPBudgetSource, TAPReviewStatus, TAPActionClosure, TAPOutage, TASubmitObj } from '../../tils-tracker-assignment.model';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TilsTrackerService } from '../../tils-tracker.service';
@@ -91,10 +91,19 @@ export class TilTrackerFormComponent extends UnsubscribeOnDestroyAdapter {
     this.submitObject.action = { ...this.actionPackage }
     this.tils = [...data.tils]
     this.equipments = [...data.equipments];
+    debugger;
     this.selectedEq = this.equipments;
 
     this.prioritys = [...data.prioritys];
     this.sites = [...data.sites];
+    let site : CSites={
+      regionId: 0,
+      regionTitle: '',
+      siteId: -11,
+      siteTitle: 'Group',
+      isSelected: false
+    }
+    this.sites.push(site)
     this.regions = [...data.regions];
     this.budgetSources = [...data.budgetSources];
     this.reviewStatuss = [...data.reviewStatuss];
@@ -103,11 +112,22 @@ export class TilTrackerFormComponent extends UnsubscribeOnDestroyAdapter {
     this.actionForm = this.buildForm();
     this.removeValidators();
   }
-  changeSelection(checked, site){
+  changeSelection(checked: boolean, site: any) {
     if (checked) {
       let eq = this.equipments.filter(a => a.siteId === site.siteId);
       eq.forEach(item => {
-        if (!this.equipmentList.includes(item)) {
+        if (item.isGroup === 1) {
+          let arr = item.groupedEquipments?.split(',');
+          if (arr) {
+            arr.forEach(element => {
+              let equis = this.equipments.find(a => a.equipmentId === +element);
+              if (equis && !this.equipmentList.includes(equis)) {
+                this.equipmentList.push(equis);
+              }
+            });
+          }
+        }
+        else if (!this.equipmentList.includes(item)) {
           this.equipmentList.push(item);
         }
       });
@@ -115,6 +135,7 @@ export class TilTrackerFormComponent extends UnsubscribeOnDestroyAdapter {
       this.equipmentList = this.equipmentList.filter(item => item.siteId !== site.siteId);
     }
   }
+  
   removeValidators() {
     if (this.view) {
       for (const key in this.actionForm.controls) {
@@ -123,14 +144,30 @@ export class TilTrackerFormComponent extends UnsubscribeOnDestroyAdapter {
       }
     }
   }
-  toggleTeamMembersSelection(eq:TAPEquipment){
-    let index = this.equipmentList.findIndex(a=>a.equipmentId == eq.equipmentId);
-    if(index>-1){
-      this.equipmentList.splice(index,1);
-    }
-    else{
-      this.equipmentList.push(eq);
-    }
+  toggleTeamMembersSelection(checked: boolean,eq:TAPEquipment){
+      if(eq.isGroup == 1){
+        let arr = eq.groupedEquipments?.split(',');
+        arr.forEach(element => {
+         let equis = this.equipments.find(a=>a.equipmentId == +element)
+         let index = this.equipmentList.findIndex(a => a.equipmentId == equis.equipmentId);
+         if (index > -1) {
+           this.equipmentList.splice(index, 1);
+         }
+         else {
+           this.equipmentList.push(equis);
+         }
+        });
+      }
+      else {
+        let index = this.equipmentList.findIndex(a => a.equipmentId == eq.equipmentId);
+        if (index > -1) {
+          this.equipmentList.splice(index, 1);
+        }
+        else {
+          this.equipmentList.push(eq);
+        }
+      }
+    
   }
   checkerSites(site:any):boolean{
     return this.equipmentList.some(a=>a.siteId == site.siteId)
@@ -300,7 +337,13 @@ export class TilTrackerFormComponent extends UnsubscribeOnDestroyAdapter {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
-  filterTeamMembers(event){
-    const value = event.target.value.toLowerCase();
-    this.selectedEq = this.equipments.filter(tag => tag.unit.toLowerCase().includes(value));  }
+  filterTeamMembers(event) {
+    const value = (event.target.value || '').toLowerCase(); // Handle null or undefined case
+    if (!this.equipments) {
+        return; // Handle case where this.equipments is not defined
+    }
+    this.selectedEq = this.equipments.filter(tag => 
+        tag.unit && tag.unit.toLowerCase().includes(value)
+    );
+}
 }

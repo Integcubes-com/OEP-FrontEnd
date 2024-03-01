@@ -3,7 +3,7 @@
     <div class="block-header">
       <app-breadcrumb [title]="'Insurance'" [items]="[]" [active_item]="'Recommendations'"></app-breadcrumb>
     </div>
-    <div class="card" *ngIf="displayFilter">
+    <!-- <div class="card" *ngIf="displayFilter">
       <div class="row m-4 p-0">
         <h5 class="card-title">Filter By:</h5>
         <div class="col-md-3">
@@ -67,23 +67,6 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <mat-expansion-panel class="mt-0">
-          <mat-expansion-panel-header (click)="$event.stopPropagation()">
-            <mat-panel-title style="font-size: 13px;">
-              Cluster
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-panel-description>
-            <div class="row">
-              <div class="col-md-12" *ngFor="let r of cluster; let i = index">
-                <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
-                  [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
-                  {{r.clusterTitle}}
-                </mat-checkbox>
-              </div>
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel>
         <div class="col-md-1 pb-0">
           <div class="float-end">
             <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
@@ -93,7 +76,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row clearfix">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card">
@@ -264,6 +247,24 @@
                                 </div>
                               </mat-panel-description>
                             </mat-expansion-panel>
+
+                            <mat-expansion-panel class="mt-0">
+                              <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                <mat-panel-title style="font-size: 13px;">
+                                  Proactive Risk Approach
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <mat-panel-description>
+                                <div class="row">
+                                  <div class="col-md-12" *ngFor="let r of proactives; let i = index">
+                                    <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                      [(ngModel)]="r.isSelected" (click)="proactiveListFn(r)">
+                                      {{r.proactivetitle}}
+                                    </mat-checkbox>
+                                  </div>
+                                </div>
+                              </mat-panel-description>
+                            </mat-expansion-panel>
                             <mat-expansion-panel class="mt-0">
                               <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                 <mat-panel-title style="font-size: 13px;">
@@ -276,6 +277,23 @@
                                     <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
                                       [(ngModel)]="r.isSelected" (click)="clusterListFn(r)">
                                       {{r.clusterTitle}}
+                                    </mat-checkbox>
+                                  </div>
+                                </div>
+                              </mat-panel-description>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel class="mt-0">
+                              <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                <mat-panel-title style="font-size: 13px;">
+                                  Year
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <mat-panel-description>
+                                <div class="row">
+                                  <div class="col-md-12 cs-style" *ngFor="let r of year; let i = index">
+                                    <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                      [(ngModel)]="r.isSelected" (click)="yearListFn(r)">
+                                      {{r.year}}
                                     </mat-checkbox>
                                   </div>
                                 </div>

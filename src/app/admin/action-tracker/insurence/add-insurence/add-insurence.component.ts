@@ -13,6 +13,7 @@ import { InsurenceRecommendation, InsurenceRecommendationApi, IRecommendationTyp
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { CCluster, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
 import { AddColumnsComponent } from './dialog/add-columns/add-columns.component';
+import { Year } from '../../end-user/end-user-til/til-tracker.model';
 
 @Component({
   selector: 'app-add-insurence',
@@ -61,6 +62,9 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
   nomacStatusFilterList: any[] = [];
   insuranceStatusFilterList: any[] = [];
   priorityFilterList: any[] = [];
+  proactiveFilterList: any[] = [];
+  yearList:any[]=[];
+  year:Year[]=[];
   constructor(private dataService: AddInsurenceService, private dataService2: CommonService, private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
   displayedColumns: string[] = ['id', 'siteTitle', 'regionTitle', 'referenceNumber', 'title', 'type', 'insuranceRecommendation', 'nomacStatusTitle', 'insurenceStatusTitle', 'report', 'actions'];
   dataSource: MatTableDataSource<InsurenceRecommendation>;
@@ -74,14 +78,24 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
   toggleFilter() {
     this.displayFilter = !this.displayFilter;
   }
+  calcYears(){
+    let i = 2015;
+    for(i; i<= 2050; i++){
+      let y:Year = {
+        year: i,
+        isSelected: false
+      }
+      this.year.push({...y})
+    }
+  }
   ngOnInit(): void {
+    this.calcYears();
     this.dataSource = new MatTableDataSource<InsurenceRecommendation>(this.recommendations);
     this.getRecommendations();
     this.getInterfaces();
     this.getSites(-1);
     this.getRegion();
     this.getClusters();
-
   }
   getClusters(){
     this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1 ).subscribe({
@@ -149,7 +163,7 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
   }
   getRecommendations() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getRecommendationsList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.nomacStatusFilterList.toString(), this.insuranceStatusFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString()
+    this.subs.sink = this.dataService.getRecommendationsList(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.nomacStatusFilterList.toString(), this.insuranceStatusFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.yearList.toString(), this.proactiveFilterList.toString()
     ).subscribe({
       next: data => {
         this.apiObj = { ...data };
@@ -339,6 +353,15 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
   }
 
   //Filters
+  yearListFn(year:Year){
+    let index = this.yearList.indexOf(year.year);
+    if (index == -1) {
+      this.yearList.push(year.year);
+    }
+    else {
+      this.yearList.splice(index, 1);
+    }
+  }
   regionListFn(region: CRegions) {
     let index = this.regionsFilterList.indexOf(region.regionId);
     if (index == -1) {
@@ -384,6 +407,15 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
       this.priorityFilterList.splice(index, 1);
     }
   }
+  proactiveListFn(proactive:IRProactive){
+    let index = this.proactiveFilterList.indexOf(proactive.proactiveId);
+    if (index == -1) {
+      this.proactiveFilterList.push(proactive.proactiveId);
+    }
+    else {
+      this.proactiveFilterList.splice(index, 1);
+    }
+  }
   clusterListFn(cluster: CCluster) {
     let index = this.clusterFilterList.indexOf(cluster.clusterId);
     if (index == -1) {
@@ -414,6 +446,7 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
     this.insuranceStatusFilterList.length = 0;
     this.clusterFilterList.length = 0;
     this.priorityFilterList.length = 0;
+    this.yearList.length = 0;
     this.regions.map(a => a.isSelected = false)
     this.sites.map(a => a.isSelected = false)
     this.nomacStatuss.map(a => a.isSelected = false)
@@ -421,5 +454,6 @@ export class AddInsurenceComponent extends UnsubscribeOnDestroyAdapter implement
     this.insurenceStatuss.map(a => a.isSelected = false)
     this.priority.map(a=>a.isSelected = false)
     this.cluster.map(a=>a.isSelected = false)
+    this.year.map(a=>a.isSelected = false)
   }
 }

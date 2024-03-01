@@ -43,7 +43,9 @@ export interface TAPEquipment {
     regionId:number;
     regionTitle:string;
     unit:string;
-    isSelected:boolean
+    isSelected:boolean;
+    isGroup:number,
+    groupedEquipments:string,
 }
 export interface TAPPriority {
     priorityId: number;

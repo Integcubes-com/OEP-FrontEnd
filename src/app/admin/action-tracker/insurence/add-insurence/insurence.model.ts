@@ -83,7 +83,8 @@ export interface IRInsurenceStatus {
 export interface IRProactive {
     proactiveId: number,
     proactivetitle: string,
-    proactiveReference:string
+    proactiveReference:string,
+    isSelected:boolean
 }
 export interface IRSource {
     sourceId: number,

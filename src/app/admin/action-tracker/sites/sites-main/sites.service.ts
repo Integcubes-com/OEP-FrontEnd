@@ -21,8 +21,8 @@ export class SitesService {
 
   constructor(private http: HttpClient) { }
 
-  getSites(userId:number, regionList:string, countryList:string, technologyList:string): Observable<SitesI[]> {
-    let data = {'userId':userId, 'regionList':regionList, 'countryList':countryList, 'technologyList':technologyList}
+  getSites(userId:number, regionList:string, countryList:string, technologyList:string, clusterList:string): Observable<SitesI[]> {
+    let data = {'userId':userId, 'regionList':regionList, 'countryList':countryList, 'technologyList':technologyList, 'clusterList':clusterList}
     return this.http.post<SitesI[]>(this.getSitesURL, data)
   }
   getInterfaces(userId:number):Observable<SPStatus[]> {

@@ -63,7 +63,7 @@
                                                                 <div class="me-2 float-end"><button mat-icon-button
                                                                         color="primary"
                                                                         aria-label="Example icon button with a home icon"
-                                                                        (click)="filterFn()">
+                                                                        (click)="getSites()">
                                                                         <mat-icon>search</mat-icon>
                                                                     </button></div>
                                                             </div>
@@ -89,6 +89,29 @@
                                                                                 [(ngModel)]="r.selected"
                                                                                 (click)="regionList(r)">
                                                                                 {{r.regionTitle}}
+                                                                            </mat-checkbox>
+                                                                        </div>
+                                                                    </div>
+                                                                </mat-panel-description>
+                                                            </mat-expansion-panel>
+                                                            <mat-expansion-panel class="mb-0">
+                                                                <mat-expansion-panel-header
+                                                                    (click)="$event.stopPropagation()">
+                                                                    <mat-panel-title style="    font-size: 13px;">
+                                                                        Clusters
+                                                                    </mat-panel-title>
+                                                                </mat-expansion-panel-header>
+                                                                <mat-panel-description>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-12"
+                                                                            *ngFor="let r of cluster; let i = index">
+                                                                            <mat-checkbox
+                                                                                (click)="$event.stopPropagation()"
+                                                                                class="example-margin"
+                                                                                [(ngModel)]="r.selected"
+                                                                                (click)="clusterList(r)">
+                                                                                {{r.clusterTitle}}
                                                                             </mat-checkbox>
                                                                         </div>
                                                                     </div>

@@ -22,8 +22,8 @@ export class AddInsurenceService {
     let data = { 'userId': userId,"filter": filterObj}
     return this.http.post<InsurenceRecommendationApi>(this.getnsurenceRecommendationsURL, data)
   }
-  getRecommendationsList(userId: number,regionList:string, siteList:string, sourceList:string, nomacStatus:string, insuranceStatus:string, priorityList:string, clusterList:string): Observable<InsurenceRecommendationApi> {
-    let data = { userId, regionList, siteList, sourceList, nomacStatus, insuranceStatus, priorityList,clusterList}
+  getRecommendationsList(userId: number,regionList:string, siteList:string, sourceList:string, nomacStatus:string, insuranceStatus:string, priorityList:string, clusterList:string, yearList:string, proactiveList:string): Observable<InsurenceRecommendationApi> {
+    let data = { userId, regionList, siteList, sourceList, nomacStatus, insuranceStatus, priorityList,clusterList,yearList,proactiveList}
     return this.http.post<InsurenceRecommendationApi>(this.getnsurenceRecommendationsURL, data)
   }
   getInterfaces(userId: number): Observable<IRInterfaces> {

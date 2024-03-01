@@ -26,15 +26,16 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
   siteRegions: CRegions[];
   siteCountry: CCountry[];
   siteTechnology: CTechnology[];
-  countryListObj:any[]=[];
-  technologyListObj:any[]=[];
+  countryListObj: any[] = [];
+  technologyListObj: any[] = [];
   siteProjectStatus: SPStatus[];
   isTableLoading: boolean;
-  selectedTechnologyList:CTechnology[];
-  users:CUsers[];
-  cluster:CCluster[];
-  regionListObj:any[] = [];
-  addColumns(){
+  selectedTechnologyList: CTechnology[];
+  users: CUsers[];
+  cluster: CCluster[];
+  regionListObj: any[] = [];
+  clusterListObj: any[] = [];
+  addColumns() {
     const dialogRef = this.dialog.open(ColumnFilterComponent, {
       width: '750px',
       data: {
@@ -51,7 +52,7 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
   constructor(private dataService: SitesService, private dataService2: CommonService, private snackBar: MatSnackBar, private dialog: MatDialog) {
     super()
   }
-  displayedColumns: string[] = ['id','region', 'country', 'siteName', 'projectStatus', 'insurancePOC','tilPOC','actions'];
+  displayedColumns: string[] = ['id', 'region', 'country', 'siteName', 'projectStatus', 'insurancePOC', 'tilPOC', 'actions'];
   dataSource: MatTableDataSource<SitesI>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -67,12 +68,12 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
     this.getInterfaces();
     this.getCluster();
   }
-  getCluster():void{
-    this.subs.sink = this.dataService2.getClusters(this.user.id,-1,-1).subscribe({
+  getCluster(): void {
+    this.subs.sink = this.dataService2.getClusters(this.user.id, -1, -1).subscribe({
       next: data => {
-       this.cluster = [...data];
+        this.cluster = [...data];
       },
-      error: err => {this.errorMessage = err;this.showNotification('black', err, 'bottom', 'center')},
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
   getInterfaces(): void {
@@ -107,47 +108,45 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
-  filterFn(){
-    this.isTableLoading = true;
-    this.subs.sink = this.dataService.getSites(this.user.id,this.regionListObj.toString(), this.countryListObj.toString(), this.technologyListObj.toString()).subscribe({
-      next: data => {
-        this.sites = [...data];
-        this.dataSource.data = [...this.sites];
-        this.isTableLoading = false;
-      },
-      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
-    })
-  }
-  countryList(country:CCountry){
+  countryList(country: CCountry) {
     let index = this.countryListObj.indexOf(country.countryId);
-    if (index==-1) {
+    if (index == -1) {
       this.countryListObj.push(country.countryId);
     }
-   else{
-    this.countryListObj.splice(index, 1);
-   }
+    else {
+      this.countryListObj.splice(index, 1);
+    }
   }
-  technologyList(technology:CTechnology){
+  technologyList(technology: CTechnology) {
     let index = this.technologyListObj.indexOf(technology.technologyId);
-    if (index==-1) {
+    if (index == -1) {
       this.technologyListObj.push(technology.technologyId);
     }
-   else{
-    this.technologyListObj.splice(index, 1);
-   }
+    else {
+      this.technologyListObj.splice(index, 1);
+    }
   }
-  regionList(region:SRegion){
+  regionList(region: SRegion) {
     let index = this.regionListObj.indexOf(region.regionId);
-    if (index==-1) {
+    if (index == -1) {
       this.regionListObj.push(region.regionId);
     }
-   else{
-    this.regionListObj.splice(index, 1);
-   }
+    else {
+      this.regionListObj.splice(index, 1);
+    }
+  }
+  clusterList(cluster: CCluster) {
+    let index = this.clusterListObj.indexOf(cluster.clusterId);
+    if (index == -1) {
+      this.clusterListObj.push(cluster.clusterId);
+    }
+    else {
+      this.clusterListObj.splice(index, 1);
+    }
   }
   getSites(): void {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getSites(this.user.id, this.regionListObj.toString(), this.countryListObj.toString(), this.technologyListObj.toString()).subscribe({
+    this.subs.sink = this.dataService.getSites(this.user.id, this.regionListObj.toString(), this.countryListObj.toString(), this.technologyListObj.toString(), this.clusterListObj.toString()).subscribe({
       next: data => {
         this.sites = [...data];
         this.dataSource.data = [...this.sites];
@@ -171,22 +170,22 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
       this.dataSource.paginator.firstPage();
     }
   }
-  viewSite(sites: SitesI):void{
+  viewSite(sites: SitesI): void {
     this.subs.sink = this.dataService.getEditData(sites, this.user.id).subscribe({
       next: data => {
-         
+
         const dialogRef = this.dialog.open(SitesFormComponent, {
           width: '720px',
           data: {
             site: sites,
             action: "view",
             siteRegions: [...this.siteRegions],
-            cluster:this.cluster,
+            cluster: this.cluster,
             siteCountry: [...this.siteCountry],
             siteTechnology: [...this.siteTechnology],
             siteProjectStatus: [...this.siteProjectStatus],
-            selectedTechnology:[...data],
-            users:[...this.users]
+            selectedTechnology: [...data],
+            users: [...this.users]
           },
         });
       },
@@ -204,15 +203,10 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
     });
     dialogRef.afterClosed().subscribe((result: SitesI) => {
       if (result) {
-    
-       this.subs.sink = this.dataService.deleteSite(result).subscribe({
-          next: data => {
-            
-            // let index = this.sites.findIndex(a => a.siteId === site.siteId);
-            // this.sites.splice(index, 1);
-            // this.dataSource.data = [...this.sites];
-            this.getSites();
 
+        this.subs.sink = this.dataService.deleteSite(result).subscribe({
+          next: data => {
+            this.getSites();
             this.showNotification('snackbar-success', result.siteName + ' has been deleted sucessfully', 'bottom', 'center');
           },
           error: err => {
@@ -232,7 +226,7 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
             site: sites,
             action: "edit",
             siteRegions: [...this.siteRegions],
-            cluster:this.cluster,
+            cluster: this.cluster,
             siteCountry: [...this.siteCountry],
             siteTechnology: [...this.siteTechnology],
             siteProjectStatus: [...this.siteProjectStatus],
@@ -245,11 +239,11 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
           if (result) {
             this.subs.sink = this.dataService.saveSite(result, this.user.id).subscribe({
               next: data => {
-             
+
                 if (result.sites.insurenceReport instanceof File || result.sites.tilsReport instanceof File) {
                   this.subs.sink = this.dataService.uploadPDF(data, result, this.user.id).subscribe({
-                    next: data => { 
-                    
+                    next: data => {
+
                     },
                     error: err => {
                       this.errorMessage = err;
@@ -257,10 +251,7 @@ export class SitesMainComponent extends UnsubscribeOnDestroyAdapter implements O
                     }
                   })
                 }
-this.getSites();
-                // let index = this.sites.findIndex(a => a.siteId === sites.siteId);
-                // this.sites[index] = { ...data };
-                // this.dataSource.data = [...this.sites];
+                this.getSites();
                 this.showNotification('snackbar-success', result.sites.siteName + ' has been added sucessfully', 'bottom', 'center');
               },
               error: err => {
@@ -279,7 +270,7 @@ this.getSites();
 
   }
   addSite(): void {
-    const dialogRef = this.dialog.open(SitesFormComponent,{
+    const dialogRef = this.dialog.open(SitesFormComponent, {
       width: '720px',
       data: {
         site: "",
@@ -288,9 +279,9 @@ this.getSites();
         siteCountry: [...this.siteCountry],
         siteTechnology: [...this.siteTechnology],
         siteProjectStatus: [...this.siteProjectStatus],
-        cluster:this.cluster,
+        cluster: this.cluster,
 
-        users:[...this.users]
+        users: [...this.users]
       },
     });
     dialogRef.afterClosed().subscribe((result: SSaveData) => {
@@ -298,14 +289,12 @@ this.getSites();
         this.subs.sink = this.dataService.saveSite(result, this.user.id).subscribe({
           next: data => {
             this.subs.sink = this.dataService.uploadPDF(data, result, this.user.id).subscribe({
-              next:data=>{},
-              error:err=>{
+              next: data => { },
+              error: err => {
                 this.errorMessage = err;
-            this.showNotification('black', err, 'bottom', 'center');
+                this.showNotification('black', err, 'bottom', 'center');
               }
             })
-            // this.sites.unshift({...data});
-            // this.dataSource.data = [...this.sites];
             this.getSites();
             this.showNotification('snackbar-success', data.siteName + ' has been added sucessfully', 'bottom', 'center');
           },

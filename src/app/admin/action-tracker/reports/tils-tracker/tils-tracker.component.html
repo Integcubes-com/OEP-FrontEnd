@@ -425,9 +425,21 @@
                   <th mat-header-cell *matHeaderCellDef> Cluster </th>
                   <td mat-cell *matCellDef="let recommendation"> {{recommendation.clusterTitle}} </td>
                 </ng-container>
+                <ng-container matColumnDef="adminComment">
+                  <th mat-header-cell *matHeaderCellDef> Admin Comment </th>
+                  <td mat-cell *matCellDef="let recommendation"> {{recommendation.adminComment}} </td>
+                </ng-container>
                 <ng-container matColumnDef="unitStatus">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Status </th>
                   <td mat-cell *matCellDef="let act"> {{act.unitStatus}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actionClosedTitle">
+                  <th mat-header-cell *matHeaderCellDef> Action Closed By </th>
+                  <td mat-cell *matCellDef="let act"> {{act.actionClosedTitle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actionClosureDate">
+                  <th mat-header-cell *matHeaderCellDef> Action Closure Date </th>
+                  <td mat-cell *matCellDef="let act"> {{act.actionClosureDate | date}} </td>
                 </ng-container>
                 <ng-container matColumnDef="daysToTarget">
                   <th mat-header-cell *matHeaderCellDef> Days To Target </th>

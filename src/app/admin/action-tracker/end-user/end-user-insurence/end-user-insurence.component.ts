@@ -16,7 +16,7 @@ import { CommonService } from 'src/app/shared/common-service/common.service';
 import { CCluster, CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
 import { ViewActionComponent } from '../../insurence/insurence-tracker/dialogs/view-action/view-action.component';
 import { TableColmComponent } from './dialog/table-colm/table-colm.component';
-import { MatDateRangePicker } from '@angular/material/datepicker';
+import { Year } from '../end-user-til/til-tracker.model';
 
 @Component({
   selector: 'app-end-user-insurence',
@@ -36,15 +36,26 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
     regionId: -1,
     siteId: -1,
   }
-  quarterData=[
-    {title:'Quarter 1', id:1, isSelected:false},
-    {title:'Quarter 2', id:2, isSelected:false},
-    {title:'Quarter 3', id:3, isSelected:false},
-    {title:'Quarter 4', id:4, isSelected:false},
+  quarterData = [
+    { title: 'Quarter 1', id: 1, isSelected: false },
+    { title: 'Quarter 2', id: 2, isSelected: false },
+    { title: 'Quarter 3', id: 3, isSelected: false },
+    { title: 'Quarter 4', id: 4, isSelected: false },
   ]
   displayFilter: Boolean = false;
   toggleFilter() {
     this.displayFilter = !this.displayFilter;
+  }
+  calcYears() {
+    let i = 2015;
+    for (i; i <= 2050; i++) {
+      let y: Year = {
+        year: i,
+        isSelected: false
+      }
+      this.year.push({ ...y })
+      this.issueYear.push({ ...y })
+    }
   }
   recInsurence: InsurenceRecommendation[];
   apiObj: IATAPIData;
@@ -55,6 +66,10 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
   isTableLoading: boolean;
   sites: CSites[];
   regions: CRegions[];
+  yearList: any[] = [];
+  year: Year[] = [];
+  issueYearList: any[] = [];
+  issueYear: Year[] = [];
   recommendations: ITRecommendation[];
   sources: ITSource[];
   companies: ITCompany[];
@@ -83,7 +98,7 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
   companyFilterList: any[] = [];
   daysToTargetFilterList: any[] = [];
   priorityFilterList: any[] = [];
-  quaterFilterList:any[] = [];
+  quaterFilterList: any[] = [];
 
   cluster: CCluster[];
 
@@ -102,6 +117,7 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
     this.dataSource.sort = this.sort;
   }
   ngOnInit(): void {
+    this.calcYears();
     this.dataSource = new MatTableDataSource<InsurenceTracker>(this.actionTrackers);
     this.getUsers();
     this.getRegions();
@@ -181,9 +197,27 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
+  yearListFn(year: Year) {
+    let index = this.yearList.indexOf(year.year);
+    if (index == -1) {
+      this.yearList.push(year.year);
+    }
+    else {
+      this.yearList.splice(index, 1);
+    }
+  }
+  issueYearListFn(year: Year) {
+    let index = this.issueYearList.indexOf(year.year);
+    if (index == -1) {
+      this.issueYearList.push(year.year);
+    }
+    else {
+      this.issueYearList.splice(index, 1);
+    }
+  }
   getActionTracker() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTracker(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.companyFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.quaterFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.sourceFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.companyFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.quaterFilterList.toString(), this.yearList.toString(), this.issueYearList.toString()).subscribe({
       next: data => {
         this.apiObj = { ...data };
         this.actionTrackers = [...data.tracker];
@@ -278,9 +312,6 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
             else {
               this.getActionTracker();
             }
-            // let index = this.actionTrackers.findIndex(a => a.insurenceActionTrackerId === result.insurenceActionTrackerId);
-            // this.actionTrackers[index] = { ...result };
-            // this.dataSource.data = [...this.actionTrackers];
             this.showNotification('snackbar-success', result.action + ' has been added sucessfully', 'bottom', 'center');
           },
           error: err => {
@@ -363,7 +394,7 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
       this.daysToTargetFilterList.splice(index, 1);
     }
   }
-  quaterListFn(num:any){
+  quaterListFn(num: any) {
     let index = this.quaterFilterList.indexOf(num.id);
     if (index == -1) {
       this.quaterFilterList.push(num.id);
@@ -394,6 +425,8 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
     this.companyFilterList.length = 0;
     this.daysToTargetFilterList.length = 0;
     this.priorityFilterList.length = 0;
+    this.yearList.length = 0;
+    this.issueYearList.length = 0;
     this.regions.map(a => a.isSelected = false)
     this.sites.map(a => a.isSelected = false)
     this.companies.map(a => a.isSelected = false)
@@ -402,6 +435,7 @@ export class EndUserInsurenceComponent extends UnsubscribeOnDestroyAdapter imple
     this.daysToTargetList.map(a => a.isSelected = false)
     this.priority.map(a => a.isSelected = false)
     this.quarterData.map(a => a.isSelected = false)
-
+    this.year.map(a => a.isSelected = false)
+    this.issueYear.map(a => a.isSelected = false)
   }
 }

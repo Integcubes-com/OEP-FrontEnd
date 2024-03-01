@@ -9,5 +9,8 @@ export interface TilActionReport {
     regionTitle: string;
     clusterId: number;
     clusterTitle: string;
-    tilNumber:string
+    tilNumber:string;
+    oemSeverityTitle:string;
+    timingCode:string;
+    focusTitle:string;
 }
