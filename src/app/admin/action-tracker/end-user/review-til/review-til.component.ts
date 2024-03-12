@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { CSites, CRegions, CUsers, CCluster } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
-import { TSeverity, TFocus } from '../../tils/add-tils/add-tils.model';
+import { TSeverity, TFocus, tbEquipemnt } from '../../tils/add-tils/add-tils.model';
 import { AssignTilActionComponent } from '../../tils/tils-tracker/assign-til/dialog/assign-til-action/assign-til-action.component';
 import { TAPBudgetSource, TilActionPackage, TAPEquipment, TAPPriority } from '../../tils/tils-tracker/tils-tracker-assignment.model';
 import { TAFilterObj } from '../end-user-til/end-user-til.component';
@@ -89,6 +89,8 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
   quaterFilterList:any[] = [];
   yearList:any[]=[];
   year:Year[]=[];
+  tbEquipemnt :tbEquipemnt[];
+  tbEquipmentFilterList: any[]=[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   errorMessage: string;
@@ -160,7 +162,7 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
   }
   getActions() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString(),this.yearList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTracker(this.user.id,this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(), this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(), this.quaterFilterList.toString(),this.yearList.toString(),this.tbEquipmentFilterList.toString()).subscribe({
       next: data => {
         this.action= [...data.action]
         this.dataSource.data = [...this.action]
@@ -184,6 +186,8 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
         this.tilSeveritys = [...data.oemSeverity];
         this.tilFocuss = [...data.tilFocus];
         this.unitTypes = [...data.outageTypes];
+        this.tbEquipemnt = [...data.tbEquipemnt]
+
       },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
@@ -439,6 +443,15 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
       this.quaterFilterList.splice(index, 1);
     }
   }
+  EquipmentListFn(eq: tbEquipemnt) {
+    let index = this.tbEquipmentFilterList.indexOf(eq.tilEquipmentId);
+    if (index == -1) {
+      this.tbEquipmentFilterList.push(eq.tilEquipmentId);
+    }
+    else {
+      this.tbEquipmentFilterList.splice(index, 1);
+    }
+  }
   clearFn(){
     this.regionsFilterList.length = 0;
     this.quaterFilterList.length = 0;
@@ -452,6 +465,7 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
     this.unitTypeFilterList.length = 0;
     this.priorityFilterList.length = 0;
     this.yearList.length = 0;
+    this.tbEquipmentFilterList.length = 0;
 
     this.regions.map(a=>a.isSelected = false)
     this.sites.map(a=>a.isSelected = false)
@@ -465,6 +479,7 @@ export class ReviewTilComponent  extends UnsubscribeOnDestroyAdapter implements 
     this.quarterData.map(a => a.isSelected = false)
     this.cluster.map(a => a.isSelected = false)
     this.year.map(a => a.isSelected = false)
+    this.tbEquipemnt.map(a => a.isSelected = false)
 
   }
 

@@ -33,7 +33,7 @@ export class TableColmTilComponent {
     {colName:"timingCode",code:"Timing Code", isSelected:false},
     {colName:"tilTitle",code:"Til Title", isSelected:false},
     {colName:"adminComment",code:"Admin Comment", isSelected:false},
-
+    {colName:"tbTitle",code:'Equipment Type', isSelected:false},
     {colName:"actionClosedTitle",code:"Action Closed By", isSelected:false},
     {colName:"actionClosureDate",code:"Action Closure Date", isSelected:false},
 

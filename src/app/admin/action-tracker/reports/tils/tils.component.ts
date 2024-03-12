@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { ViewFormComponent } from '../../reviewer/til-evaluation/dialogs/view-form/view-form.component';
-import { TFilterObj, TAPIData, TILs, TComponent, TDocType, TEquipment, TSeverity, TSeverityTiming, TFocus, TReviewForum, TReviewStatus, TSite, TSource } from '../../tils/add-tils/add-tils.model';
+import { TFilterObj, TAPIData, TILs, TComponent, TDocType, TEquipment, TSeverity, TSeverityTiming, TFocus, TReviewForum, TReviewStatus, TSite, TSource, tbEquipemnt } from '../../tils/add-tils/add-tils.model';
 import { AddTilsService } from '../../tils/add-tils/add-tils.service';
 import { User } from 'src/app/core/models/user';
 import { TableColsComponent } from '../../tils/add-tils/dialog/table-cols/table-cols.component';
@@ -46,8 +46,11 @@ export class TilsComponent extends UnsubscribeOnDestroyAdapter implements OnInit
   tilReviewStatuss: TReviewStatus[];
   tilSites: TSite[];
   tilSources: TSource[];
+  tbEquipemnt :tbEquipemnt[];
+
   tilFocusFilterList: any[] = [];
   soverityFilterList: any[] = [];
+  tbEquipmentFilterList: any[]=[];
   constructor(private dataService: AddTilsService, private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
   displayedColumns: string[] = ['id', 'tilNumber', 'tilTitle', 'oemTimingTitle', 'documentTypeTitle', 'sourceTitle', 'reviewForumtitle', 'report'];  dataSource: MatTableDataSource<TILs>;
   @ViewChild(MatSort) sort: MatSort;
@@ -78,7 +81,7 @@ export class TilsComponent extends UnsubscribeOnDestroyAdapter implements OnInit
   }
   getTils() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getTilsList(this.user.id,this.documentFilterList.toString(), this.reviewStatusFilterList.toString(), this.reviewFormFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getTilsList(this.user.id,this.documentFilterList.toString(), this.reviewStatusFilterList.toString(), this.reviewFormFilterList.toString(),this.tilFocusFilterList.toString(), this.soverityFilterList.toString(),this.tbEquipmentFilterList.toString()).subscribe({
       next: data => {
         this.tils = [...data.tils]
         this.dataSource.data = [...this.tils];
@@ -122,6 +125,8 @@ export class TilsComponent extends UnsubscribeOnDestroyAdapter implements OnInit
         this.tilSources = [...data.tilSource];
         this.tilReviewForums = [...data.reviewForum];
         this.tilReviewStatuss = [...data.reviewStatus];
+        this.tbEquipemnt = [...data.tbEquipemnt]
+
       },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
@@ -202,7 +207,15 @@ export class TilsComponent extends UnsubscribeOnDestroyAdapter implements OnInit
         this.reviewFormFilterList.splice(index, 1);
       }
     }
-  
+    EquipmentListFn(eq: tbEquipemnt) {
+      let index = this.tbEquipmentFilterList.indexOf(eq.tilEquipmentId);
+      if (index == -1) {
+        this.tbEquipmentFilterList.push(eq.tilEquipmentId);
+      }
+      else {
+        this.tbEquipmentFilterList.splice(index, 1);
+      }
+    }
     filterFn() {
       this.getTils();
     }
@@ -213,10 +226,14 @@ export class TilsComponent extends UnsubscribeOnDestroyAdapter implements OnInit
       this.reviewFormFilterList.length = 0;
       this.tilFocusFilterList.length = 0;
       this.soverityFilterList.length = 0;
+      this.tbEquipmentFilterList.length = 0;
+
       this.tilDocTypes.map(a => a.isSelected = false)
       this.tilReviewStatuss.map(a => a.isSelected = false)
       this.tilReviewForums.map(a => a.isSelected = false)
       this.tilFocuss.map(a => a.isSelected = false)
       this.tilSeveritys.map(a => a.isSelected = false)
+      this.tbEquipemnt.map(a => a.isSelected = false)
+
     }
 }

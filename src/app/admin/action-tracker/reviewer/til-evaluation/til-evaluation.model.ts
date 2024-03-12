@@ -38,7 +38,9 @@ export interface TILEvaluation {
     mandatory: boolean;
     critical: boolean;
     safetyCritical: boolean;
-    reviewTitle:string
+    reviewTitle:string;
+    evaluatedById:number;
+    evaluatedByTitle:string;
 }
 export interface tilReviewStatus{
     tesId:number,

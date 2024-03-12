@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { ViewFormComponent } from '../../reviewer/til-evaluation/dialogs/view-form/view-form.component';
-import { TComponent, TILs, TDocType, TFocus, TReviewForum, TReviewStatus, TSeverity, TSeverityTiming, TSource, TFilterObj } from './add-tils.model';
+import { TComponent, TILs, TDocType, TFocus, TReviewForum, TReviewStatus, TSeverity, TSeverityTiming, TSource, TFilterObj, tbEquipemnt } from './add-tils.model';
 import { AddTilsService } from './add-tils.service';
 import { TilsFormDeleteComponent } from './dialog/tils-form-delete/tils-form-delete.component';
 import { TilsFormComponent } from './dialog/tils-form/tils-form.component';
@@ -43,7 +43,7 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
   tilReviewForums: TReviewForum[];
   tilReviewStatuss: TReviewStatus[];
   tilSources: TSource[];
-
+  tbEquipemnt :tbEquipemnt[];
 
   //Filter Lists
 
@@ -52,6 +52,7 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
   reviewFormFilterList: any[] = [];
   tilFocusFilterList: any[] = [];
   soverityFilterList: any[] = [];
+  tbEquipmentFilterList: any[]=[];
   tableColumn: any[] = ['id', 'tilNumber', 'tilTitle', 'oemTimingTitle', 'documentTypeTitle', 'sourceTitle', 'reviewForumtitle', 'report', 'actions']
 
   constructor(private dataService: AddTilsService, private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
@@ -74,7 +75,7 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
   }
   getTils() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getTilsList(this.user.id, this.documentFilterList.toString(), this.reviewStatusFilterList.toString(), this.reviewFormFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getTilsList(this.user.id, this.documentFilterList.toString(), this.reviewStatusFilterList.toString(), this.reviewFormFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.tbEquipmentFilterList.toString()).subscribe({
       next: data => {
         this.tils = [...data.tils]
         this.dataSource.data = [...this.tils];
@@ -94,6 +95,7 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
         this.tilSources = [...data.tilSource];
         this.tilReviewForums = [...data.reviewForum];
         this.tilReviewStatuss = [...data.reviewStatus];
+        this.tbEquipemnt = [...data.tbEquipemnt]
       },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
@@ -133,6 +135,7 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
         tilReviewForums: this.tilReviewForums,
         tilReviewStatuss: this.tilReviewStatuss,
         tilSources: this.tilSources,
+        tbEquipemnt:this.tbEquipemnt,
         action: "add",
       },
     });
@@ -183,6 +186,8 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
         tilReviewForums: this.tilReviewForums,
         tilReviewStatuss: this.tilReviewStatuss,
         tilSources: this.tilSources,
+        tbEquipemnt:this.tbEquipemnt,
+
         action: "edit",
       },
     });
@@ -293,6 +298,15 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
       this.documentFilterList.splice(index, 1);
     }
   }
+  EquipmentListFn(eq: tbEquipemnt) {
+    let index = this.tbEquipmentFilterList.indexOf(eq.tilEquipmentId);
+    if (index == -1) {
+      this.tbEquipmentFilterList.push(eq.tilEquipmentId);
+    }
+    else {
+      this.tbEquipmentFilterList.splice(index, 1);
+    }
+  }
   focusListFn(source: TFocus) {
     let index = this.tilFocusFilterList.indexOf(source.focusId);
     if (index == -1) {
@@ -341,10 +355,12 @@ export class AddTilsComponent extends UnsubscribeOnDestroyAdapter implements OnI
     this.reviewFormFilterList.length = 0;
     this.tilFocusFilterList.length = 0;
     this.soverityFilterList.length = 0;
+    this.tbEquipmentFilterList.length = 0;
     this.tilDocTypes.map(a => a.isSelected = false)
     this.tilReviewStatuss.map(a => a.isSelected = false)
     this.tilReviewForums.map(a => a.isSelected = false)
     this.tilFocuss.map(a => a.isSelected = false)
     this.tilSeveritys.map(a => a.isSelected = false)
+    this.tbEquipemnt.map(a => a.isSelected = false)
   }
 }

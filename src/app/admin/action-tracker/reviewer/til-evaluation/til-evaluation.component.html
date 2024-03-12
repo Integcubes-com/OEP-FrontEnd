@@ -239,10 +239,16 @@
                     <th mat-header-cell *matHeaderCellDef> No. </th>
                     <td mat-cell *matCellDef="let til ; let i = index"> {{i+1}} </td>
                   </ng-container>
+                  
                   <ng-container matColumnDef="tilNumber">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> TIL Number </th>
                     <td mat-cell *matCellDef="let til"> {{til.tilNumber}} </td>
                   </ng-container>
+                  <ng-container matColumnDef="evaluatedByTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Evaluated By </th>
+                    <td mat-cell *matCellDef="let til"> {{til.evaluatedByTitle}} </td>
+                  </ng-container>
+                  
                   <ng-container matColumnDef="sourceTitle">
                     <th mat-header-cell *matHeaderCellDef>sourceTitle</th>
                     <td mat-cell *matCellDef="let til"> {{til.sourceTitle}} </td>

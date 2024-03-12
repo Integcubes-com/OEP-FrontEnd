@@ -87,6 +87,18 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Equipment</mat-label>
+                        <mat-select formControlName="tbEquipemnt">
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let e of tbEquipemnt"
+                                [value]="e.tilEquipmentId">{{e.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
                         <mat-label>OEM Severity</mat-label>
                         <mat-select formControlName="oemSeverityId">
                             <mat-option>None</mat-option>

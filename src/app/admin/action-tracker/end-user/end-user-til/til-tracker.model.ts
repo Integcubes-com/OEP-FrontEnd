@@ -1,4 +1,4 @@
-import { TFocus, TSeverity } from "../../tils/add-tils/add-tils.model";
+import { TFocus, TSeverity, tbEquipemnt } from "../../tils/add-tils/add-tils.model";
 import { TAPEquipment, TAPPriority, TAPBudgetSource } from "../../tils/tils-tracker/tils-tracker-assignment.model";
 
 export class ActionTrackerEndUser {
@@ -70,6 +70,8 @@ export class ActionTrackerEndUser {
     actionClosedBy:number;
     actionClosedTitle:string;
     actionClosureDate:Date;
+    tbEquipmentId:number;
+    tbTitle:string;
     constructor(reg) {
         this.tilActionTrackerId = reg.tilActionTrackerId ? this.tilActionTrackerId : -1;
     }
@@ -121,6 +123,7 @@ export interface ActionTilInterfaceApi{
     oemSeverity:TSeverity[],
     tilFocus:TFocus[]
     outageTypes:unitTypes[],
+    tbEquipemnt:tbEquipemnt[],
 }
 export class Year{
     year:number;

@@ -217,6 +217,7 @@ export class AssignTilActionComponent extends UnsubscribeOnDestroyAdapter {
     return this.fb.group({
       tapId: [this.package.packageId, [Validators.required]],
       actionDescription: [{ value: this.action.actionDescription, disabled: true }],
+      equipmentType: [{ value: this.action.tbTitle, disabled: true }],
       siteEquipmentId: [{ value: this.action.siteEquipmentId, disabled: true }],
       priorityId: [{ value: this.action.priorityId, disabled: true }],
       targetDate: [this.action.targetDate,[Validators.required]],

@@ -1,99 +1,101 @@
 <section class="content">
-    <div class="content-block">
-      <div class="block-header">
-        <app-breadcrumb [title]="'Reports'" [items]="[]" [active_item]="'ADD TILs'"></app-breadcrumb>
-      </div>
-      <div class="card" *ngIf="displayFilter">
-        <div class="row m-4 p-0">
-          <h5 class="card-title">Filter By:</h5>
-          <div class="col-md-3">
-            <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Start Date</mat-label>
-              <input matInput [matDatepicker]="picker1" [(ngModel)]="filterObj.startDate">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>End Date</mat-label>
-              <input matInput [matDatepicker]="picker2" [(ngModel)]="filterObj.endDate">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Document</mat-label>
-              <mat-select [(ngModel)]="filterObj.documentId">
-                <mat-option [value]="-1">--All--</mat-option>
-                <mat-option *ngFor="let d of tilDocTypes" [value]="d.typeId">{{d.typeTitle}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3 pb-0">
-            <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Review Status</mat-label>
-              <mat-select [(ngModel)]="filterObj.statusId">
-                <mat-option [value]="-1">--All--</mat-option>
-                <mat-option *ngFor="let s of tilReviewStatuss" [value]="s.reviewStatusId">{{s.reviewStatusTitle}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3 pb-0">
-            <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Review Forum</mat-label>
-              <mat-select [(ngModel)]="filterObj.formId">
-                <mat-option [value]="-1">--All--</mat-option>
-                <mat-option *ngFor="let rf of tilReviewForums" [value]="rf.reviewFormId">{{rf.reviewFormTitle}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-1 pb-0">
-            <div class="float-end">
-              <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
-                (click)="getTils()">
-                <mat-icon>search</mat-icon>
-              </button>
-            </div>
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'Reports'" [items]="[]" [active_item]="'ADD TILs'"></app-breadcrumb>
+    </div>
+    <div class="card" *ngIf="displayFilter">
+      <div class="row m-4 p-0">
+        <h5 class="card-title">Filter By:</h5>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="filterObj.startDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="picker2" [(ngModel)]="filterObj.endDate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Document</mat-label>
+            <mat-select [(ngModel)]="filterObj.documentId">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let d of tilDocTypes" [value]="d.typeId">{{d.typeTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Review Status</mat-label>
+            <mat-select [(ngModel)]="filterObj.statusId">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let s of tilReviewStatuss"
+                [value]="s.reviewStatusId">{{s.reviewStatusTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pb-0">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Review Forum</mat-label>
+            <mat-select [(ngModel)]="filterObj.formId">
+              <mat-option [value]="-1">--All--</mat-option>
+              <mat-option *ngFor="let rf of tilReviewForums"
+                [value]="rf.reviewFormId">{{rf.reviewFormTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 pb-0">
+          <div class="float-end">
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a bookmark icon"
+              (click)="getTils()">
+              <mat-icon>search</mat-icon>
+            </button>
           </div>
         </div>
       </div>
-      <div class="row clearfix">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card">
-            <div class="body">
-              <div class="table-responsive">
-                <div class="materialTableHeader">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul class="header-buttons-left ms-0">
-                        <li class="dropdown">
-                          <h2>TILs</h2>
-                        </li>
-                        <li class="dropdown m-l-20">
-                          <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                          <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
-                            class="browser-default search-field" aria-label="Search box">
-                        </li>
-                        <li>
-                          <div class="m-l-10" matTooltip="FILTER DATA">
-                            <button mat-mini-fab color="accent" (click)="addColumns()">
-                              <mat-icon>view_column</mat-icon>
-                            </button>
-                          </div>
-                        </li>
-                        <!-- <li>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ms-0">
+                      <li class="dropdown">
+                        <h2>TILs</h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                        <input placeholder="Search" type="text" (keyup)="applyFilter($event)" #input
+                          class="browser-default search-field" aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="m-l-10" matTooltip="FILTER DATA">
+                          <button mat-mini-fab color="accent" (click)="addColumns()">
+                            <mat-icon>view_column</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <!-- <li>
                           <div class="m-l-10" matTooltip="FILTER DATA">
                             <button mat-mini-fab color="warn" (click)="toggleFilter()">
                               <mat-icon>filter_list</mat-icon>
                             </button>
                           </div>
                         </li>  -->
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                      <ul class="header-buttons">
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
                       <li class="me-4">
                         <button mat-raised-button color="filter" [matMenuTriggerFor]="menu1">Filter
                           <mat-icon>filter_list</mat-icon>
@@ -137,7 +139,7 @@
                                   </div>
                                 </mat-panel-description>
                               </mat-expansion-panel>
-                           <mat-expansion-panel class="mt-0">
+                              <mat-expansion-panel class="mt-0">
                                 <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                   <mat-panel-title style="font-size: 13px;">
                                     Review Status
@@ -154,7 +156,7 @@
                                   </div>
                                 </mat-panel-description>
                               </mat-expansion-panel>
-                                 <mat-expansion-panel class="mt-0">
+                              <mat-expansion-panel class="mt-0">
                                 <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                   <mat-panel-title style="font-size: 13px;">
                                     Review Form
@@ -170,7 +172,7 @@
                                     </div>
                                   </div>
                                 </mat-panel-description>
-                            
+
                               </mat-expansion-panel>
                               <mat-expansion-panel class="mt-0">
                                 <mat-expansion-panel-header (click)="$event.stopPropagation()">
@@ -206,6 +208,23 @@
                                   </div>
                                 </mat-panel-description>
                               </mat-expansion-panel>
+                              <mat-expansion-panel class="mt-0">
+                                <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                  <mat-panel-title style="font-size: 13px;">
+                                    Equipment Type
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-panel-description>
+                                  <div class="row">
+                                    <div class="col-md-12 cs-style" *ngFor="let r of tbEquipemnt; let i = index">
+                                      <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                        [(ngModel)]="r.isSelected" (click)="EquipmentListFn(r)">
+                                        {{r.title}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
+                                </mat-panel-description>
+                              </mat-expansion-panel>
                             </mat-accordion>
                           </div>
                         </mat-menu>
@@ -236,11 +255,15 @@
                           </button>
                         </mat-menu>
                       </li>
-                      </ul>
-                    </div>
+                    </ul>
                   </div>
                 </div>
-                <div class="example-container">
+              </div>
+              <div class="example-container">
+                <div *ngIf="isTableLoading" class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
+                </div>
                 <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
                   <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -255,11 +278,11 @@
                     <td mat-cell *matCellDef="let til"> {{til.alternateNumber}} </td>
                   </ng-container>
                   <ng-container matColumnDef="applicabilityNotes">
-                    <th mat-header-cell *matHeaderCellDef > Applicability Notes </th>
+                    <th mat-header-cell *matHeaderCellDef> Applicability Notes </th>
                     <td mat-cell *matCellDef="let til"> {{til.applicabilityNotes}} </td>
                   </ng-container>
                   <ng-container matColumnDef="tilTitle">
-                    <th mat-header-cell *matHeaderCellDef > TIL Title </th>
+                    <th mat-header-cell *matHeaderCellDef> TIL Title </th>
                     <td mat-cell *matCellDef="let til"> {{til.tilTitle}} </td>
                   </ng-container>
                   <ng-container matColumnDef="currentRevision">
@@ -268,7 +291,9 @@
                   </ng-container>
                   <ng-container matColumnDef="report">
                     <th mat-header-cell *matHeaderCellDef> Report </th>
-                    <td mat-cell *matCellDef="let til"> <i matTooltip="DOWNLOAD" (click)="$event.stopPropagation()" (click)="downloadReport(til)" *ngIf="til.reportAttahced" style="color:rgb(0, 81, 255);"class="material-icons">file_download</i><span *ngIf="!til.reportAttahced">No File</span>
+                    <td mat-cell *matCellDef="let til"> <i matTooltip="DOWNLOAD" (click)="$event.stopPropagation()"
+                        (click)="downloadReport(til)" *ngIf="til.reportAttahced" style="color:rgb(0, 81, 255);"
+                        class="material-icons">file_download</i><span *ngIf="!til.reportAttahced">No File</span>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="tilFocusTitle">
@@ -278,43 +303,48 @@
                   <ng-container matColumnDef="documentTypeTitle">
                     <th mat-header-cell *matHeaderCellDef> Document Type </th>
                     <td mat-cell *matCellDef="let til"> {{til.documentTypeTitle}} </td>
-                  </ng-container>                  
+                  </ng-container>
                   <ng-container matColumnDef="oem">
                     <th mat-header-cell *matHeaderCellDef> OEM </th>
                     <td mat-cell *matCellDef="let til"> {{til.oem}} </td>
-                  </ng-container>                  
+                  </ng-container>
                   <ng-container matColumnDef="oemSeverityTitle">
                     <th mat-header-cell *matHeaderCellDef> OEM Severity </th>
                     <td mat-cell *matCellDef="let til"> {{til.oemSeverityTitle}} </td>
-                  </ng-container>                  
+                  </ng-container>
                   <ng-container matColumnDef="oemTimingTitle">
                     <th mat-header-cell *matHeaderCellDef> OEM Timing</th>
                     <td mat-cell *matCellDef="let til"> {{til.oemTimingTitle}} </td>
-                  </ng-container>                  
+                  </ng-container>
                   <ng-container matColumnDef="reviewForumtitle">
                     <th mat-header-cell *matHeaderCellDef> Review Forum</th>
-                    <td mat-cell *matCellDef="let til" > {{til.reviewForumtitle}} </td>
-                  </ng-container>                  
+                    <td mat-cell *matCellDef="let til"> {{til.reviewForumtitle}} </td>
+                  </ng-container>
                   <ng-container matColumnDef="recommendations">
                     <th mat-header-cell *matHeaderCellDef style="padding-right:400px!important"> Recommendations</th>
                     <td mat-cell *matCellDef="let til"> {{til.recommendations}} </td>
-                  </ng-container>                  
+                  </ng-container>
                   <ng-container matColumnDef="implementationNotes">
-                    <th mat-header-cell *matHeaderCellDef > Implementation Notes</th>
-                    <td mat-cell *matCellDef="let til" > {{til.implementationNotes}} </td>
-                  </ng-container>     
+                    <th mat-header-cell *matHeaderCellDef> Implementation Notes</th>
+                    <td mat-cell *matCellDef="let til"> {{til.implementationNotes}} </td>
+                  </ng-container>
                   <ng-container matColumnDef="technicalReviewSummary">
                     <th mat-header-cell *matHeaderCellDef> Technical Review</th>
-                    <td mat-cell *matCellDef="let til"> {{til.technicalReviewId?til.technicalReviewSummary:'pending...'}} </td>
-                  </ng-container>             
+                    <td mat-cell *matCellDef="let til">
+                      {{til.technicalReviewId?til.technicalReviewSummary:'pending...'}} </td>
+                  </ng-container>
                   <ng-container matColumnDef="dateReceivedNomac">
                     <th mat-header-cell *matHeaderCellDef>Date Received Nomac</th>
                     <td mat-cell *matCellDef="let til"> {{til.dateReceivedNomac | date}} </td>
                   </ng-container>
+                  <ng-container matColumnDef="tbTitle">
+                    <th mat-header-cell *matHeaderCellDef>Equipment</th>
+                    <td mat-cell *matCellDef="let til"> {{til.tbTitle}} </td>
+                  </ng-container>
                   <ng-container matColumnDef="dateIssuedDocument">
                     <th mat-header-cell *matHeaderCellDef>Date Issued Document</th>
                     <td mat-cell *matCellDef="let til"> {{til.dateIssuedDocument | date}} </td>
-                  </ng-container> 
+                  </ng-container>
                   <ng-container matColumnDef="sourceTitle">
                     <th mat-header-cell *matHeaderCellDef>sourceTitle</th>
                     <td mat-cell *matCellDef="let til"> {{til.sourceTitle}} </td>
@@ -348,25 +378,16 @@
                     <td mat-cell *matCellDef="let til"> {{til.yearOfIssue}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row  *matRowDef="let row; columns: displayedColumns;"
-                   matRipple></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" matRipple></tr>
                 </table>
-                <div *ngIf="isTableLoading" class="tbl-spinner">
-                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
-                  </mat-progress-spinner>
-                </div>
-                <div *ngIf="!isTableLoading" class="no-results"
-                [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
-                No results
-              </div>
                 <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
                   aria-label="Select page of periodic elements">
                 </mat-paginator>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>

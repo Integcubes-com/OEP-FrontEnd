@@ -59,7 +59,7 @@ export class TilEvaluationComponent extends UnsubscribeOnDestroyAdapter implemen
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   constructor(private dataService2: AddTilsService, private dataService: TilEvaluationService, private snackBar: MatSnackBar, public dialog: MatDialog) { super() }
-  displayedColumns: string[] = ['id', 'tilNumber', 'tilTitle', 'oemTimingTitle', 'documentTypeTitle', 'sourceTitle', 'reviewForumtitle', 'reviewTitle', 'report', 'actions'];
+  displayedColumns: string[] = ['id', 'tilNumber', 'tilTitle', 'oemTimingTitle', 'documentTypeTitle', 'sourceTitle', 'reviewForumtitle', 'reviewTitle','evaluatedByTitle', 'report', 'actions'];
   dataSource: MatTableDataSource<TILEvaluation>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

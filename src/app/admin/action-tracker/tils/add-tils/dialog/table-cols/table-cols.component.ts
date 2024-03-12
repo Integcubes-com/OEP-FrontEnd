@@ -30,7 +30,7 @@ export class TableColsComponent  {
     {colName:"componentTitle",code:"Component", isSelected:false},
     {colName:"implementationNotes",code:"Implementation Notes", isSelected:false},
     {colName:"yearOfIssue",code:'Year Of Issue', isSelected:false},
-    // {colName:"actions", isSelected:false},
+    {colName:"tbTitle",code:'Equipment Type', isSelected:false},
 
   ];
   selectedCols:any[]=[];

@@ -25,13 +25,13 @@ export class EndUserTilService {
   private readonly reportURL = `${environment.apiUrl}/AssignTilAction/downloadFile`
 
   constructor(private http: HttpClient) { }
-  getActionTracker(userId: number, regionList:string, siteList:string, equipmentList:string, sapList:string, statusList:string,daysList:string, focusList:string, severityList:string, priorityList:string,clusterList:string,finalImpList:string,unitStatusList:string, quarterList:string, yearList:string): Observable<ActionTilAddAPI> {
-    let userID = {userId, regionList, siteList, equipmentList, sapList, statusList, daysList, focusList, severityList, priorityList,clusterList,finalImpList,unitStatusList,quarterList,yearList};
+  getActionTracker(userId: number, regionList:string, siteList:string, equipmentList:string, sapList:string, statusList:string,daysList:string, focusList:string, severityList:string, priorityList:string,clusterList:string,finalImpList:string,unitStatusList:string, quarterList:string, yearList:string, equipmentTypeList: string): Observable<ActionTilAddAPI> {
+    let userID = {userId, regionList, siteList, equipmentList, sapList, statusList, daysList, focusList, severityList, priorityList,clusterList,finalImpList,unitStatusList,quarterList,yearList,equipmentTypeList};
     return this.http.post<ActionTilAddAPI>(this.getURL,userID).pipe(
     )
   }
-  getActionTrackerReport(userId: number,regionList:string, siteList:string, equipmentList:string, sapList:string, statusList:string,daysList:string,focusList:string, severityList:string, priorityList:string, clusterList:string,finalImpList:string,unitStatusList:string): Observable<ActionTilAddAPI> {
-    let userID = {userId, regionList, siteList, equipmentList, sapList, statusList, daysList,focusList, severityList,priorityList,clusterList,finalImpList,unitStatusList};
+  getActionTrackerReport(userId: number,regionList:string, siteList:string, equipmentList:string, sapList:string, statusList:string,daysList:string,focusList:string, severityList:string, priorityList:string, clusterList:string,finalImpList:string,unitStatusList:string, equipmentTypeList: string): Observable<ActionTilAddAPI> {
+    let userID = {userId, regionList, siteList, equipmentList, sapList, statusList, daysList,focusList, severityList,priorityList,clusterList,finalImpList,unitStatusList,equipmentTypeList};
     return this.http.post<ActionTilAddAPI>(this.getReportURL,userID).pipe(
     )
   }

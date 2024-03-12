@@ -15,7 +15,7 @@ import { CSites, CRegions, CCluster } from 'src/app/shared/common-interface/comm
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { FileUploadDialogComponent } from '../../file-upload-dialog/file-upload-dialog.component';
 import { TableColmTilComponent } from '../../end-user/end-user-til/table-colm/table-colm.component';
-import { TSeverity, TFocus } from '../../tils/add-tils/add-tils.model';
+import { TSeverity, TFocus, tbEquipemnt } from '../../tils/add-tils/add-tils.model';
 
 @Component({
   selector: 'app-tils-tracker',
@@ -57,7 +57,8 @@ sapPlaning: tataSAP[]
 tilSeveritys: TSeverity[];
 tilFocuss: TFocus[];
 unitTypeFilterList:any[]=[];
-
+tbEquipemnt :tbEquipemnt[];
+tbEquipmentFilterList: any[]=[];
 daysToTargetList = [
   { title: 'Closed', isSelected: false },
   { title: 'OverDue', isSelected: false },
@@ -174,6 +175,7 @@ priorityFilterList:any[]=[];
         this.statusList = [...data.statusList]
         this.tilSeveritys = [...data.oemSeverity];
         this.tilFocuss = [...data.tilFocus];
+        this.tbEquipemnt = [...data.tbEquipemnt]
       },
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
@@ -192,7 +194,7 @@ priorityFilterList:any[]=[];
   // }
   getActions() {
     this.isTableLoading = true;
-    this.subs.sink = this.dataService.getActionTrackerReport(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(),this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString()).subscribe({
+    this.subs.sink = this.dataService.getActionTrackerReport(this.user.id, this.regionsFilterList.toString(), this.sitesFilterList.toString(), this.equipmentFilterList.toString(), this.sapFilterList.toString(), this.statusFilterList.toString(), this.daysToTargetFilterList.toString(), this.tilFocusFilterList.toString(), this.soverityFilterList.toString(), this.priorityFilterList.toString(),this.clusterFilterList.toString(), this.finalImplementationList.toString(), this.unitTypeFilterList.toString(),this.tbEquipmentFilterList.toString()).subscribe({
       next: data => {
         this.action= [...data.action]
         this.dataSource.data = [...this.action];
@@ -279,6 +281,15 @@ priorityFilterList:any[]=[];
         this.soverityFilterList.splice(index, 1);
       }
     }
+    EquipmentListFn(eq: tbEquipemnt) {
+      let index = this.tbEquipmentFilterList.indexOf(eq.tilEquipmentId);
+      if (index == -1) {
+        this.tbEquipmentFilterList.push(eq.tilEquipmentId);
+      }
+      else {
+        this.tbEquipmentFilterList.splice(index, 1);
+      }
+    }
     regionListFn(region: CRegions) {
       let index = this.regionsFilterList.indexOf(region.regionId);
       if (index == -1) {
@@ -356,6 +367,8 @@ priorityFilterList:any[]=[];
       this.tilFocusFilterList.length = 0;
       this.soverityFilterList.length = 0;
       this.priorityFilterList.length = 0;
+      this.tbEquipmentFilterList.length = 0;
+
       this.regions.map(a=>a.isSelected = false)
       this.sites.map(a=>a.isSelected = false)
       this.equipment.map(a=>a.isSelected = false)
@@ -366,6 +379,7 @@ priorityFilterList:any[]=[];
       this.tilSeveritys.map(a=>a.isSelected = false)
       this.priority.map(a=>a.isSelected = false)
       this.cluster.map(a => a.isSelected = false)
+      this.tbEquipemnt.map(a => a.isSelected = false)
 
     }
 }

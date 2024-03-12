@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'src/app/core/models/user';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
-import { TComponent, TDocType, TFocus, TILs, TReviewForum, TReviewStatus, TSeverity, TSeverityTiming, TSource } from '../../add-tils.model';
+import { TComponent, TDocType, TFocus, TILs, TReviewForum, TReviewStatus, TSeverity, TSeverityTiming, TSource, tbEquipemnt } from '../../add-tils.model';
 import { AddTilsService } from '../../add-tils.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -26,6 +26,7 @@ export class TilsFormComponent extends UnsubscribeOnDestroyAdapter {
   tilReviewForums: TReviewForum[];
   tilReviewStatuss: TReviewStatus[];
   tilSources: TSource[];
+  tbEquipemnt:tbEquipemnt[];
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
   constructor
@@ -53,6 +54,7 @@ export class TilsFormComponent extends UnsubscribeOnDestroyAdapter {
     this.tilReviewForums = [...data.tilReviewForums];
     this.tilReviewStatuss = [...data.tilReviewStatuss];
     this.tilSources = [...data.tilSources]
+    this.tbEquipemnt = [...data.tbEquipemnt]
     this.tilForm = this.buildForm();
   }
 
@@ -81,6 +83,7 @@ export class TilsFormComponent extends UnsubscribeOnDestroyAdapter {
       yearOfIssue: [this.til.yearOfIssue],
       implementationNotes: [this.til.implementationNotes],
       attachments: [''],
+      tbEquipemnt: [this.til.tbEquipmentId],
       tilReport: ['']
     })
   }
@@ -137,6 +140,9 @@ export class TilsFormComponent extends UnsubscribeOnDestroyAdapter {
       this.til.implementationNotes = this.tilForm.value.implementationNotes;
       this.til.yearOfIssue = this.tilForm.value.yearOfIssue;
       this.til.tilReport = this.tilForm.value.tilReport;
+
+      this.til.tbEquipmentId = this.tilForm.value.tbEquipemnt
+      this.til.tbTitle = this.tbEquipemnt.find(data => data.tilEquipmentId === this.tilForm.value.tbEquipemnt)?.title;
     }
   }
 }

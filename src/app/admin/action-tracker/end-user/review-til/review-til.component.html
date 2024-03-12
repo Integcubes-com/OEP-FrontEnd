@@ -386,6 +386,23 @@
                                 <mat-expansion-panel class="mt-0">
                                   <mat-expansion-panel-header (click)="$event.stopPropagation()">
                                     <mat-panel-title style="font-size: 13px;">
+                                      Equipment Type
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                                  <mat-panel-description>
+                                    <div class="row">
+                                      <div class="col-md-12 cs-style" *ngFor="let r of tbEquipemnt; let i = index">
+                                        <mat-checkbox (click)="$event.stopPropagation()" class="example-margin"
+                                          [(ngModel)]="r.isSelected" (click)="EquipmentListFn(r)">
+                                          {{r.title}}
+                                        </mat-checkbox>
+                                      </div>
+                                    </div>
+                                  </mat-panel-description>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel class="mt-0">
+                                  <mat-expansion-panel-header (click)="$event.stopPropagation()">
+                                    <mat-panel-title style="font-size: 13px;">
                                       Year
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -458,6 +475,10 @@
                   <ng-container matColumnDef="actionClosedTitle">
                     <th mat-header-cell *matHeaderCellDef> Action Closed By </th>
                     <td mat-cell *matCellDef="let act"> {{act.actionClosedTitle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="tbTitle">
+                    <th mat-header-cell *matHeaderCellDef>Equipment Type</th>
+                    <td mat-cell *matCellDef="let til"> {{til.tbTitle}} </td>
                   </ng-container>
                   <ng-container matColumnDef="actionClosureDate">
                     <th mat-header-cell *matHeaderCellDef> Action Closure Date </th>
@@ -575,11 +596,7 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewAction(row)"
                     [style.cursor]="'pointer'" matRipple></tr>
                 </table>
-               
-                <div *ngIf="!isTableLoading" class="no-results"
-                  [style.display]="dataSource.renderedData?.length == 0 ? '' : 'none'">
-                  No results
-                </div>
+
                 <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
                   aria-label="Select page of periodic elements">
                 </mat-paginator>

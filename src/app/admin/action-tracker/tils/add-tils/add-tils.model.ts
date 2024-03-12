@@ -49,6 +49,8 @@ export class TILs {
     reportAttahced:boolean;
     reportName:string;
     isSelected:boolean;
+    tbEquipmentId:number;
+    tbTitle:string;
     constructor(reg) {
         this.tilId = reg.tilId ? reg.tilId : -1;
         this.reviewStatusId = reg.statusId? reg.statusId : 1;
@@ -57,6 +59,12 @@ export class TILs {
 export interface TSource{
     sourceId:number,
     sourceTitle:string
+}
+export interface tbEquipemnt{
+    tilEquipmentId:number,
+    title:string,
+    isSelected:boolean,
+
 }
 export interface TComponent {
     componentId: number,
@@ -119,4 +127,5 @@ export interface TInterface{
     reviewForum: TReviewForum[],
     reviewStatus: TReviewStatus[],
     tilSource:TSource[];
+    tbEquipemnt:tbEquipemnt[];
 }
